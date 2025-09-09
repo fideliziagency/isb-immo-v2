@@ -47,7 +47,7 @@ const faqCategories = [
       {
         question: "Quels types de logements sont disponibles ?",
         answer:
-          "The Life Residence propose 5 types de logements : Appartements S+1 (65-75 m²), S+2 (85-95 m²), S+3 (110-125 m²), Duplex Premium (150-180 m²) et Villas Premium (200-250 m²).",
+          "The Life Residence propose 5 types de logements : Appartements S+1 (65-75 m²), S+2 (85-95 m²), S+3 (139-208 m²), Duplex Premium (150-180 m²) et Villas Premium (200-250 m²).",
       },
       {
         question: "Combien d'unités sont disponibles par type ?",

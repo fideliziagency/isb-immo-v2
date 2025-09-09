@@ -98,7 +98,7 @@ export default function WhyBuyOffPlan() {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Achat sur Plan</Badge>
+          <Badge className="mb-4 bg-custom-beige text-gray-900 rounded-none">Achat sur Plan</Badge>
           <h2 className="text-6xl font-bold text-gray-900 mb-6">Pourquoi Acheter sur Plan ?</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             L'achat sur plan vous offre des avantages exclusifs et des garanties solides pour sécuriser votre
@@ -117,7 +117,7 @@ export default function WhyBuyOffPlan() {
                 <div className="mb-6">
                   <advantage.icon className="h-12 w-12 text-custom-beige mx-auto group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <Badge className="mb-4 bg-custom-beige text-white rounded-none">{advantage.highlight}</Badge>
+                <Badge className="mb-4 bg-custom-beige text-gray-900 rounded-none">{advantage.highlight}</Badge>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{advantage.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{advantage.description}</p>
               </CardContent>

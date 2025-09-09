@@ -97,7 +97,7 @@ const properties = [
     type: "Villa",
     title: "Villa Individuelle",
     description: "Maison individuelle avec jardin privé",
-    image: "/villa-modern-pool-exterior.jpeg",
+    image: "/villa-h1.jpg",
     surface: "353-357 m²",
     chambres: "3 Suites",
     sallesBain: "Piscine privée",

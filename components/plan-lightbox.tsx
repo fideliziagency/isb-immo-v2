@@ -50,14 +50,14 @@ export default function PlanLightbox({ isOpen, onClose, plans, initialIndex = 0 
   const currentPlan = plans[currentIndex]
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-      <div className="relative w-full h-full max-w-6xl max-h-[90vh] bg-white rounded-none overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
+      <div className="relative w-full h-full max-w-7xl mx-auto flex flex-col bg-white overflow-hidden">
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm p-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">{currentPlan?.title}</h3>
+        <div className="flex-shrink-0 bg-white/95 backdrop-blur-sm p-3 md:p-4 flex items-center justify-between border-b border-gray-200">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-base md:text-lg font-bold text-gray-900 truncate">{currentPlan?.title}</h3>
             {plans.length > 1 && (
-              <p className="text-sm text-gray-600">
+              <p className="text-xs md:text-sm text-gray-600">
                 {currentIndex + 1} sur {plans.length}
               </p>
             )}
@@ -66,20 +66,23 @@ export default function PlanLightbox({ isOpen, onClose, plans, initialIndex = 0 
             variant="outline"
             size="icon"
             onClick={onClose}
-            className="rounded-none border-gray-300 hover:bg-gray-100 bg-transparent"
+            className="flex-shrink-0 ml-4 rounded-none border-gray-300 hover:bg-gray-100 bg-transparent"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
 
-        {/* Image */}
-        <div className="relative w-full h-full pt-20 pb-4">
-          <Image
-            src={currentPlan?.src || "/placeholder.svg"}
-            alt={currentPlan?.alt || "Plan"}
-            fill
-            className="object-contain p-4"
-          />
+        <div className="flex-1 relative overflow-hidden bg-gray-50 flex items-center justify-center p-2 md:p-4">
+          <div className="relative w-full h-full max-w-full max-h-full flex items-center justify-center">
+            <Image
+              src={currentPlan?.src || "/placeholder.svg"}
+              alt={currentPlan?.alt || "Plan"}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+              priority
+            />
+          </div>
         </div>
 
         {/* Navigation */}
@@ -89,7 +92,7 @@ export default function PlanLightbox({ isOpen, onClose, plans, initialIndex = 0 
               variant="outline"
               size="icon"
               onClick={prevPlan}
-              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white"
+              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/95 border-gray-300 hover:bg-white shadow-lg z-10"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -97,22 +100,23 @@ export default function PlanLightbox({ isOpen, onClose, plans, initialIndex = 0 
               variant="outline"
               size="icon"
               onClick={nextPlan}
-              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white"
+              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/95 border-gray-300 hover:bg-white shadow-lg z-10"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
 
-            {/* Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-              {plans.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentIndex ? "bg-custom-beige" : "bg-gray-400"
-                  }`}
-                />
-              ))}
+            <div className="flex-shrink-0 bg-white/95 backdrop-blur-sm p-3 md:p-4 flex justify-center border-t border-gray-200">
+              <div className="flex space-x-1 md:space-x-2 overflow-x-auto max-w-full">
+                {plans.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors flex-shrink-0 ${
+                      index === currentIndex ? "bg-custom-beige" : "bg-gray-400 hover:bg-gray-500"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </>
         )}

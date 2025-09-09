@@ -10,7 +10,6 @@ import {
   Home,
   Ruler,
   Bed,
-  Bath,
   Wifi,
   Shield,
   Thermometer,
@@ -25,8 +24,6 @@ import {
   ChevronRight,
   Camera,
   Tv,
-  Shirt,
-  Car,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -38,10 +35,11 @@ export default function DuplexPage() {
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "221-254 m²" },
-    { icon: Bed, label: "Chambres", value: "3 chambres" },
-    { icon: Bath, label: "Salles de bain", value: "2 salles de bain" },
+    { icon: Bed, label: "RDC", value: "Salon, salle à manger, cuisine" },
+    { icon: Home, label: "Étage", value: "3 suites" },
     { icon: Droplets, label: "Salle d'eau", value: "1 salle d'eau" },
     { icon: Home, label: "Niveaux", value: "2 niveaux" },
+    { icon: Droplets, label: "Piscine privée", value: "Incluse" },
   ]
 
   const equipments = [
@@ -52,9 +50,6 @@ export default function DuplexPage() {
     { icon: Camera, text: "Interphone vidéo couleur" },
     { icon: Tv, text: "Pré-installation satellite et internet fibre" },
     { icon: Shield, text: "Isolation thermique et phonique renforcée" },
-    { icon: Shirt, text: "Dressing intégré dans la suite parentale" },
-    { icon: Droplets, text: "Salle de bain principale avec douche italienne" },
-    { icon: Car, text: "Garage privé inclus" },
   ]
 
   const features = [
@@ -336,42 +331,6 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-luxury-living-space.jpeg"
-                  alt="Salon Duplex - Espace de vie luxueux double hauteur"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <Image
-                  src="/duplex-double-height-staircase.jpeg"
-                  alt="Escalier Duplex - Escalier design double hauteur"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <Image
-                  src="/duplex-modern-kitchen-dining.jpeg"
-                  alt="Cuisine Duplex - Cuisine moderne avec salle à manger"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <Image
                   src="/duplex-new-living-staircase.png"
                   alt="Salon Duplex - Vue d'ensemble avec escalier"
                   fill
@@ -430,7 +389,7 @@ export default function DuplexPage() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre prénom"
+                          placeholder="prénom"
                         />
                       </div>
                       <div>
@@ -438,7 +397,7 @@ export default function DuplexPage() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre nom"
+                          placeholder="nom"
                         />
                       </div>
                     </div>
@@ -510,6 +469,13 @@ export default function DuplexPage() {
                         <div className="text-gray-600">113-154 m² de jardin privé</div>
                       </div>
                     </div>
+                    <div className="flex items-start space-x-3">
+                      <Droplets className="h-5 w-5 text-custom-beige mt-1" />
+                      <div>
+                        <div className="font-semibold text-gray-900">Piscine privée</div>
+                        <div className="text-gray-600">Incluse</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -572,7 +538,7 @@ export default function DuplexPage() {
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+3</h4>
-                  <p className="text-gray-600 mb-3">4 pièces • 110-125 m² • 22 unités</p>
+                  <p className="text-gray-600 mb-3">4 pièces • 139-208 m² • 22 unités</p>
                   <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
                 </CardContent>
               </Card>

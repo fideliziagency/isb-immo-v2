@@ -489,7 +489,7 @@ export default function VillasPage() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre prénom"
+                          placeholder="prénom"
                         />
                       </div>
                       <div>
@@ -497,7 +497,7 @@ export default function VillasPage() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre nom"
+                          placeholder="nom"
                         />
                       </div>
                     </div>

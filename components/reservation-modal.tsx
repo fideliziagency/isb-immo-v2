@@ -27,7 +27,7 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
   const units = [
     { id: "s1", name: "Appartement S+1", surface: "65-75 m²", available: 28 },
     { id: "s2", name: "Appartement S+2", surface: "85-95 m²", available: 32 },
-    { id: "s3", name: "Appartement S+3", surface: "110-125 m²", available: 22 },
+    { id: "s3", name: "Appartement S+3", surface: "139-208 m²", available: 22 },
     { id: "duplex", name: "Duplex Premium", surface: "150-180 m²", available: 2 },
     { id: "villa", name: "Villa Premium", surface: "200-250 m²", available: 6 },
   ]
@@ -63,15 +63,15 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-none border-0 shadow-2xl">
-        <CardHeader className="relative bg-custom-beige text-white">
-          <button onClick={onClose} className="absolute right-4 top-4 text-white hover:text-gray-200 transition-colors">
+        <CardHeader className="relative bg-custom-beige text-black">
+          <button onClick={onClose} className="absolute right-4 top-4 text-black hover:text-gray-700 transition-colors">
             <X className="h-6 w-6" />
           </button>
           <div className="flex items-center space-x-3">
             <Home className="h-6 w-6" />
             <div>
               <CardTitle className="text-2xl">Réservation sur Plan</CardTitle>
-              <p className="text-custom-beige-light mt-1">Sécurisez votre futur logement dès aujourd'hui</p>
+              <p className="text-gray-700 mt-1">Sécurisez votre futur logement dès aujourd'hui</p>
             </div>
           </div>
         </CardHeader>
@@ -147,7 +147,7 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                    placeholder="Votre prénom"
+                    placeholder="prénom"
                   />
                 </div>
                 <div>
@@ -159,7 +159,7 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                    placeholder="Votre nom"
+                    placeholder="nom"
                   />
                 </div>
               </div>

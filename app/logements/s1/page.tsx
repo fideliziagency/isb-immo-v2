@@ -259,7 +259,7 @@ export default function AppartementS1Page() {
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 WhatsApp
@@ -528,7 +528,7 @@ export default function AppartementS1Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre prénom"
+                          placeholder="prénom"
                         />
                       </div>
                       <div>
@@ -536,7 +536,7 @@ export default function AppartementS1Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre nom"
+                          placeholder="nom"
                         />
                       </div>
                     </div>
@@ -659,7 +659,7 @@ export default function AppartementS1Page() {
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+3</h4>
-                  <p className="text-gray-600 mb-3">4 pièces • 110-125 m² • 22 unités</p>
+                  <p className="text-gray-600 mb-3">4 pièces • 139-208 m² • 22 unités</p>
                   <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
                 </CardContent>
               </Card>
@@ -668,7 +668,7 @@ export default function AppartementS1Page() {
             <Link href="/logements/duplex">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
-                  <Image src="/luxury-duplex-interior.png" alt="Duplex" fill className="object-cover" />
+                  <Image src="/duplex-1.png" alt="Duplex" fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Duplex</h4>
@@ -699,7 +699,7 @@ export default function AppartementS1Page() {
         <Button
           size="lg"
           variant="outline"
-          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-white shadow-lg"
+          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent shadow-lg"
         >
           <MessageCircle className="h-6 w-6" />
         </Button>

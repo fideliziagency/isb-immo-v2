@@ -471,18 +471,6 @@ export default function AppartementS3Page() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/s3-new-kitchen-modern-gallery.jpeg"
-                  alt="Cuisine S+3 - Design contemporain"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <Image
                   src="/s3-new-dining-area-gallery.png"
                   alt="Salle à manger S+3 - Espace repas avec miroirs"
                   fill
@@ -529,7 +517,7 @@ export default function AppartementS3Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre prénom"
+                          placeholder="prénom"
                         />
                       </div>
                       <div>
@@ -537,7 +525,7 @@ export default function AppartementS3Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre nom"
+                          placeholder="nom"
                         />
                       </div>
                     </div>
@@ -663,7 +651,7 @@ export default function AppartementS3Page() {
             <Link href="/logements/duplex">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
-                  <Image src="/luxury-duplex-interior.png" alt="Duplex" fill className="object-cover" />
+                  <Image src="/duplex-1.png" alt="Duplex" fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Duplex</h4>

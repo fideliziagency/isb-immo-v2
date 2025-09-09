@@ -60,7 +60,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige-light bg-transparent"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <Phone className="h-4 w-4 mr-2" />
                 Appeler
@@ -68,7 +68,7 @@ export default function HomePage() {
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 WhatsApp
@@ -92,12 +92,12 @@ export default function HomePage() {
 
         {/* Top Thin Horizontal Glassmorphism Rectangle */}
         <div className="relative z-10 container mx-auto px-4 pt-8">
-          <div className="backdrop-blur-md bg-white/15 border border-white/20 rounded-2xl px-8 py-4 shadow-xl max-w-4xl mx-auto">
+          <div className="backdrop-blur-md bg-black/40 border border-white/20 rounded-2xl px-8 py-4 shadow-xl max-w-4xl mx-auto">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg tracking-wide mb-2">
                 The Life Residence
               </h1>
-              <p className="text-lg md:text-xl text-white/90 drop-shadow-md font-light">
+              <p className="text-lg md:text-xl text-white drop-shadow-lg font-light">
                 L'art de vivre au cœur de la modernité
               </p>
             </div>
@@ -107,23 +107,25 @@ export default function HomePage() {
         {/* Bottom Stats - Clean and Minimal */}
         <div className="absolute bottom-16 left-0 right-0 z-10">
           <div className="container mx-auto px-4">
-            <div className="backdrop-blur-sm bg-black/20 rounded-xl px-8 py-6 max-w-4xl mx-auto">
+            <div className="backdrop-blur-sm bg-black/50 rounded-xl px-8 py-6 max-w-4xl mx-auto">
               <div className="grid grid-cols-4 gap-8 text-center">
                 <div>
                   <div className="text-3xl font-bold text-white drop-shadow-md">82</div>
-                  <div className="text-sm text-white/80 uppercase tracking-wide font-light">Appartements</div>
+                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">
+                    Appartements
+                  </div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white drop-shadow-md">02</div>
-                  <div className="text-sm text-white/80 uppercase tracking-wide font-light">Duplex</div>
+                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Duplex</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white drop-shadow-md">06</div>
-                  <div className="text-sm text-white/80 uppercase tracking-wide font-light">Villas</div>
+                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Villas</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-white drop-shadow-md">Fin 2027</div>
-                  <div className="text-sm text-white/80 uppercase tracking-wide font-light">Livraison</div>
+                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Livraison</div>
                 </div>
               </div>
             </div>
@@ -141,7 +143,7 @@ export default function HomePage() {
       <section id="projet" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Le Projet</Badge>
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Le Projet</Badge>
             <h2 className="text-6xl font-bold text-gray-900 mb-6">Un Concept d'Exception</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Situé sur la route principale face au restaurant El Firma, The Life Residence redéfinit l'art de vivre
@@ -226,7 +228,7 @@ export default function HomePage() {
       <section id="contact" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Contact</Badge>
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
             <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Notre équipe est à votre disposition pour répondre à toutes vos questions.
@@ -295,7 +297,7 @@ export default function HomePage() {
                       <input
                         type="text"
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Votre prénom"
+                        placeholder="prénom"
                       />
                     </div>
                     <div>
@@ -303,7 +305,7 @@ export default function HomePage() {
                       <input
                         type="text"
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Votre nom"
+                        placeholder="nom"
                       />
                     </div>
                   </div>
@@ -339,13 +341,13 @@ export default function HomePage() {
                     <textarea
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                      placeholder="Votre message..."
+                      placeholder="message..."
                     ></textarea>
                   </div>
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full rounded-none bg-white text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white transition-colors duration-300"
+                    className="w-full rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white transition-colors duration-300"
                   >
                     Envoyer la Demande
                   </Button>

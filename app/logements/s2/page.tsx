@@ -263,7 +263,7 @@ export default function AppartementS2Page() {
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 WhatsApp
@@ -290,7 +290,7 @@ export default function AppartementS2Page() {
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
-              <Badge className="mb-4 bg-custom-beige text-custom-beige rounded-none">Appartement S+2</Badge>
+              <Badge className="mb-4 bg-custom-beige text-black rounded-none">Appartement S+2</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Appartement S+2</h1>
               <p className="text-xl text-gray-600 mb-8">
                 Parfait pour les familles. Espace généreux avec 2 chambres, salon spacieux et finitions exceptionnelles.
@@ -321,7 +321,7 @@ export default function AppartementS2Page() {
                 className="w-full h-96 object-cover"
               />
               <div className="absolute top-4 right-4">
-                <Badge className="bg-custom-beige text-white rounded-none">30 Unités Disponibles</Badge>
+                <Badge className="bg-custom-beige text-black rounded-none">30 Unités Disponibles</Badge>
               </div>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function AppartementS2Page() {
                     <Button
                       onClick={() => openLightbox(currentPlanIndex)}
                       variant="outline"
-                      className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white"
+                      className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-black bg-transparent"
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Voir en grand
@@ -532,7 +532,7 @@ export default function AppartementS2Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre prénom"
+                          placeholder="prénom"
                         />
                       </div>
                       <div>
@@ -540,7 +540,7 @@ export default function AppartementS2Page() {
                         <input
                           type="text"
                           className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Votre nom"
+                          placeholder="nom"
                         />
                       </div>
                     </div>
@@ -624,7 +624,7 @@ export default function AppartementS2Page() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
+                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-black bg-transparent"
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
                     Discuter sur WhatsApp
@@ -649,7 +649,9 @@ export default function AppartementS2Page() {
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+1</h4>
                   <p className="text-gray-600 mb-3">2 pièces • 48 à 77 m² • 30 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige-hover text-black">
+                    Découvrir
+                  </Button>
                 </CardContent>
               </Card>
             </Link>
@@ -666,8 +668,10 @@ export default function AppartementS2Page() {
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+3</h4>
-                  <p className="text-gray-600 mb-3">4 pièces • 110-125 m² • 22 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
+                  <p className="text-gray-600 mb-3">4 pièces • 139-208 m² • 22 unités</p>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige-hover text-black">
+                    Découvrir
+                  </Button>
                 </CardContent>
               </Card>
             </Link>
@@ -675,12 +679,14 @@ export default function AppartementS2Page() {
             <Link href="/logements/duplex">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
-                  <Image src="/luxury-duplex-interior.png" alt="Duplex" fill className="object-cover" />
+                  <Image src="/duplex-1.png" alt="Duplex" fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Duplex</h4>
                   <p className="text-gray-600 mb-3">2 niveaux • 221-254 m² • 2 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige-hover text-black">
+                    Découvrir
+                  </Button>
                 </CardContent>
               </Card>
             </Link>
@@ -693,24 +699,15 @@ export default function AppartementS2Page() {
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Villa</h4>
                   <p className="text-gray-600 mb-3">2 niveaux • 353-357 m² • 6 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige-hover text-black">
+                    Découvrir
+                  </Button>
                 </CardContent>
               </Card>
             </Link>
           </div>
         </div>
       </section>
-
-      {/* WhatsApp Float Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="lg"
-          variant="outline"
-          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-white shadow-lg"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      </div>
 
       {/* Plan Lightbox */}
       <PlanLightbox
