@@ -1,146 +1,133 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Phone, MessageCircle, ChevronDown, ChevronUp, Building, HelpCircle } from "lucide-react"
+import {
+  ArrowLeft,
+  HelpCircle,
+  Home,
+  DollarSign,
+  Shield,
+  Building,
+  Users,
+  Phone,
+  MessageCircle,
+  Mail,
+  ChevronDown,
+} from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
 
-const faqData = [
+const faqCategories = [
   {
-    category: "Le Projet",
+    id: "general",
+    name: "Informations Générales",
+    icon: Home,
     questions: [
       {
-        question: "Où se situe exactement The Life Residence ?",
+        question: "Qu'est-ce que The Life Residence ?",
         answer:
-          "The Life Residence est situé à Chotrana 3, La Soukra, sur la route principale face au restaurant El Firma. Cette localisation privilégiée offre un accès facile aux commodités tout en conservant un environnement résidentiel calme.",
+          "The Life Residence est un projet résidentiel haut de gamme situé à Chotrana 3, La Soukra. Il comprend 82 appartements, 2 duplex et 6 villas de très haut standing, développé par ISB Immobilière Sodaprim Bouaziz.",
       },
       {
-        question: "Qui est le promoteur du projet ?",
+        question: "Où se situe exactement le projet ?",
         answer:
-          "Sodaprim Immobilière est le promoteur de The Life Residence. Avec plus de 10 ans d'expérience dans l'immobilier résidentiel haut de gamme, Sodaprim a déjà réalisé des projets comme la Résidence Skander à Aïn Zaghouan Nord et la Résidence El Menzah.",
+          "Le projet est situé à Chotrana 3, La Soukra, sur la route principale face au restaurant El Firma. Cette localisation offre un accès facile aux commodités tout en préservant la tranquillité résidentielle.",
       },
       {
         question: "Quand aura lieu la livraison ?",
         answer:
-          "La livraison de The Life Residence est prévue pour 2026. Les travaux ont officiellement commencé et l'appartement témoin sera disponible dès juillet 2026.",
+          "La livraison de The Life Residence est prévue pour 2027. Le projet suit un calendrier précis avec des étapes de construction régulièrement communiquées aux acquéreurs.",
       },
     ],
   },
   {
-    category: "Les Logements",
+    id: "logements",
+    name: "Types de Logements",
+    icon: Building,
     questions: [
       {
-        question: "Combien de logements comprend le projet ?",
+        question: "Quels types de logements sont disponibles ?",
         answer:
-          "The Life Residence comprend au total 92 logements : 15 appartements S+1, 45 appartements S+2, 24 appartements S+3, et 8 duplex de prestige.",
+          "The Life Residence propose 5 types de logements : Appartements S+1 (65-75 m²), S+2 (85-95 m²), S+3 (110-125 m²), Duplex Premium (150-180 m²) et Villas Premium (200-250 m²).",
       },
       {
-        question: "Quelles sont les surfaces disponibles ?",
+        question: "Combien d'unités sont disponibles par type ?",
         answer:
-          "Les surfaces varient selon le type : S+1 (65-75 m²), S+2 (85-95 m²), S+3 (110-125 m²), et Duplex (150-180 m²). Chaque logement est conçu pour optimiser l'espace et le confort.",
+          "Nous proposons 28 appartements S+1, 32 appartements S+2, 22 appartements S+3, 2 duplex premium et 6 villas premium, soit un total de 90 logements.",
       },
       {
-        question: "Le parking est-il inclus ?",
+        question: "Les logements sont-ils livrés meublés ?",
         answer:
-          "Oui, chaque appartement (S+1, S+2, S+3) inclut 1 place de parking couverte. Les duplex bénéficient de 2 places de parking incluses.",
+          "Les logements sont livrés avec des finitions haut de gamme et les équipements de base (cuisine équipée, climatisation, etc.) mais non meublés. Cela vous permet de personnaliser votre intérieur selon vos goûts.",
+      },
+    ],
+  },
+  {
+    id: "achat",
+    name: "Processus d'Achat",
+    icon: DollarSign,
+    questions: [
+      {
+        question: "Comment fonctionne l'achat sur plan ?",
+        answer:
+          "L'achat sur plan vous permet de réserver votre logement avant sa construction. Vous signez un contrat de réservation avec un acompte, puis bénéficiez d'un échéancier de paiement étalé jusqu'à la livraison.",
+      },
+      {
+        question: "Quels sont les modes de paiement acceptés ?",
+        answer:
+          "Nous acceptons les paiements par virement bancaire, chèque certifié et facilités de paiement bancaire. Des solutions de financement personnalisées peuvent être étudiées selon votre profil.",
       },
       {
         question: "Peut-on visiter un appartement témoin ?",
         answer:
-          "L'appartement témoin sera disponible à partir de juillet 2026. En attendant, nous proposons des visites privées du chantier et des rendus 3D photoréalistes pour vous projeter dans votre futur logement.",
+          "Un appartement témoin sera disponible à partir de juillet 2026. En attendant, nous proposons des visites 3D virtuelles et des rendez-vous dans notre showroom pour découvrir les finitions et matériaux.",
       },
     ],
   },
   {
-    category: "Finitions et Équipements",
+    id: "garanties",
+    name: "Garanties et Sécurité",
+    icon: Shield,
     questions: [
       {
-        question: "Quelles sont les finitions incluses ?",
+        question: "Quelles garanties sont offertes ?",
         answer:
-          "Tous les logements incluent des finitions haut de gamme : cuisine équipée, climatisation réversible, carrelage premium, menuiserie aluminium, interphone vidéo, éclairage LED, et isolation renforcée.",
+          "Nous offrons toutes les garanties légales : garantie décennale (10 ans), garantie biennale (2 ans) et garantie de parfait achèvement (1 an). Une assurance dommages-ouvrage couvre également la construction.",
       },
       {
-        question: "La climatisation est-elle incluse ?",
+        question: "Le projet est-il sécurisé ?",
         answer:
-          "Oui, tous les logements sont équipés de climatisation réversible. Les duplex bénéficient d'un système centralisé avec zones indépendantes.",
+          "Oui, The Life Residence dispose d'un système de sécurité complet : gardiennage 24h/24, vidéosurveillance HD, contrôle d'accès et parking sécurisé pour tous les résidents.",
       },
       {
-        question: "Y a-t-il des options de personnalisation ?",
+        question: "Que se passe-t-il en cas de retard de livraison ?",
         answer:
-          "Pour les duplex de prestige, nous proposons des options de personnalisation des finitions. Les appartements standards offrent également quelques choix de finitions selon disponibilité.",
+          "En cas de retard de livraison imputable au promoteur, des pénalités sont prévues contractuellement. ISB Immobilière s'engage sur ses délais avec un historique de 100% de projets livrés à temps.",
       },
     ],
   },
   {
-    category: "Achat et Financement",
+    id: "services",
+    name: "Services et Commodités",
+    icon: Users,
     questions: [
       {
-        question: "Quels sont les modes de paiement acceptés ?",
+        question: "Quels services sont inclus dans la résidence ?",
         answer:
-          "Nous acceptons plusieurs modes de paiement : paiement comptant avec remise, échelonnement sur la durée des travaux, et financement bancaire. Notre équipe vous accompagne dans vos démarches.",
+          "La résidence propose de nombreux services : sécurité 24h/24, parking sécurisé, espaces verts aménagés, salle de sport, piscine commune, aire de jeux pour enfants et espaces communautaires.",
       },
       {
-        question: "Y a-t-il des facilités de paiement ?",
+        question: "Y a-t-il des frais de copropriété ?",
         answer:
-          "Oui, nous proposons des facilités de paiement adaptées à votre situation. Un apport initial est demandé, suivi d'échéances mensuelles jusqu'à la livraison.",
+          "Oui, des charges de copropriété couvrent l'entretien des espaces communs, la sécurité, l'éclairage et les services partagés. Le montant sera communiqué lors de la signature et reste compétitif pour ce niveau de prestations.",
       },
       {
-        question: "Les prix sont-ils négociables ?",
+        question: "La fibre optique est-elle disponible ?",
         answer:
-          "Les prix sont établis selon un barème officiel. Cependant, des remises peuvent être accordées pour les paiements comptants ou les achats multiples.",
-      },
-    ],
-  },
-  {
-    category: "Services et Commodités",
-    questions: [
-      {
-        question: "Y a-t-il une sécurité 24h/24 ?",
-        answer:
-          "Oui, The Life Residence dispose d'un service de gardiennage 24h/24 et d'un système de surveillance moderne pour assurer la sécurité des résidents.",
-      },
-      {
-        question: "Quels sont les services inclus ?",
-        answer:
-          "Les services incluent : gardiennage 24h/24, maintenance des parties communes, gestion des espaces verts, et pour les duplex, un service de conciergerie premium.",
-      },
-      {
-        question: "Y a-t-il des espaces communs ?",
-        answer:
-          "Le projet comprend des espaces verts aménagés, des aires de stationnement sécurisées, et des parties communes élégamment décorées.",
+          "Oui, tous les logements sont pré-câblés pour la fibre optique haut débit. Les résidents peuvent choisir leur fournisseur d'accès internet parmi les opérateurs disponibles dans la zone.",
       },
     ],
   },
 ]
-
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <Card className="rounded-none border-0 shadow-sm">
-      <CardContent className="p-0">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
-        >
-          <h3 className="text-lg font-semibold text-gray-900 pr-4">{question}</h3>
-          {isOpen ? (
-            <ChevronUp className="h-5 w-5 text-custom-beige flex-shrink-0" />
-          ) : (
-            <ChevronDown className="h-5 w-5 text-custom-beige flex-shrink-0" />
-          )}
-        </button>
-        {isOpen && (
-          <div className="px-6 pb-6">
-            <p className="text-gray-600 leading-relaxed">{answer}</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
 
 export default function FAQPage() {
   return (
@@ -152,7 +139,7 @@ export default function FAQPage() {
             <Link href="/" className="flex items-center space-x-3">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
               <div className="flex items-center space-x-2">
-                <Building className="h-6 w-6 text-custom-beige" />
+                <Home className="h-6 w-6 text-custom-beige" />
                 <span className="text-lg font-bold text-gray-900">The Life Residence</span>
               </div>
             </Link>
@@ -160,18 +147,10 @@ export default function FAQPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige-light bg-transparent"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <Phone className="h-4 w-4 mr-2" />
-                Appeler
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
+                Nous Contacter
               </Button>
             </div>
           </div>
@@ -182,34 +161,79 @@ export default function FAQPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-6">
-              <HelpCircle className="h-12 w-12 text-custom-beige mr-4" />
-              <div>
-                <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">FAQ</Badge>
-                <h1 className="text-4xl font-bold text-gray-900">Questions Fréquentes</h1>
-              </div>
-            </div>
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Support Client</Badge>
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">Questions Fréquentes</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Trouvez rapidement les réponses à vos questions sur The Life Residence. Si vous ne trouvez pas
-              l'information recherchée, n'hésitez pas à nous contacter.
+              Trouvez rapidement les réponses à vos questions sur The Life Residence. Notre équipe reste disponible pour
+              tout complément d'information.
             </p>
+          </div>
+
+          {/* Quick Contact */}
+          <div className="flex justify-center space-x-4 mb-12">
+            <Button size="lg" className="rounded-none bg-custom-beige hover:bg-custom-beige-hover" asChild>
+              <a href="tel:58666963">
+                <Phone className="h-5 w-5 mr-2" />
+                58 666 963
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
+              asChild
+            >
+              <a href="https://wa.me/21658666963" target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-5 w-5 mr-2" />
+                WhatsApp
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-none border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
+              asChild
+            >
+              <a href="mailto:contact@theliferesidence.com">
+                <Mail className="h-5 w-5 mr-2" />
+                Email
+              </a>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* FAQ Content */}
+      {/* FAQ Categories */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {faqData.map((category, categoryIndex) => (
-              <div key={categoryIndex} className="mb-12">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <div className="w-1 h-8 bg-custom-beige mr-4"></div>
-                  {category.category}
-                </h2>
+            {faqCategories.map((category, categoryIndex) => (
+              <div key={category.id} className="mb-12">
+                <div className="flex items-center space-x-3 mb-8">
+                  <category.icon className="h-8 w-8 text-custom-beige" />
+                  <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
+                </div>
+
                 <div className="space-y-4">
                   {category.questions.map((faq, faqIndex) => (
-                    <FAQItem key={faqIndex} question={faq.question} answer={faq.answer} />
+                    <Card key={faqIndex} className="rounded-none border-0 shadow-sm">
+                      <CardContent className="p-0">
+                        <details className="group">
+                          <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                            <div className="flex items-start space-x-4">
+                              <HelpCircle className="h-5 w-5 text-custom-beige mt-1 flex-shrink-0" />
+                              <h3 className="font-semibold text-gray-900 text-left">{faq.question}</h3>
+                            </div>
+                            <ChevronDown className="h-5 w-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                          </summary>
+                          <div className="px-6 pb-6">
+                            <div className="pl-9">
+                              <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                            </div>
+                          </div>
+                        </details>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </div>
@@ -218,43 +242,73 @@ export default function FAQPage() {
         </div>
       </section>
 
-      {/* Contact CTA */}
+      {/* Contact Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Vous avez d'autres questions ?</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Notre équipe commerciale est à votre disposition pour répondre à toutes vos questions spécifiques.
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Vous ne trouvez pas votre réponse ?</h2>
+            <p className="text-gray-600 mb-8">
+              Notre équipe d'experts est à votre disposition pour répondre à toutes vos questions spécifiques sur The
+              Life Residence.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="rounded-none bg-custom-beige bg-custom-beige-hover">
-                <Phone className="h-5 w-5 mr-2" />
-                Appeler : 22 322 468
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
-              >
-                <MessageCircle className="h-5 w-5 mr-2" />
-                WhatsApp
-              </Button>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <Card className="rounded-none border-0 shadow-sm">
+                <CardContent className="p-6 text-center">
+                  <Phone className="h-8 w-8 text-custom-beige mx-auto mb-3" />
+                  <h4 className="font-bold text-gray-900 mb-2">Par Téléphone</h4>
+                  <p className="text-sm text-gray-600 mb-3">Lun-Ven : 8h-18h</p>
+                  <Button size="sm" className="rounded-none bg-custom-beige hover:bg-custom-beige-hover" asChild>
+                    <a href="tel:58666963">Appeler</a>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-none border-0 shadow-sm">
+                <CardContent className="p-6 text-center">
+                  <MessageCircle className="h-8 w-8 text-custom-beige mx-auto mb-3" />
+                  <h4 className="font-bold text-gray-900 mb-2">WhatsApp</h4>
+                  <p className="text-sm text-gray-600 mb-3">Réponse rapide</p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
+                    asChild
+                  >
+                    <a href="https://wa.me/21658666963" target="_blank" rel="noopener noreferrer">
+                      Discuter
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-none border-0 shadow-sm">
+                <CardContent className="p-6 text-center">
+                  <Mail className="h-8 w-8 text-custom-beige mx-auto mb-3" />
+                  <h4 className="font-bold text-gray-900 mb-2">Par Email</h4>
+                  <p className="text-sm text-gray-600 mb-3">Réponse sous 24h</p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-none border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
+                    asChild
+                  >
+                    <a href="mailto:contact@theliferesidence.com">Écrire</a>
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
-            <div className="mt-8">
-              <Link href="/#contact" className="text-custom-beige hover:underline">
-                Ou remplissez notre formulaire de contact →
-              </Link>
+
+            <div className="bg-custom-beige-light p-6">
+              <h3 className="font-bold text-gray-900 mb-2">Rendez-vous Personnalisé</h3>
+              <p className="text-gray-600 mb-4">
+                Planifiez une rencontre avec nos conseillers pour une présentation détaillée du projet.
+              </p>
+              <Button className="rounded-none bg-custom-beige hover:bg-custom-beige-hover">Prendre Rendez-vous</Button>
             </div>
           </div>
         </div>
       </section>
-
-      {/* WhatsApp Float Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button size="lg" className="rounded-full bg-custom-beige bg-custom-beige-hover shadow-lg">
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      </div>
     </div>
   )
 }

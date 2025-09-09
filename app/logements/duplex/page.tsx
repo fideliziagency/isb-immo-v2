@@ -1,65 +1,104 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import PlanLightbox from "@/components/plan-lightbox"
+import { useState } from "react"
 import {
   ArrowLeft,
   Home,
   Ruler,
   Bed,
   Bath,
-  Car,
   Wifi,
   Shield,
   Thermometer,
   Zap,
+  Droplets,
+  Wind,
   Phone,
   MessageCircle,
-  Download,
   Eye,
-  CheckCircle,
-  Crown,
-  Star,
-  StepBackIcon as Stairs,
+  Trees,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
+  Tv,
+  Shirt,
+  Car,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function DuplexPage() {
+  const [showPlanLightbox, setShowPlanLightbox] = useState(false)
+  const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
+  const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+
   const specifications = [
-    { icon: Ruler, label: "Surface", value: "150 - 180 m²" },
-    { icon: Stairs, label: "Niveaux", value: "2 niveaux" },
-    { icon: Bed, label: "Chambres", value: "3-4 chambres" },
-    { icon: Bath, label: "Salles de bain", value: "2-3 salles de bain" },
-    { icon: Car, label: "Parking", value: "2 places incluses" },
+    { icon: Ruler, label: "Surface", value: "221-254 m²" },
+    { icon: Bed, label: "Chambres", value: "3 chambres" },
+    { icon: Bath, label: "Salles de bain", value: "2 salles de bain" },
+    { icon: Droplets, label: "Salle d'eau", value: "1 salle d'eau" },
+    { icon: Home, label: "Niveaux", value: "2 niveaux" },
   ]
 
   const equipments = [
-    "Cuisine équipée haut de gamme avec îlot central et coin petit-déjeuner",
-    "Climatisation réversible centralisée avec zones indépendantes",
-    "Carrelage premium grand format et parquet dans les chambres",
-    "Menuiserie aluminium à rupture thermique avec triple vitrage",
-    "Interphone vidéo couleur haute définition avec application mobile",
-    "Pré-installation domotique complète et système audio intégré",
-    "Éclairage LED avec variateurs, détecteurs et programmation",
-    "Prises USB, chargeurs sans fil et bornes de recharge voiture",
-    "Isolation thermique et phonique renforcée premium",
-    "Terrasse privative de 30-40 m² avec vue panoramique",
-    "Suite parentale avec dressing walk-in et salle de bain spa",
-    "Mezzanine aménageable en bureau ou espace détente",
-    "Buanderie équipée et cave de rangement 15 m²",
-    "Système de sécurité individuel avec caméras",
-    "Cheminée design dans le salon principal",
-    "Jacuzzi privatif sur terrasse (en option)",
+    { icon: Home, text: "Cuisine équipée avec îlot central" },
+    { icon: Thermometer, text: "Climatisation dans toutes les pièces" },
+    { icon: null, text: "Revêtement premium dans toutes les pièces" },
+    { icon: null, text: "Menuiserie aluminium à rupture thermique" },
+    { icon: Camera, text: "Interphone vidéo couleur" },
+    { icon: Tv, text: "Pré-installation satellite et internet fibre" },
+    { icon: Shield, text: "Isolation thermique et phonique renforcée" },
+    { icon: Shirt, text: "Dressing intégré dans la suite parentale" },
+    { icon: Droplets, text: "Salle de bain principale avec douche italienne" },
+    { icon: Car, text: "Garage privé inclus" },
   ]
 
   const features = [
-    { icon: Crown, label: "Finitions luxueuses" },
-    { icon: Wifi, label: "Domotique intégrée" },
-    { icon: Shield, label: "Sécurité renforcée" },
-    { icon: Thermometer, label: "Climatisation centralisée" },
+    { icon: Wifi, label: "Pré-câblage internet fibre" },
+    { icon: Shield, label: "Sécurité 24h/24" },
+    { icon: Thermometer, label: "Climatisation multi-zones" },
     { icon: Zap, label: "Installation électrique premium" },
-    { icon: Star, label: "Services conciergerie" },
+    { icon: Droplets, label: "Plomberie haut de gamme" },
+    { icon: Wind, label: "VMC double flux" },
   ]
+
+  // Generate 2 Duplex unit plans
+  const duplexPlans = [
+    {
+      src: "/duplex-plan-fd01.png",
+      alt: "Plan Duplex - Appartement FD.01 (Duplex Bloc F)",
+      title: "Plan Duplex - Appartement FD.01 (Duplex Bloc F) - 254 m²",
+    },
+    {
+      src: "/duplex-plan-gd05.png",
+      alt: "Plan Duplex - Appartement GD.05 (Duplex Bloc G)",
+      title: "Plan Duplex - Appartement GD.05 (Duplex Bloc G) - 221 m²",
+    },
+  ]
+
+  const nextPlan = () => {
+    setCurrentPlanIndex((prev) => (prev + 1) % duplexPlans.length)
+  }
+
+  const prevPlan = () => {
+    setCurrentPlanIndex((prev) => (prev - 1 + duplexPlans.length) % duplexPlans.length)
+  }
+
+  const openLightbox = (index: number) => {
+    setLightboxStartIndex(index)
+    setShowPlanLightbox(true)
+  }
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById("contact-section")
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,7 +109,7 @@ export default function DuplexPage() {
             <Link href="/" className="flex items-center space-x-3">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
               <div className="flex items-center space-x-2">
-                <Home className="h-6 w-6 text-custom-beige-600" />
+                <Home className="h-6 w-6 text-custom-beige" />
                 <span className="text-lg font-bold text-gray-900">The Life Residence</span>
               </div>
             </Link>
@@ -78,7 +117,7 @@ export default function DuplexPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-none border-custom-beige-600 text-custom-beige-600 hover:bg-custom-beige-50 bg-transparent"
+                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
               >
                 <Phone className="h-4 w-4 mr-2" />
                 Appeler
@@ -100,36 +139,30 @@ export default function DuplexPage() {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex items-center space-x-2 mb-6">
-            <Link href="/" className="text-gray-500 hover:text-custom-beige-600">
+            <Link href="/" className="text-gray-500 hover:text-custom-beige">
               Accueil
             </Link>
             <span className="text-gray-400">/</span>
-            <Link href="/#logements" className="text-gray-500 hover:text-custom-beige-600">
+            <Link href="/#logements" className="text-gray-500 hover:text-custom-beige">
               Logements
             </Link>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Duplex</span>
+            <span className="text-gray-900">Duplex de Prestige</span>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Badge className="bg-custom-beige-100 text-custom-beige-800 rounded-none">Duplex</Badge>
-                <Badge className="bg-purple-100 text-purple-800 rounded-none">
-                  <Crown className="h-3 w-3 mr-1" />
-                  Prestige
-                </Badge>
-              </div>
+              <Badge className="mb-4 bg-custom-beige text-white rounded-none">Duplex de Prestige</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Duplex de Prestige</h1>
               <p className="text-xl text-gray-600 mb-8">
-                Le summum du luxe résidentiel. Duplex sur 2 niveaux avec terrasse privative, finitions exceptionnelles
-                et services haut de gamme. Un art de vivre unique pour les plus exigeants.
+                Le summum du luxe résidentiel sur 2 niveaux. Volumes exceptionnels, terrasse panoramique et finitions
+                d'exception pour un art de vivre unique.
               </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
                   <div key={index} className="flex items-center space-x-3">
-                    <spec.icon className="h-5 w-5 text-custom-beige-600" />
+                    {spec.icon && <spec.icon className="h-5 w-5 text-custom-beige" />}
                     <div>
                       <div className="text-sm text-gray-600">{spec.label}</div>
                       <div className="font-semibold text-gray-900">{spec.value}</div>
@@ -138,35 +171,19 @@ export default function DuplexPage() {
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="rounded-none bg-custom-beige-600 hover:bg-custom-beige-700">
-                  <Eye className="h-5 w-5 mr-2" />
-                  Visite Privée VIP
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-none border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  Dossier Complet
-                </Button>
-              </div>
+              {/* Removed the "Demander une Visite" button */}
             </div>
 
             <div className="relative">
               <Image
-                src="/luxury-duplex-interior.png"
-                alt="Duplex - Salon principal"
+                src="/duplex-new-cover-hero.png"
+                alt="Duplex de Prestige - Salon double hauteur avec escalier design"
                 width={600}
                 height={400}
                 className="w-full h-96 object-cover"
               />
               <div className="absolute top-4 right-4">
-                <Badge className="bg-purple-600 text-white rounded-none">8 Unités Exclusives</Badge>
-              </div>
-              <div className="absolute bottom-4 left-4">
-                <Badge className="bg-custom-beige-600 text-white rounded-none">Collection Limitée</Badge>
+                <Badge className="bg-custom-beige text-white rounded-none">2 Unités Disponibles</Badge>
               </div>
             </div>
           </div>
@@ -177,63 +194,96 @@ export default function DuplexPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Architecture</h2>
-            <p className="text-lg text-gray-600">Une architecture d'exception sur deux niveaux</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
+            <p className="text-lg text-gray-600">Un agencement exceptionnel sur 2 niveaux</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 mb-12">
+          <div className="max-w-4xl mx-auto">
             <Card className="rounded-none border-0 shadow-lg overflow-hidden">
-              <div className="relative h-96">
-                <Image
-                  src="/duplex-floor-plan-level1.png"
-                  alt="Plan Niveau 1 - Duplex"
-                  fill
-                  className="object-contain p-4"
-                />
-              </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Niveau 1 - Espaces de Vie</h3>
-                <p className="text-gray-600">
-                  Grand salon avec cheminée, salle à manger, cuisine ouverte avec îlot, chambre d'invités et salle
-                  d'eau.
-                </p>
-              </CardContent>
-            </Card>
+              <div className="relative">
+                {/* Plan Slider */}
+                <div className="relative h-96 overflow-hidden">
+                  <div
+                    className="flex transition-transform duration-500 ease-in-out h-full"
+                    style={{ transform: `translateX(-${currentPlanIndex * 100}%)` }}
+                  >
+                    {duplexPlans.map((plan, index) => (
+                      <div
+                        key={index}
+                        className="w-full flex-shrink-0 relative cursor-pointer group"
+                        onClick={() => openLightbox(index)}
+                      >
+                        <Image
+                          src={plan.src || "/placeholder.svg"}
+                          alt={plan.alt}
+                          fill
+                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                          <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">
+                            <Eye className="h-4 w-4 mr-2" />
+                            Voir en grand
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-            <Card className="rounded-none border-0 shadow-lg overflow-hidden">
-              <div className="relative h-96">
-                <Image
-                  src="/duplex-floor-plan-level2.png"
-                  alt="Plan Niveau 2 - Duplex"
-                  fill
-                  className="object-contain p-4"
-                />
+                  {/* Navigation Arrows */}
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={prevPlan}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={nextPlan}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Plan Info */}
+                <CardContent className="p-6 text-center">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Plan Duplex - Unité {currentPlanIndex + 1} sur 2
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Agencement exceptionnel avec salon double hauteur, cuisine haut de gamme, 3 suites et terrasse
+                    panoramique.
+                  </p>
+                  <div className="flex justify-center space-x-4">
+                    <Button
+                      onClick={() => openLightbox(currentPlanIndex)}
+                      variant="outline"
+                      className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white"
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      Voir en grand
+                    </Button>
+                  </div>
+                </CardContent>
+
+                {/* Dots Navigation */}
+                <div className="flex justify-center space-x-1 pb-4">
+                  {duplexPlans.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPlanIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentPlanIndex ? "bg-custom-beige" : "bg-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Niveau 2 - Espaces Privés</h3>
-                <p className="text-gray-600">
-                  Suite parentale avec dressing et salle de bain spa, 2 chambres enfants, mezzanine et accès terrasse.
-                </p>
-              </CardContent>
             </Card>
           </div>
-
-          <Card className="rounded-none border-0 shadow-lg overflow-hidden">
-            <div className="relative h-96">
-              <Image
-                src="/duplex-3d-architectural-view.png"
-                alt="Vue 3D architecturale - Duplex"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <CardContent className="p-6 text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Visualisation 3D Architecturale</h3>
-              <p className="text-gray-600">
-                Découvrez l'élégance architecturale et les volumes exceptionnels de votre futur duplex de prestige.
-              </p>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
@@ -241,77 +291,34 @@ export default function DuplexPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Prestations de Luxe</h2>
-            <p className="text-lg text-gray-600">Des équipements et services d'exception</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
+            <p className="text-lg text-gray-600">Des équipements d'exception pour un confort absolu</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {features.map((feature, index) => (
               <Card key={index} className="rounded-none border-0 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6 text-center">
-                  <feature.icon className="h-8 w-8 text-custom-beige-600 mx-auto mb-3" />
+                  {feature.icon && <feature.icon className="h-8 w-8 text-custom-beige mx-auto mb-3" />}
                   <h3 className="font-semibold text-gray-900">{feature.label}</h3>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Équipements de Prestige</h3>
-              <div className="space-y-3">
-                {equipments.map((equipment, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span className="text-gray-700">{equipment}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Surfaces Détaillées</h3>
-              <div className="space-y-4">
-                <div className="bg-custom-beige-50 p-4 mb-4">
-                  <h4 className="font-bold text-gray-900 mb-2">Niveau 1 (Jour)</h4>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Grand salon + cheminée</span>
-                  <span className="font-semibold text-gray-900">40 - 45 m²</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Cuisine + salle à manger</span>
-                  <span className="font-semibold text-gray-900">35 - 40 m²</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Chambre d'invités</span>
-                  <span className="font-semibold text-gray-900">15 - 18 m²</span>
-                </div>
-
-                <div className="bg-purple-50 p-4 mb-4 mt-6">
-                  <h4 className="font-bold text-gray-900 mb-2">Niveau 2 (Nuit)</h4>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Suite parentale complète</span>
-                  <span className="font-semibold text-gray-900">35 - 40 m²</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Chambres enfants (x2)</span>
-                  <span className="font-semibold text-gray-900">15 - 18 m² chacune</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Mezzanine</span>
-                  <span className="font-semibold text-gray-900">12 - 15 m²</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                  <span className="text-gray-700">Terrasse privative</span>
-                  <span className="font-semibold text-gray-900">30 - 40 m²</span>
-                </div>
-                <div className="flex justify-between items-center py-3 font-bold text-lg">
-                  <span className="text-gray-900">Surface Totale</span>
-                  <span className="text-custom-beige-600">150 - 180 m²</span>
-                </div>
-              </div>
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements Inclus</h3>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {equipments.map((equipment, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="px-4 py-2 text-sm bg-custom-beige-50 border-custom-beige-200 text-custom-beige-800 hover:bg-custom-beige-100 transition-colors"
+                >
+                  {equipment.icon && <equipment.icon className="h-4 w-4 mr-2" />}
+                  {equipment.text}
+                </Badge>
+              ))}
             </div>
           </div>
         </div>
@@ -321,16 +328,16 @@ export default function DuplexPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Prestige</h2>
-            <p className="text-lg text-gray-600">Découvrez l'art de vivre du duplex de prestige</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
+            <p className="text-lg text-gray-600">Découvrez l'exception et le raffinement du duplex</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-grand-salon-fireplace.png"
-                  alt="Grand salon avec cheminée"
+                  src="/duplex-luxury-living-space.jpeg"
+                  alt="Salon Duplex - Espace de vie luxueux double hauteur"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -341,8 +348,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-master-suite-luxury.png"
-                  alt="Suite parentale de luxe"
+                  src="/duplex-double-height-staircase.jpeg"
+                  alt="Escalier Duplex - Escalier design double hauteur"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -353,8 +360,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-gourmet-kitchen.png"
-                  alt="Cuisine gastronomique"
+                  src="/duplex-modern-kitchen-dining.jpeg"
+                  alt="Cuisine Duplex - Cuisine moderne avec salle à manger"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -365,8 +372,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-private-terrace-jacuzzi.png"
-                  alt="Terrasse privative avec jacuzzi"
+                  src="/duplex-new-living-staircase.png"
+                  alt="Salon Duplex - Vue d'ensemble avec escalier"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -377,8 +384,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-spa-bathroom.png"
-                  alt="Salle de bain spa"
+                  src="/duplex-new-kitchen-dining.png"
+                  alt="Cuisine Duplex - Espace cuisine et salle à manger"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -389,8 +396,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-mezzanine-office.png"
-                  alt="Mezzanine bureau"
+                  src="/duplex-new-open-living.png"
+                  alt="Salon Duplex - Espace de vie ouvert"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -402,18 +409,20 @@ export default function DuplexPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-white">
+      <section id="contact-section" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par ce Duplex de Prestige ?</h2>
-              <p className="text-lg text-gray-600">Collection limitée à 8 unités exclusives. Réservation conseillée.</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par ce Duplex ?</h2>
+              <p className="text-lg text-gray-600">
+                Le duplex de prestige représente l'excellence de notre offre avec seulement 2 unités disponibles.
+              </p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12">
               <Card className="rounded-none border-0 shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Duplex Prestige</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Duplex</h3>
                   <form className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -438,7 +447,7 @@ export default function DuplexPage() {
                       <input
                         type="email"
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="contact@thelife.com"
+                        placeholder="Isbimmobiliere@gmail.com"
                       />
                     </div>
                     <div>
@@ -446,33 +455,16 @@ export default function DuplexPage() {
                       <input
                         type="tel"
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="22 322 468"
+                        placeholder="58 666 963"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Surface souhaitée</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Duplex souhaité</label>
                       <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
-                        <option>150 m² - 165 m²</option>
-                        <option>165 m² - 180 m²</option>
+                        <option>Duplex FD.01 - 254 m²</option>
+                        <option>Duplex GD.05 - 221 m²</option>
                         <option>Indifférent</option>
                       </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Options souhaitées</label>
-                      <div className="space-y-2">
-                        <label className="flex items-center">
-                          <input type="checkbox" className="mr-2" />
-                          <span className="text-gray-700">Jacuzzi privatif sur terrasse</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" className="mr-2" />
-                          <span className="text-gray-700">Système domotique avancé</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" className="mr-2" />
-                          <span className="text-gray-700">Services conciergerie</span>
-                        </label>
-                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
@@ -485,9 +477,9 @@ export default function DuplexPage() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full rounded-none bg-custom-beige-600 hover:bg-custom-beige-700"
+                      className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
                     >
-                      Envoyer la Demande VIP
+                      Envoyer la Demande
                     </Button>
                   </form>
                 </CardContent>
@@ -495,52 +487,40 @@ export default function DuplexPage() {
 
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Exclusives</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Pratiques</h3>
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
-                      <Crown className="h-5 w-5 text-custom-beige-600 mt-1" />
+                      <Home className="h-5 w-5 text-custom-beige mt-1" />
                       <div>
-                        <div className="font-semibold text-gray-900">Collection Limitée</div>
-                        <div className="text-gray-600">Seulement 8 duplex de prestige disponibles</div>
+                        <div className="font-semibold text-gray-900">Disponibilité</div>
+                        <div className="text-gray-600">2 duplex de prestige disponibles</div>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <Ruler className="h-5 w-5 text-custom-beige-600 mt-1" />
+                      <Ruler className="h-5 w-5 text-custom-beige mt-1" />
                       <div>
-                        <div className="font-semibold text-gray-900">Surfaces Exceptionnelles</div>
-                        <div className="text-gray-600">De 150 m² à 180 m² sur 2 niveaux</div>
+                        <div className="font-semibold text-gray-900">Surfaces</div>
+                        <div className="text-gray-600">De 221 m² à 254 m²</div>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <Car className="h-5 w-5 text-custom-beige-600 mt-1" />
+                      <Trees className="h-5 w-5 text-custom-beige mt-1" />
                       <div>
-                        <div className="font-semibold text-gray-900">Parking Premium</div>
-                        <div className="text-gray-600">2 places de parking couvertes incluses</div>
+                        <div className="font-semibold text-gray-900">Jardin privé</div>
+                        <div className="text-gray-600">113-154 m² de jardin privé</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-custom-beige-50 to-purple-50 p-6">
-                  <h4 className="font-bold text-gray-900 mb-3 flex items-center">
-                    <Crown className="h-5 w-5 text-custom-beige-600 mr-2" />
-                    Services VIP Inclus
-                  </h4>
-                  <ul className="text-gray-700 space-y-2">
-                    <li>• Visite privée avec architecte</li>
-                    <li>• Personnalisation des finitions</li>
-                    <li>• Service conciergerie 24h/24</li>
-                    <li>• Maintenance premium incluse</li>
-                  </ul>
-                  <Button className="w-full mt-4 rounded-none bg-purple-600 hover:bg-purple-700">
-                    Réserver une Visite VIP
-                  </Button>
-                </div>
-
                 <div>
-                  <Button size="lg" className="w-full rounded-none bg-custom-beige-600 hover:bg-custom-beige-700">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
+                  >
                     <MessageCircle className="h-5 w-5 mr-2" />
-                    Conseiller Duplex WhatsApp
+                    Discuter sur WhatsApp
                   </Button>
                 </div>
               </div>
@@ -553,23 +533,16 @@ export default function DuplexPage() {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez Nos Autres Logements</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link href="/logements/s1">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
-                  <Image
-                    src="/modern-apartment-living-room-s1.png"
-                    alt="Appartement S+1"
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src="/s1-modern-living-room-new.png" alt="Appartement S+1" fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+1</h4>
-                  <p className="text-gray-600 mb-3">2 pièces • 65-75 m² • 15 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige-600 hover:bg-custom-beige-700">
-                    Découvrir
-                  </Button>
+                  <p className="text-gray-600 mb-3">2 pièces • 48 à 77 m² • 30 unités</p>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
                 </CardContent>
               </Card>
             </Link>
@@ -577,19 +550,12 @@ export default function DuplexPage() {
             <Link href="/logements/s2">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
-                  <Image
-                    src="/modern-apartment-living-room-s2.png"
-                    alt="Appartement S+2"
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src="/s2-modern-living-room-hero.png" alt="Appartement S+2" fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+2</h4>
-                  <p className="text-gray-600 mb-3">3 pièces • 85-95 m² • 45 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige-600 hover:bg-custom-beige-700">
-                    Découvrir
-                  </Button>
+                  <p className="text-gray-600 mb-3">3 pièces • 87-136 m² • 30 unités</p>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
                 </CardContent>
               </Card>
             </Link>
@@ -598,7 +564,7 @@ export default function DuplexPage() {
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
                   <Image
-                    src="/modern-apartment-living-room-s3.png"
+                    src="/s3-modern-living-dining-interior.jpeg"
                     alt="Appartement S+3"
                     fill
                     className="object-cover"
@@ -606,10 +572,21 @@ export default function DuplexPage() {
                 </div>
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Appartement S+3</h4>
-                  <p className="text-gray-600 mb-3">4 pièces • 110-125 m² • 24 unités</p>
-                  <Button className="w-full rounded-none bg-custom-beige-600 hover:bg-custom-beige-700">
-                    Découvrir
-                  </Button>
+                  <p className="text-gray-600 mb-3">4 pièces • 110-125 m² • 22 unités</p>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/logements/villa">
+              <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+                <div className="relative h-48">
+                  <Image src="/villa-luxury-interior-modern.jpeg" alt="Villa" fill className="object-cover" />
+                </div>
+                <CardContent className="p-6">
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Villa</h4>
+                  <p className="text-gray-600 mb-3">2 niveaux • 353-357 m² • 6 unités</p>
+                  <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige">Découvrir</Button>
                 </CardContent>
               </Card>
             </Link>
@@ -619,10 +596,22 @@ export default function DuplexPage() {
 
       {/* WhatsApp Float Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button size="lg" className="rounded-full bg-custom-beige-500 hover:bg-custom-beige-600 shadow-lg">
+        <Button
+          size="lg"
+          variant="outline"
+          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-white shadow-lg"
+        >
           <MessageCircle className="h-6 w-6" />
         </Button>
       </div>
+
+      {/* Plan Lightbox */}
+      <PlanLightbox
+        isOpen={showPlanLightbox}
+        onClose={() => setShowPlanLightbox(false)}
+        plans={duplexPlans}
+        initialIndex={lightboxStartIndex}
+      />
     </div>
   )
 }

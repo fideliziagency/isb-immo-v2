@@ -79,7 +79,6 @@
 
 @theme inline {
   /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -153,27 +152,83 @@ html {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Custom beige color utilities */
-.bg-custom-beige {
-  background-color: var(--color-custom-beige);
-}
-
-.bg-custom-beige-hover:hover {
-  background-color: var(--color-custom-beige-hover);
-}
-
+/* Custom colors for The Life Residence */
 .text-custom-beige {
-  color: var(--color-custom-beige);
+  color: #b6b09f;
+}
+
+.bg-custom-beige {
+  background-color: #b6b09f;
 }
 
 .border-custom-beige {
-  border-color: var(--color-custom-beige);
+  border-color: #b6b09f;
+}
+
+.hover\:bg-custom-beige:hover {
+  background-color: #a5a08a;
 }
 
 .bg-custom-beige-light {
-  background-color: var(--color-custom-beige-light);
+  background-color: #e8e6e0;
 }
 
 .text-custom-beige-light {
-  color: var(--color-custom-beige-light);
+  color: #d4d0c4;
+}
+
+.hover\:bg-custom-beige-light:hover {
+  background-color: #ddd9cc;
+}
+
+.bg-custom-beige-hover {
+  background-color: #a5a08a;
+}
+
+.hover\:bg-custom-beige-hover:hover {
+  background-color: #959075;
+}
+
+.text-custom-beige-600 {
+  color: #9b9580;
+}
+
+.bg-custom-beige-600 {
+  background-color: #9b9580;
+}
+
+.border-custom-beige-600 {
+  border-color: #9b9580;
+}
+
+.hover\:bg-custom-beige-600:hover {
+  background-color: #8a8570;
+}
+
+.hover\:bg-custom-beige-700:hover {
+  background-color: #7a7560;
+}
+
+.bg-custom-beige-50 {
+  background-color: #f5f4f1;
+}
+
+.bg-custom-beige-100 {
+  background-color: #ebeae5;
+}
+
+.text-custom-beige-800 {
+  color: #6b6555;
+}
+
+.border-custom-beige-500 {
+  border-color: #a8a28d;
+}
+
+.text-custom-beige-500 {
+  color: #a8a28d;
+}
+
+.hover\:bg-custom-beige-500:hover {
+  background-color: #9b9580;
 }
