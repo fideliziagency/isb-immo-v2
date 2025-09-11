@@ -56,24 +56,6 @@ export default function HomePage() {
                 Contact
               </Link>
             </nav>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                Appeler
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
-              </Button>
-            </div>
           </div>
         </div>
       </header>
@@ -87,17 +69,19 @@ export default function HomePage() {
             fill
             className="object-cover"
             priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            quality={90}
           />
         </div>
 
         {/* Top Thin Horizontal Glassmorphism Rectangle */}
         <div className="relative z-10 container mx-auto px-4 pt-8">
-          <div className="backdrop-blur-md bg-black/40 border border-white/20 rounded-2xl px-8 py-4 shadow-xl max-w-4xl mx-auto">
+          <div className="backdrop-blur-md bg-black/40 border border-white/20 rounded-2xl px-4 sm:px-8 py-4 sm:py-6 shadow-xl max-w-4xl mx-auto">
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg tracking-wide mb-2">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg tracking-wide mb-2 leading-tight">
                 The Life Residence
               </h1>
-              <p className="text-lg md:text-xl text-white drop-shadow-lg font-light">
+              <p className="text-base sm:text-lg md:text-xl text-white drop-shadow-lg font-light leading-relaxed">
                 L'art de vivre au cœur de la modernité
               </p>
             </div>
@@ -107,25 +91,25 @@ export default function HomePage() {
         {/* Bottom Stats - Clean and Minimal */}
         <div className="absolute bottom-16 left-0 right-0 z-10">
           <div className="container mx-auto px-4">
-            <div className="backdrop-blur-sm bg-black/50 rounded-xl px-8 py-6 max-w-4xl mx-auto">
-              <div className="grid grid-cols-4 gap-8 text-center">
+            <div className="backdrop-blur-sm bg-black/50 rounded-xl px-4 sm:px-8 py-4 sm:py-6 max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-white drop-shadow-md">82</div>
-                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">
+                  <div className="text-xl sm:text-3xl font-bold text-white drop-shadow-md">82</div>
+                  <div className="text-xs text-white uppercase tracking-wide font-light drop-shadow-md">
                     Appartements
                   </div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-white drop-shadow-md">02</div>
-                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Duplex</div>
+                  <div className="text-xl sm:text-3xl font-bold text-white drop-shadow-md">02</div>
+                  <div className="text-xs text-white uppercase tracking-wide font-light drop-shadow-md">Duplex</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-white drop-shadow-md">06</div>
-                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Villas</div>
+                  <div className="text-xl sm:text-3xl font-bold text-white drop-shadow-md">06</div>
+                  <div className="text-xs text-white uppercase tracking-wide font-light drop-shadow-md">Villas</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-white drop-shadow-md">Fin 2027</div>
-                  <div className="text-sm text-white uppercase tracking-wide font-light drop-shadow-md">Livraison</div>
+                  <div className="text-lg sm:text-2xl font-bold text-white drop-shadow-md">Fin 2027</div>
+                  <div className="text-xs text-white uppercase tracking-wide font-light drop-shadow-md">Livraison</div>
                 </div>
               </div>
             </div>
@@ -279,7 +263,7 @@ export default function HomePage() {
 
               <div className="mt-8">
                 <Button size="lg" className="w-full rounded-none bg-custom-beige bg-custom-beige-hover" asChild>
-                  <a href="https://wa.me/21656999963" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/21658999963" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="h-5 w-5 mr-2" />
                     Discuter sur WhatsApp
                   </a>
@@ -290,12 +274,15 @@ export default function HomePage() {
             <Card className="rounded-none border-0 shadow-lg">
               <CardContent className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information</h3>
-                <form className="space-y-6">
+                <form action="https://formspree.io/f/meoldjwl" method="POST" className="space-y-6">
+                  <input type="hidden" name="formType" value="contact" />
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
                       <input
                         type="text"
+                        name="firstName"
+                        required
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
                         placeholder="prénom"
                       />
@@ -304,6 +291,8 @@ export default function HomePage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
                       <input
                         type="text"
+                        name="lastName"
+                        required
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
                         placeholder="nom"
                       />
@@ -313,6 +302,8 @@ export default function HomePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input
                       type="email"
+                      name="email"
+                      required
                       className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
                       placeholder="Isbimmobiliere@gmail.com"
                     />
@@ -321,13 +312,18 @@ export default function HomePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
                     <input
                       type="tel"
+                      name="phone"
+                      required
                       className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
                       placeholder="58 666 963"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Type de logement souhaité</label>
-                    <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
+                    <select
+                      name="unitType"
+                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                    >
                       <option>Sélectionnez un type</option>
                       <option>Appartement S+1</option>
                       <option>Appartement S+2</option>
@@ -340,6 +336,7 @@ export default function HomePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                     <textarea
                       rows={4}
+                      name="message"
                       className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
                       placeholder="message..."
                     ></textarea>

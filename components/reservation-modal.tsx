@@ -32,23 +32,48 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
     { id: "villa", name: "Villa Premium", surface: "200-250 m²", available: 6 },
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate form submission
-    setIsSubmitted(true)
-    setTimeout(() => {
-      setIsSubmitted(false)
-      onClose()
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        message: "",
+
+    try {
+      const response = await fetch("https://formspree.io/f/meoldjwl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          unitType: selectedUnit,
+          message: formData.message,
+          formType: "reservation",
+        }),
       })
-      setSelectedUnit("")
-    }, 2000)
+
+      if (response.ok) {
+        setIsSubmitted(true)
+        setTimeout(() => {
+          setIsSubmitted(false)
+          onClose()
+          // Reset form
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            message: "",
+          })
+          setSelectedUnit("")
+        }, 2000)
+      } else {
+        throw new Error("Erreur lors de l'envoi")
+      }
+    } catch (error) {
+      console.error("Erreur:", error)
+      alert("Erreur lors de l'envoi du formulaire. Veuillez réessayer.")
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

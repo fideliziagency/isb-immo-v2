@@ -17,7 +17,6 @@ import {
   Zap,
   Droplets,
   Wind,
-  Phone,
   Eye,
   Trees,
   ChevronLeft,
@@ -250,16 +249,7 @@ export default function AppartementS1Page() {
                 <span className="text-lg font-bold text-gray-900">The Life Residence</span>
               </div>
             </Link>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                Appeler
-              </Button>
-            </div>
+            <div className="flex items-center space-x-3">{/* Button removed */}</div>
           </div>
         </div>
       </header>
@@ -516,7 +506,7 @@ export default function AppartementS1Page() {
               <Card className="rounded-none border-0 shadow-lg">
                 <CardContent className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+1</h3>
-                  <form className="space-y-6">
+                 <form action="/api/send-email" method="POST" className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
@@ -548,7 +538,7 @@ export default function AppartementS1Page() {
                       <input
                         type="tel"
                         className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="58 666 963"
+                        placeholder="+216 58 666 963"
                       />
                     </div>
                     <div>
