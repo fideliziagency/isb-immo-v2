@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ArrowLeft,
   Home,
@@ -32,6 +32,10 @@ export default function VillaPage() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "353-357 m²" },
@@ -172,7 +176,7 @@ export default function VillaPage() {
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
+                className="rounded-none border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white bg-transparent"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 WhatsApp
@@ -490,8 +494,8 @@ export default function VillaPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/villa-h6.jpg"
-                  alt="Suite Villa - Chambre moderne avec design contemporain"
+                  src="/villa-h1-exterior.jpg"
+                  alt="Extérieur Villa - Façade moderne avec jardin paysager"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -514,6 +518,18 @@ export default function VillaPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
+                  src="/villa-h3.jpg"
+                  alt="Salon Villa - Salon contemporain avec TV murale et lustre design"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <div className="relative h-64 overflow-hidden">
+                <Image
                   src="/villa-h2.jpg"
                   alt="Cuisine Villa - Cuisine moderne avec îlot central en marbre"
                   fill
@@ -526,8 +542,8 @@ export default function VillaPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/villa-h1-exterior.jpg"
-                  alt="Extérieur Villa - Façade moderne avec jardin paysager"
+                  src="/villa-h6.jpg"
+                  alt="Suite Villa - Chambre moderne avec design contemporain"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -540,18 +556,6 @@ export default function VillaPage() {
                 <Image
                   src="/villa-h4.jpg"
                   alt="Piscine Villa - Terrasse avec piscine et salon extérieur"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <Image
-                  src="/villa-h3.jpg"
-                  alt="Salon Villa - Salon contemporain avec TV murale et lustre design"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -764,7 +768,7 @@ export default function VillaPage() {
         <Button
           size="lg"
           variant="outline"
-          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-white shadow-lg"
+          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-black bg-white shadow-lg"
         >
           <MessageCircle className="h-6 w-6" />
         </Button>

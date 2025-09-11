@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ArrowLeft,
   Home,
@@ -33,6 +33,10 @@ export default function AppartementS2Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "87-136 m²" },
@@ -498,8 +502,8 @@ export default function AppartementS2Page() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/s2-new-bedroom-gallery.png"
-                  alt="Chambre principale S+2 avec coin salon"
+                  src="/s2-chambre-moderne-luxe.png"
+                  alt="Chambre moderne S+2 avec vue et éclairage design"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />

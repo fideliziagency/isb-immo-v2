@@ -109,7 +109,7 @@ export default function VillasPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-none border-custom-beige-600 text-custom-beige-600 hover:bg-custom-beige-600 hover:text-white bg-transparent"
+                className="rounded-none border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white bg-transparent"
               >
                 <Phone className="h-4 w-4 mr-2" />
                 Appeler
@@ -117,7 +117,7 @@ export default function VillasPage() {
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
+                className="rounded-none border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white bg-transparent"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 WhatsApp
@@ -704,7 +704,7 @@ export default function VillasPage() {
         <Button
           size="lg"
           variant="outline"
-          className="rounded-full border-custom-beige-500 text-custom-beige-500 hover:bg-custom-beige-500 hover:text-white bg-white shadow-lg"
+          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-black bg-white shadow-lg"
         >
           <MessageCircle className="h-6 w-6" />
         </Button>

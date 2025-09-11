@@ -82,7 +82,7 @@ export default function HomePage() {
       <section className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/the-life-residence-front-view.jpeg"
+            src="/nouvelle-facade-residence.png"
             alt="The Life Residence - Vue frontale du complexe résidentiel moderne avec entrée principale"
             fill
             className="object-cover"

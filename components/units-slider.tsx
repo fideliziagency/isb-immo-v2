@@ -160,7 +160,7 @@ export default function UnitsSlider() {
                           className="object-cover"
                         />
                         <div className="absolute top-4 left-4">
-                          <Badge className="bg-custom-beige text-white rounded-none">{property.type}</Badge>
+                          <Badge className="bg-gray-900 text-white rounded-none">{property.type}</Badge>
                         </div>
                         <div className="absolute top-4 right-4">
                           <Badge className="bg-white text-gray-900 rounded-none">{property.disponibles}</Badge>

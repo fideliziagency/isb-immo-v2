@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ArrowLeft,
   Home,
@@ -17,7 +17,6 @@ import {
   Droplets,
   Wind,
   Phone,
-  MessageCircle,
   Eye,
   Trees,
   ChevronLeft,
@@ -32,6 +31,10 @@ export default function DuplexPage() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "221-254 m²" },
@@ -116,14 +119,6 @@ export default function DuplexPage() {
               >
                 <Phone className="h-4 w-4 mr-2" />
                 Appeler
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-none border-custom-beige bg-white text-custom-beige hover:bg-custom-beige hover:text-white"
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
               </Button>
             </div>
           </div>
@@ -343,8 +338,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-new-kitchen-dining.png"
-                  alt="Cuisine Duplex - Espace cuisine et salle à manger"
+                  src="/duplex-new-open-living.png"
+                  alt="Salon Duplex - Espace de vie ouvert"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -355,8 +350,8 @@ export default function DuplexPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/duplex-new-open-living.png"
-                  alt="Salon Duplex - Espace de vie ouvert"
+                  src="/duplex-new-kitchen-dining.png"
+                  alt="Cuisine Duplex - Espace cuisine et salle à manger"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -478,17 +473,6 @@ export default function DuplexPage() {
                     </div>
                   </div>
                 </div>
-
-                <div>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Discuter sur WhatsApp
-                  </Button>
-                </div>
               </div>
             </div>
           </div>
@@ -559,17 +543,6 @@ export default function DuplexPage() {
           </div>
         </div>
       </section>
-
-      {/* WhatsApp Float Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="lg"
-          variant="outline"
-          className="rounded-full border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-white shadow-lg"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      </div>
 
       {/* Plan Lightbox */}
       <PlanLightbox
