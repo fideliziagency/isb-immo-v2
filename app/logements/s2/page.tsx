@@ -318,8 +318,8 @@ export default function AppartementS2Page() {
 
             <div className="relative">
               <Image
-                src="/s2-modern-living-room-hero.png"
-                alt="Appartement S+2 - Salon moderne avec cheminée et TV murale"
+                src="/s2-salon-moderne-elegant-hero.png"
+                alt="Appartement S+2 - Salon moderne avec canapé gris, table basse en marbre et éclairage design"
                 width={600}
                 height={400}
                 className="w-full h-96 object-cover"

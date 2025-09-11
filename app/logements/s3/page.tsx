@@ -270,8 +270,8 @@ export default function AppartementS3Page() {
 
             <div className="relative">
               <Image
-                src="/s3-modern-living-dining-hero.jpeg"
-                alt="Appartement S+3 - Grand salon avec cheminée et salle à manger"
+                src="/s3-salon-salle-manger-luxe-hero.png"
+                alt="Appartement S+3 - Grand salon avec salle à manger moderne et cuisine ouverte"
                 width={600}
                 height={400}
                 className="w-full h-96 object-cover"
