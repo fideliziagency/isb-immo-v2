@@ -1,9 +1,6 @@
 "use client"
-import { useForm, ValidationError } from '@formspree/react'; // 👈 Ajoutez cette ligne
-
-export default function DuplexPage() {
-  const [state, handleSubmit] = useForm("meoldjwl"); // 👈 Utilisez votre ID Formspree
-  
+import { useForm, ValidationError } from "@formspree/react" // 👈 Ajoutez cette ligne
+import type React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,7 +19,6 @@ import {
   Droplets,
   Wind,
   Eye,
-  Trees,
   ChevronLeft,
   ChevronRight,
   Camera,
@@ -32,13 +28,64 @@ import Image from "next/image"
 import Link from "next/link"
 
 export default function DuplexPage() {
+  const [state, handleSubmit] = useForm("meoldjwl") // 👈 Utilisez votre ID Formspree
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+  const [currentCoverIndex, setCurrentCoverIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const [planTouchStart, setPlanTouchStart] = useState(0)
+  const [planTouchEnd, setPlanTouchEnd] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const coverImages = [
+    {
+      src: "/duplex-new-living-staircase.png",
+      alt: "Salon Duplex - Vue d'ensemble avec escalier",
+    },
+    {
+      src: "/duplex-new-open-living.png",
+      alt: "Salon Duplex - Espace de vie ouvert",
+    },
+    {
+      src: "/duplex-new-kitchen-dining.png",
+      alt: "Cuisine Duplex - Espace cuisine et salle à manger",
+    },
+  ]
+
+  const nextCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev + 1) % coverImages.length)
+  }
+
+  const prevCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev - 1 + coverImages.length) % coverImages.length)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextCoverImage()
+    }
+    if (isRightSwipe) {
+      prevCoverImage()
+    }
+  }
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "221-254 m²" },
@@ -68,7 +115,6 @@ export default function DuplexPage() {
     { icon: Wind, label: "VMC double flux" },
   ]
 
-  // Generate 2 Duplex unit plans
   const duplexPlans = [
     {
       src: "/duplex-plan-fd01.png",
@@ -102,6 +148,28 @@ export default function DuplexPage() {
     }
   }
 
+  const handlePlanTouchStart = (e: React.TouchEvent) => {
+    setPlanTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handlePlanTouchMove = (e: React.TouchEvent) => {
+    setPlanTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handlePlanTouchEnd = () => {
+    if (!planTouchStart || !planTouchEnd) return
+    const distance = planTouchStart - planTouchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextPlan()
+    }
+    if (isRightSwipe) {
+      prevPlan()
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -121,9 +189,9 @@ export default function DuplexPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 md:py-12 py-8 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2 mb-6">
+          <div className="flex items-center space-x-2 mb-6 md:mb-6 mb-4">
             <Link href="/" className="text-gray-500 hover:text-custom-beige">
               Accueil
             </Link>
@@ -135,14 +203,10 @@ export default function DuplexPage() {
             <span className="text-gray-900">Duplex de Prestige</span>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8 items-start">
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Duplex de Prestige</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Duplex de Prestige</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Le summum du luxe résidentiel sur 2 niveaux. Volumes exceptionnels, terrasse panoramique et finitions
-                d'exception pour un art de vivre unique.
-              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -160,13 +224,61 @@ export default function DuplexPage() {
             </div>
 
             <div className="relative">
-              <Image
-                src="/duplex-new-cover-hero.png"
-                alt="Duplex de Prestige - Salon double hauteur avec escalier design"
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
+              <div
+                className="relative h-96 overflow-hidden"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <div
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${currentCoverIndex * 100}%)` }}
+                >
+                  {coverImages.map((image, index) => (
+                    <div key={index} className="w-full flex-shrink-0 relative">
+                      <Image
+                        src={image.src || "/placeholder.svg"}
+                        alt={image.alt}
+                        width={600}
+                        height={400}
+                        className="w-full h-96 object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Navigation Arrows */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={prevCoverImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={nextCoverImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Button>
+
+                {/* Dots Navigation */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {coverImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentCoverIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentCoverIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="absolute top-4 right-4">
                 <Badge className="bg-custom-beige text-white rounded-none">2 Unités Disponibles</Badge>
               </div>
@@ -176,9 +288,9 @@ export default function DuplexPage() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
             <p className="text-lg text-gray-600">Un agencement exceptionnel sur 2 niveaux</p>
           </div>
@@ -187,7 +299,12 @@ export default function DuplexPage() {
             <Card className="rounded-none border-0 shadow-lg overflow-hidden">
               <div className="relative">
                 {/* Plan Slider */}
-                <div className="relative h-96 overflow-hidden">
+                <div
+                  className="relative h-96 overflow-hidden"
+                  onTouchStart={handlePlanTouchStart}
+                  onTouchMove={handlePlanTouchMove}
+                  onTouchEnd={handlePlanTouchEnd}
+                >
                   <div
                     className="flex transition-transform duration-500 ease-in-out h-full"
                     style={{ transform: `translateX(-${currentPlanIndex * 100}%)` }}
@@ -202,7 +319,7 @@ export default function DuplexPage() {
                           src={plan.src || "/placeholder.svg"}
                           alt={plan.alt}
                           fill
-                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                           <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">
@@ -273,14 +390,14 @@ export default function DuplexPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
             <p className="text-lg text-gray-600">Des équipements d'exception pour un confort absolu</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 md:mb-12 mb-8">
             {features.map((feature, index) => (
               <Card key={index} className="rounded-none border-0 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6 text-center">
@@ -310,9 +427,9 @@ export default function DuplexPage() {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
             <p className="text-lg text-gray-600">Découvrez l'exception et le raffinement du duplex</p>
           </div>
@@ -358,124 +475,120 @@ export default function DuplexPage() {
       </section>
 
       {/* Contact Section */}
-<section id="contact-section" className="py-16 bg-white">
-  <div className="container mx-auto px-4">
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par ce Duplex ?</h2>
-        <p className="text-lg text-gray-600">
-          Le duplex de prestige représente l'excellence de notre offre avec seulement 2 unités disponibles.
-        </p>
-      </div>
+      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12 md:mb-12 mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par ce Duplex ?</h2>
+              <p className="text-lg text-gray-600">
+                Le duplex de prestige représente l'excellence de notre offre avec seulement 2 unités disponibles.
+              </p>
+            </div>
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        <Card className="rounded-none border-0 shadow-lg">
-          <CardContent className="p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Duplex</h3>
-            
-            {/* 👇 CODE CORRIGÉ AVEC FORMSPREE */}
-            {state.succeeded ? (
-              <p className="text-green-600 font-medium">Merci pour votre demande ! Nous vous contacterons sous 24h.</p>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <input type="hidden" name="_replyto" value="Isbimmobiliere@gmail.com" />
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                      placeholder="prénom"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                      placeholder="nom"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                    placeholder="Isbimmobiliere@gmail.com"
-                  />
-                  <ValidationError 
-                    field="email" 
-                    prefix="Email" 
-                    errors={state.errors} 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                    placeholder="+216 58 666 963"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Duplex souhaité</label>
-                  <select
-                    name="unitType"
-                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                  >
-                    <option>Duplex FD.01 - 254 m²</option>
-                    <option>Duplex GD.05 - 221 m²</option>
-                    <option>Indifférent</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                  <textarea
-                    rows={4}
-                    name="message"
-                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                    placeholder="Questions spécifiques sur le duplex de prestige..."
-                  ></textarea>
-                  <ValidationError 
-                    field="message" 
-                    prefix="Message" 
-                    errors={state.errors} 
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                  disabled={state.submitting}
-                >
-                  {state.submitting ? 'Envoi en cours...' : 'Envoyer la Demande'}
-                </Button>
-              </form>
-            )}
-          </CardContent>
-        </Card>
+            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
+              <Card className="rounded-none border-0 shadow-lg">
+                <CardContent className="p-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Duplex</h3>
 
-        {/* ... le reste du code reste inchangé ... */}
-      </div>
-    </div>
-  </div>
-</section>
+                  {/* 👇 CODE CORRIGÉ AVEC FORMSPREE */}
+                  {state.succeeded ? (
+                    <p className="text-green-600 font-medium">
+                      Merci pour votre demande ! Nous vous contacterons sous 24h.
+                    </p>
+                  ) : (
+                    <form onSubmit={handleSubmit}>
+                      <input type="hidden" name="_replyto" value="Isbimmobiliere@gmail.com" />
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                          <input
+                            type="text"
+                            name="firstName"
+                            required
+                            className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                            placeholder="prénom"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                          <input
+                            type="text"
+                            name="lastName"
+                            required
+                            className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                            placeholder="nom"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                          placeholder="Isbimmobiliere@gmail.com"
+                        />
+                        <ValidationError field="email" prefix="Email" errors={state.errors} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                          placeholder="+216 58 666 963"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Duplex souhaité</label>
+                        <select
+                          name="unitType"
+                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                        >
+                          <option>Duplex FD.01 - 254 m²</option>
+                          <option>Duplex GD.05 - 221 m²</option>
+                          <option>Indifférent</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea
+                          rows={4}
+                          name="message"
+                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
+                          placeholder="Questions spécifiques sur le duplex de prestige..."
+                        ></textarea>
+                        <ValidationError field="message" prefix="Message" errors={state.errors} />
+                      </div>
+                      <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
+                        disabled={state.submitting}
+                      >
+                        {state.submitting ? "Envoi en cours..." : "Envoyer la Demande"}
+                      </Button>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* ... le reste du code reste inchangé ... */}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Navigation to Other Types */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez Nos Autres Logements</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8 md:mb-8 mb-6">
+            Découvrez Nos Autres Logements
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 gap-4">
             <Link href="/logements/s1">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">

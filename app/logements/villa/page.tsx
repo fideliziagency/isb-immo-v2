@@ -187,10 +187,6 @@ export default function VillaPage() {
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Villa Individuelle</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Villa Individuelle</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Maison individuelle avec jardin privé et piscine. L'art de vivre à la tunisienne dans un cadre
-                d'exception avec des prestations haut de gamme.
-              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -240,7 +236,7 @@ export default function VillaPage() {
                     src="/villa-1-ground-floor.png"
                     alt="Plan Villa 1 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -251,7 +247,7 @@ export default function VillaPage() {
                     src="/villa-1-upper-floor.png"
                     alt="Plan Villa 1 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -272,7 +268,7 @@ export default function VillaPage() {
                     src="/villa-2-ground-floor.png"
                     alt="Plan Villa 2 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -283,7 +279,7 @@ export default function VillaPage() {
                     src="/villa-2-upper-floor.png"
                     alt="Plan Villa 2 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -304,7 +300,7 @@ export default function VillaPage() {
                     src="/villa-3-ground-floor.png"
                     alt="Plan Villa 3 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -315,7 +311,7 @@ export default function VillaPage() {
                     src="/villa-3-upper-floor.png"
                     alt="Plan Villa 3 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -336,7 +332,7 @@ export default function VillaPage() {
                     src="/villa-4-ground-floor.png"
                     alt="Plan Villa 4 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -347,7 +343,7 @@ export default function VillaPage() {
                     src="/villa-4-upper-floor.png"
                     alt="Plan Villa 4 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -368,7 +364,7 @@ export default function VillaPage() {
                     src="/villa-5-ground-floor.png"
                     alt="Plan Villa 5 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -379,7 +375,7 @@ export default function VillaPage() {
                     src="/villa-5-upper-floor.png"
                     alt="Plan Villa 5 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -400,7 +396,7 @@ export default function VillaPage() {
                     src="/villa-6-ground-floor.png"
                     alt="Plan Villa 6 - RDC"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -411,7 +407,7 @@ export default function VillaPage() {
                     src="/villa-6-upper-floor.png"
                     alt="Plan Villa 6 - Étage"
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

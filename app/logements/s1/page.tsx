@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -31,10 +33,59 @@ export default function AppartementS1Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+  const [currentCoverIndex, setCurrentCoverIndex] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const coverImages = [
+    {
+      src: "/s1-salon-moderne-luxe.jpeg",
+      alt: "Salon S+1 - Espace de vie moderne avec canapé beige, coin bar et TV murale",
+    },
+    {
+      src: "/s1-new-open-living-dining.jpeg",
+      alt: "Salon-salle à manger S+1 - Espace ouvert avec cuisine et îlot central",
+    },
+    {
+      src: "/s1-new-kitchen-modern.jpeg",
+      alt: "Cuisine S+1 - Cuisine moderne équipée avec plan de travail en marbre",
+    },
+  ]
+
+  const nextCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev + 1) % coverImages.length)
+  }
+
+  const prevCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev - 1 + coverImages.length) % coverImages.length)
+  }
+
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextCoverImage()
+    }
+    if (isRightSwipe) {
+      prevCoverImage()
+    }
+  }
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "48 à 77 m²" },
@@ -62,7 +113,6 @@ export default function AppartementS1Page() {
     { icon: Wind, label: "Ventilation optimisée" },
   ]
 
-  // Generate 30 S+1 unit plans
   const s1Plans = [
     {
       src: "/s1-plan-c12.png",
@@ -255,9 +305,9 @@ export default function AppartementS1Page() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 md:py-12 py-8 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2 mb-6">
+          <div className="flex items-center space-x-2 mb-6 md:mb-6 mb-4">
             <Link href="/" className="text-gray-500 hover:text-custom-beige">
               Accueil
             </Link>
@@ -269,14 +319,10 @@ export default function AppartementS1Page() {
             <span className="text-gray-900">Appartement S+1</span>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8 items-start">
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Appartement S+1</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Appartement S+1</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Idéal pour jeunes couples ou investissement locatif. Compact et fonctionnel avec des finitions haut de
-                gamme dans un cadre de vie exceptionnel.
-              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -294,13 +340,61 @@ export default function AppartementS1Page() {
             </div>
 
             <div className="relative">
-              <Image
-                src="/s1-luxury-living-room-hero.png"
-                alt="Appartement S+1 - Salon moderne avec cuisine ouverte"
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
+              <div
+                className="relative h-96 overflow-hidden"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <div
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${currentCoverIndex * 100}%)` }}
+                >
+                  {coverImages.map((image, index) => (
+                    <div key={index} className="w-full flex-shrink-0 relative">
+                      <Image
+                        src={image.src || "/placeholder.svg"}
+                        alt={image.alt}
+                        width={600}
+                        height={400}
+                        className="w-full h-96 object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Navigation Arrows */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={prevCoverImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={nextCoverImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Button>
+
+                {/* Dots Navigation */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {coverImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentCoverIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentCoverIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="absolute top-4 right-4">
                 <Badge className="bg-custom-beige text-white rounded-none">30 Unités Disponibles</Badge>
               </div>
@@ -310,9 +404,9 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
             <p className="text-lg text-gray-600">Découvrez l'agencement optimisé de votre futur appartement</p>
           </div>
@@ -336,7 +430,7 @@ export default function AppartementS1Page() {
                           src={plan.src || "/placeholder.svg"}
                           alt={plan.alt}
                           fill
-                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                           <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">
@@ -407,18 +501,18 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
             <p className="text-lg text-gray-600">Des équipements modernes pour votre confort quotidien</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 md:mb-12 mb-8">
             {features.map((feature, index) => (
               <Card key={index} className="rounded-none border-0 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6 text-center">
-                  <feature.icon className="h-8 w-8 text-custom-beige mx-auto mb-3" />
+                  {feature.icon && <feature.icon className="h-8 w-8 text-custom-beige mx-auto mb-3" />}
                   <h3 className="font-semibold text-gray-900">{feature.label}</h3>
                 </CardContent>
               </Card>
@@ -444,14 +538,14 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
             <p className="text-lg text-gray-600">Découvrez les finitions et l'aménagement en images</p>
           </div>
 
-          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6 md:gap-6 gap-4">
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
@@ -492,21 +586,21 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact-section" className="py-16 bg-white">
+      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 md:mb-12 mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cet Appartement ?</h2>
               <p className="text-lg text-gray-600">
                 Contactez-nous pour plus d'informations ou pour planifier une visite
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
               <Card className="rounded-none border-0 shadow-lg">
                 <CardContent className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+1</h3>
-                 <form action="/api/send-email" method="POST" className="space-y-6">
+                  <form action="/api/send-email" method="POST" className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
@@ -604,10 +698,12 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Navigation to Other Types */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez Nos Autres Logements</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8 md:mb-8 mb-6">
+            Découvrez Nos Autres Logements
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 gap-4">
             <Link href="/logements/s2">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">

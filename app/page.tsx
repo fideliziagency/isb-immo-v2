@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,6 +17,10 @@ import {
   Facebook,
   Instagram,
   Building,
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -25,6 +31,76 @@ import ReservationModal from "@/components/reservation-modal"
 
 export default function HomePage() {
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [currentConceptImage, setCurrentConceptImage] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+
+  const conceptImages = [
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%201.jpg-ygqUJRW8r4tx6f0FQ66wP523IxcGJH.jpeg",
+      alt: "Vue aérienne du complexe résidentiel avec piscines",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%202.jpg-T3tWpiEpYKGTfKQXUnWkmW0tNNoYmD.jpeg",
+      alt: "Vue aérienne montrant les piscines et l'aménagement",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%203.jpg-pBMr6LAm7VYMuTNfMiECR1iPB9M663.jpeg",
+      alt: "Vue de face de l'entrée principale en journée",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%204.jpg-3WvYsDTghgZMOHFbhMZ4R4M14zYJgN.jpeg",
+      alt: "Vue nocturne de l'entrée principale The Life Residence",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%205.jpg-Oq0DllZRBO2GXkEPgRB4MCN7FGh90L.jpeg",
+      alt: "Vue extérieure des maisons individuelles avec jardins privés",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%206.jpg-TCnamuw5qZ41NYSip5nQjnERPAxQuE.jpeg",
+      alt: "Vue intérieure du complexe avec piscines et jardins",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%207.jpg-y70hesgPmzM6diPbkkIDuYBvcpR6y3.jpeg",
+      alt: "Salle de sport/fitness moderne avec équipements",
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ISB%20residence%208.jpg-8sAq1eMHp72Ww8jqWPxkKGb6rWuSbW.jpeg",
+      alt: "Espace enfants/jeux coloré avec mobilier adapté",
+    },
+  ]
+
+  const nextConceptImage = () => {
+    setCurrentConceptImage((prev) => (prev + 1) % conceptImages.length)
+  }
+
+  const prevConceptImage = () => {
+    setCurrentConceptImage((prev) => (prev - 1 + conceptImages.length) % conceptImages.length)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextConceptImage()
+    }
+    if (isRightSwipe) {
+      prevConceptImage()
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,7 +118,7 @@ export default function HomePage() {
               />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">The Life Residence</h1>
-                <p className="text-xs text-gray-600">Par ISB Immobilière Sodaprim Bouaziz</p>
+                <p className="text-xs text-gray-600">ISB immobilière</p>
               </div>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
@@ -56,7 +132,41 @@ export default function HomePage() {
                 Contact
               </Link>
             </nav>
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Menu"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6 text-gray-700" /> : <Menu className="h-6 w-6 text-gray-700" />}
+            </button>
           </div>
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
+              <nav className="flex flex-col space-y-4 pt-4">
+                <Link
+                  href="#projet"
+                  className="text-gray-700 hover:text-custom-beige font-medium text-lg px-2 py-1 rounded transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Le Projet
+                </Link>
+                <Link
+                  href="#logements"
+                  className="text-gray-700 hover:text-custom-beige font-medium text-lg px-2 py-1 rounded transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Les Logements
+                </Link>
+                <Link
+                  href="#contact"
+                  className="text-gray-700 hover:text-custom-beige font-medium text-lg px-2 py-1 rounded transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+              </nav>
+            </div>
+          )}
         </div>
       </header>
 
@@ -171,13 +281,51 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="relative h-96">
-              <Image
-                src="/the-life-residence-pool-courtyard.png"
-                alt="The Life Residence - Vue 3D du complexe résidentiel avec piscine centrale et aménagement paysager luxueux"
-                fill
-                className="object-cover"
-              />
+            <div className="relative h-96 group">
+              <div
+                className="relative h-full overflow-hidden rounded-lg"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <Image
+                  src={conceptImages[currentConceptImage].src || "/placeholder.svg"}
+                  alt={conceptImages[currentConceptImage].alt}
+                  fill
+                  className="object-cover transition-all duration-500"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+
+              {/* Flèches de navigation */}
+              <button
+                onClick={prevConceptImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                aria-label="Image précédente"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={nextConceptImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                aria-label="Image suivante"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Indicateurs de points */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+                {conceptImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentConceptImage(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === currentConceptImage ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+                    }`}
+                    aria-label={`Aller à l'image ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
@@ -202,11 +350,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Buy Off-Plan Section */}
-      <WhyBuyOffPlan />
-
       {/* Facilities Section */}
       <FacilitiesSection />
+
+      {/* Why Buy Off-Plan Section */}
+      <WhyBuyOffPlan />
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-gray-50">
@@ -227,7 +375,7 @@ export default function HomePage() {
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900">Téléphone</h4>
-                    <p className="text-gray-600">58 666 963</p>
+                    <p className="text-gray-600">+216 58 666 963</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -244,7 +392,6 @@ export default function HomePage() {
                     <p className="text-gray-600">Chotrana 3, La Soukra, Tunisie</p>
                   </div>
                 </div>
-                {/* New Contact Item */}
                 <div className="flex items-start space-x-4">
                   <MapPin className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
@@ -263,7 +410,7 @@ export default function HomePage() {
 
               <div className="mt-8">
                 <Button size="lg" className="w-full rounded-none bg-custom-beige bg-custom-beige-hover" asChild>
-                  <a href="https://wa.me/21658999963" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/21658666963" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="h-5 w-5 mr-2" />
                     Discuter sur WhatsApp
                   </a>
@@ -315,7 +462,7 @@ export default function HomePage() {
                       name="phone"
                       required
                       className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                      placeholder="58 666 963"
+                      placeholder="+216 58 666 963"
                     />
                   </div>
                   <div>

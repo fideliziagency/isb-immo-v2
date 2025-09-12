@@ -31,10 +31,49 @@ export default function AppartementS3Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+  const [currentCoverIndex, setCurrentCoverIndex] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const coverImages = [
+    {
+      src: "/s3-new-living-dining-gallery.png",
+      alt: "Salon et salle à manger S+3 - Espace de vie moderne",
+    },
+    {
+      src: "/s3-new-dining-area-gallery.png",
+      alt: "Salle à manger S+3 - Espace repas avec miroirs",
+    },
+    {
+      src: "/s3-new-open-living-gallery.png",
+      alt: "Salon S+3 - Espace de vie ouvert et moderne",
+    },
+    {
+      src: "/s3-new-kitchen-island-gallery.png",
+      alt: "Cuisine S+3 - Cuisine moderne avec îlot central",
+    },
+    {
+      src: "/s3-new-master-bedroom-gallery.png",
+      alt: "Suite parentale S+3 - Chambre principale moderne",
+    },
+  ]
+
+  const nextCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev + 1) % coverImages.length)
+  }
+
+  const prevCoverImage = () => {
+    setCurrentCoverIndex((prev) => (prev - 1 + coverImages.length) % coverImages.length)
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCoverIndex((prev) => (prev + 1) % coverImages.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [coverImages.length])
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "139-208 m²" },
@@ -65,9 +104,7 @@ export default function AppartementS3Page() {
     { icon: Wind, label: "VMC double flux" },
   ]
 
-  // Generate 22 S+3 unit plans - all with new architectural plans
   const s3Plans = [
-    // New architectural plans (1-10)
     {
       src: "/s3-plan-b11.png",
       alt: "Plan S+3 - Appartement B.11 (1er étage Bloc B)",
@@ -118,7 +155,6 @@ export default function AppartementS3Page() {
       alt: "Plan S+3 - Appartement B.01 (RDC Bloc B)",
       title: "Plan S+3 - Appartement B.01 (RDC Bloc B) - 208 m²",
     },
-    // New architectural plans (11-22)
     {
       src: "/s3-plan-d02.png",
       alt: "Plan S+3 - Appartement D.02 (RDC Bloc D)",
@@ -238,10 +274,6 @@ export default function AppartementS3Page() {
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Appartement S+3</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Appartement S+3</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Espace généreux pour grandes familles. Trois chambres spacieuses, salon cathédrale et finitions
-                exceptionnelles pour un art de vivre raffiné.
-              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -254,18 +286,51 @@ export default function AppartementS3Page() {
                   </div>
                 ))}
               </div>
-
-              {/* Removed the "Demander une Visite" button */}
             </div>
 
             <div className="relative">
-              <Image
-                src="/s3-salon-salle-manger-luxe-hero.png"
-                alt="Appartement S+3 - Grand salon avec salle à manger moderne et cuisine ouverte"
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
+              <div className="relative h-96 overflow-hidden rounded-lg">
+                <div
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${currentCoverIndex * 100}%)` }}
+                >
+                  {coverImages.map((image, index) => (
+                    <div key={index} className="w-full flex-shrink-0 relative">
+                      <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+                    </div>
+                  ))}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={prevCoverImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={nextCoverImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-custom-beige/90 border-white text-white hover:bg-custom-beige z-10"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Button>
+
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {coverImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentCoverIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentCoverIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="absolute top-4 right-4">
                 <Badge className="bg-custom-beige text-white rounded-none">22 Unités Disponibles</Badge>
               </div>
@@ -301,7 +366,7 @@ export default function AppartementS3Page() {
                           src={plan.src || "/placeholder.svg"}
                           alt={plan.alt}
                           fill
-                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                           <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">

@@ -233,3 +233,102 @@ html {
 .hover\:bg-custom-beige-500:hover {
   background-color: #9b9580;
 }
+
+/* Mobile spacing optimizations */
+@media (max-width: 768px) {
+  /* Réduction des paddings verticaux des sections principales */
+  .py-20 {
+    padding-top: 3rem !important; /* 48px au lieu de 80px */
+    padding-bottom: 3rem !important;
+  }
+
+  .py-16 {
+    padding-top: 2.5rem !important; /* 40px au lieu de 64px */
+    padding-bottom: 2.5rem !important;
+  }
+
+  .py-12 {
+    padding-top: 2rem !important; /* 32px au lieu de 48px */
+    padding-bottom: 2rem !important;
+  }
+
+  /* Réduction des marges entre les blocs */
+  .mb-16 {
+    margin-bottom: 2.5rem !important; /* 40px au lieu de 64px */
+  }
+
+  .mb-12 {
+    margin-bottom: 2rem !important; /* 32px au lieu de 48px */
+  }
+
+  .mb-8 {
+    margin-bottom: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Réduction des gaps dans les grilles */
+  .gap-12 {
+    gap: 2rem !important; /* 32px au lieu de 48px */
+  }
+
+  .gap-8 {
+    gap: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .gap-6 {
+    gap: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Optimisation spécifique pour les sections hero */
+  .py-12.md\:py-12 {
+    padding-top: 1.5rem !important; /* 24px */
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Réduction des espaces dans les cartes */
+  .p-8 {
+    padding: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .p-6 {
+    padding: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Optimisation des espacements dans les formulaires */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 0.75rem !important; /* 12px au lieu de 16px */
+  }
+
+  /* Réduction des espaces dans les listes */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+}
+
+/* Optimisations supplémentaires pour très petits écrans */
+@media (max-width: 480px) {
+  .py-20 {
+    padding-top: 2rem !important; /* 32px */
+    padding-bottom: 2rem !important;
+  }
+
+  .py-16 {
+    padding-top: 1.5rem !important; /* 24px */
+    padding-bottom: 1.5rem !important;
+  }
+
+  .mb-16 {
+    margin-bottom: 1.5rem !important; /* 24px */
+  }
+
+  .mb-12 {
+    margin-bottom: 1rem !important; /* 16px */
+  }
+}

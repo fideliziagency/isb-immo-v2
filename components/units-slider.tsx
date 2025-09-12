@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -117,6 +119,11 @@ const properties = [
 
 export default function UnitsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const sliderRef = useRef<HTMLDivElement>(null)
+
+  const minSwipeDistance = 50
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % properties.length)
@@ -128,6 +135,29 @@ export default function UnitsSlider() {
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index)
+  }
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextSlide()
+    } else if (isRightSwipe) {
+      prevSlide()
+    }
   }
 
   return (
@@ -142,7 +172,13 @@ export default function UnitsSlider() {
 
         <div className="relative max-w-6xl mx-auto">
           {/* Main Slider */}
-          <div className="overflow-hidden rounded-none">
+          <div
+            className="overflow-hidden rounded-none"
+            ref={sliderRef}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -153,17 +189,23 @@ export default function UnitsSlider() {
                     <div className="grid lg:grid-cols-2 gap-0">
                       {/* Image */}
                       <div className="relative h-96 lg:h-auto">
-                        <Image
-                          src={property.image || "/placeholder.svg"}
-                          alt={property.title}
-                          fill
-                          className="object-cover"
-                        />
+                        <Link href={property.href} className="block w-full h-full">
+                          <Image
+                            src={property.image || "/placeholder.svg"}
+                            alt={property.title}
+                            fill
+                            className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                          />
+                        </Link>
                         <div className="absolute top-4 left-4">
-                          <Badge className="bg-gray-900 text-white rounded-none">{property.type}</Badge>
+                          <Badge className="bg-custom-beige text-black rounded-none font-semibold shadow-sm">
+                            {property.type}
+                          </Badge>
                         </div>
                         <div className="absolute top-4 right-4">
-                          <Badge className="bg-white text-gray-900 rounded-none">{property.disponibles}</Badge>
+                          <Badge className="bg-white/95 text-gray-900 rounded-none font-semibold shadow-sm border border-gray-200">
+                            {property.disponibles}
+                          </Badge>
                         </div>
                       </div>
 
@@ -232,15 +274,15 @@ export default function UnitsSlider() {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-200 z-10"
+            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 bg-custom-beige hover:bg-custom-beige/90 p-3 rounded-full shadow-xl transition-all duration-200 z-10 border-2 border-white"
           >
-            <ChevronLeft className="h-6 w-6 text-gray-700" />
+            <ChevronLeft className="h-7 w-7 text-white" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-200 z-10"
+            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 bg-custom-beige hover:bg-custom-beige/90 p-3 rounded-full shadow-xl transition-all duration-200 z-10 border-2 border-white"
           >
-            <ChevronRight className="h-6 w-6 text-gray-700" />
+            <ChevronRight className="h-7 w-7 text-white" />
           </button>
 
           {/* Dots Navigation */}

@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -32,10 +34,60 @@ export default function AppartementS2Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const heroImages = [
+    {
+      src: "/s2-new-living-room-gallery.png",
+      alt: "Salon moderne S+2 avec cheminée et TV",
+    },
+    {
+      src: "/s1-salon-moderne-luxe.jpeg",
+      alt: "Salon S+1 - Espace de vie moderne avec canapé beige, coin bar et TV murale",
+    },
+    {
+      src: "/s2-chambre-moderne-luxe.png",
+      alt: "Chambre moderne S+2 avec vue et éclairage design",
+    },
+  ]
+
+  const nextHeroImage = () => {
+    setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length)
+  }
+
+  const prevHeroImage = () => {
+    setCurrentHeroIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextHeroImage()
+    }
+    if (isRightSwipe) {
+      prevHeroImage()
+    }
+  }
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "87-136 m²" },
@@ -64,9 +116,7 @@ export default function AppartementS2Page() {
     { icon: Wind, label: "VMC double flux" },
   ]
 
-  // Generate 30 S+2 unit plans - all with new architectural plans
   const s2Plans = [
-    // New architectural plans (1-10)
     {
       src: "/s2-plan-b03.png",
       alt: "Plan S+2 - Appartement B.03 (RDC Bloc B)",
@@ -117,7 +167,6 @@ export default function AppartementS2Page() {
       alt: "Plan S+2 - Appartement C.21 (2ème étage Bloc C)",
       title: "Plan S+2 - Appartement C.21 (2ème étage Bloc C) - 107 m²",
     },
-    // New architectural plans (11-20)
     {
       src: "/s2-plan-e11.png",
       alt: "Plan S+2 - Appartement E.11 (1er étage Bloc E)",
@@ -168,7 +217,6 @@ export default function AppartementS2Page() {
       alt: "Plan S+2 - Appartement C.05 (RDC Bloc C)",
       title: "Plan S+2 - Appartement C.05 (RDC Bloc C) - 93 m²",
     },
-    // New architectural plans (21-30)
     {
       src: "/s2-plan-g15.png",
       alt: "Plan S+2 - Appartement G.15 (1er étage Bloc G)",
@@ -260,9 +308,9 @@ export default function AppartementS2Page() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 md:py-12 py-8 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2 mb-6">
+          <div className="flex items-center space-x-2 mb-6 md:mb-6 mb-4">
             <Link href="/" className="text-gray-500 hover:text-custom-beige">
               Accueil
             </Link>
@@ -274,14 +322,10 @@ export default function AppartementS2Page() {
             <span className="text-gray-900">Appartement S+2</span>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8 items-start">
             <div>
               <Badge className="mb-4 bg-custom-beige text-black rounded-none">Appartement S+2</Badge>
               <h1 className="text-4xl font-bold text-gray-900 mb-6">Appartement S+2</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Parfait pour les familles. Espace généreux avec 2 chambres, salon spacieux et finitions exceptionnelles.
-                Le choix idéal pour un confort familial optimal.
-              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -294,18 +338,56 @@ export default function AppartementS2Page() {
                   </div>
                 ))}
               </div>
-
-              {/* Removed the "Demander une Visite" button */}
             </div>
 
             <div className="relative">
-              <Image
-                src="/s2-salon-moderne-elegant-hero.png"
-                alt="Appartement S+2 - Salon moderne avec canapé gris, table basse en marbre et éclairage design"
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
+              <div
+                className="relative h-96 overflow-hidden"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <div
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${currentHeroIndex * 100}%)` }}
+                >
+                  {heroImages.map((image, index) => (
+                    <div key={index} className="w-full flex-shrink-0 relative">
+                      <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+                    </div>
+                  ))}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={prevHeroImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10 hidden md:flex"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={nextHeroImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10 hidden md:flex"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {heroImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentHeroIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentHeroIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="absolute top-4 right-4">
                 <Badge className="bg-custom-beige text-black rounded-none">30 Unités Disponibles</Badge>
               </div>
@@ -315,9 +397,9 @@ export default function AppartementS2Page() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
             <p className="text-lg text-gray-600">Un agencement pensé pour le confort familial</p>
           </div>
@@ -341,7 +423,7 @@ export default function AppartementS2Page() {
                           src={plan.src || "/placeholder.svg"}
                           alt={plan.alt}
                           fill
-                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                           <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">
@@ -412,14 +494,14 @@ export default function AppartementS2Page() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
             <p className="text-lg text-gray-600">Des équipements haut de gamme pour votre famille</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 md:mb-12 mb-8">
             {features.map((feature, index) => (
               <Card key={index} className="rounded-none border-0 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6 text-center">
@@ -449,14 +531,14 @@ export default function AppartementS2Page() {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 md:mb-12 mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
             <p className="text-lg text-gray-600">Découvrez l'espace et le confort de l'appartement S+2</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-6 gap-4">
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
@@ -472,8 +554,8 @@ export default function AppartementS2Page() {
             <div className="relative group cursor-pointer">
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  src="/s2-new-kitchen-gallery.jpeg"
-                  alt="Cuisine moderne S+2 avec îlot"
+                  src="/s1-salon-moderne-luxe.jpeg"
+                  alt="Salon S+1 - Espace de vie moderne avec canapé beige, coin bar et TV murale"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -497,17 +579,17 @@ export default function AppartementS2Page() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact-section" className="py-16 bg-white">
+      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 md:mb-12 mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cet Appartement ?</h2>
               <p className="text-lg text-gray-600">
                 L'appartement S+2 représente 33% de notre offre et convient parfaitement aux familles avec enfants.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
               <Card className="rounded-none border-0 shadow-lg">
                 <CardContent className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+2</h3>
@@ -623,10 +705,12 @@ export default function AppartementS2Page() {
       </section>
 
       {/* Navigation to Other Types */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez Nos Autres Logements</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8 md:mb-8 mb-6">
+            Découvrez Nos Autres Logements
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 gap-4">
             <Link href="/logements/s1">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                 <div className="relative h-48">
