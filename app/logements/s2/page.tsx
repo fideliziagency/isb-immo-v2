@@ -19,9 +19,7 @@ import {
   Zap,
   Droplets,
   Wind,
-  MessageCircle,
   Eye,
-  Trees,
   ChevronLeft,
   ChevronRight,
   Camera,
@@ -280,13 +278,6 @@ export default function AppartementS2Page() {
   const openLightbox = (index: number) => {
     setLightboxStartIndex(index)
     setShowPlanLightbox(true)
-  }
-
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact-section")
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" })
-    }
   }
 
   return (
@@ -572,132 +563,6 @@ export default function AppartementS2Page() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12 md:mb-12 mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cet Appartement ?</h2>
-              <p className="text-lg text-gray-600">
-                L'appartement S+2 représente 33% de notre offre et convient parfaitement aux familles avec enfants.
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
-              <Card className="rounded-none border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+2</h3>
-                  <form action="/api/send-email" method="POST" className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="prénom"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="nom"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Isbimmobiliere@gmail.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                      <input
-                        type="tel"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="+216 58 666 963"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Surface souhaitée</label>
-                      <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
-                        <option>87 m² - 95 m²</option>
-                        <option>95 m² - 105 m²</option>
-                        <option>105 m² - 115 m²</option>
-                        <option>115 m² - 125 m²</option>
-                        <option>125 m² - 136 m²</option>
-                        <option>Indifférent</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                      <textarea
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Questions spécifiques sur l'appartement S+2..."
-                      ></textarea>
-                    </div>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                    >
-                      Envoyer la Demande
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Pratiques</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <Home className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Disponibilité</div>
-                        <div className="text-gray-600">30 appartements S+2 disponibles</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Ruler className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Surfaces</div>
-                        <div className="text-gray-600">De 87 m² à 136 m²</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Trees className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Jardin privé</div>
-                        <div className="text-gray-600">
-                          0 à 53 m² (disponible uniquement pour certains appartements)
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-black bg-transparent"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Discuter sur WhatsApp
-                  </Button>
-                </div>
               </div>
             </div>
           </div>

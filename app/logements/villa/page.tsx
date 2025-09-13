@@ -23,9 +23,13 @@ import {
   Camera,
   Tv,
   Car,
+  Phone,
+  Mail,
+  MapPin,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import ContactForm from "@/components/contact-form"
 
 export default function VillaPage() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
@@ -394,7 +398,7 @@ export default function VillaPage() {
                 <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(10)}>
                   <Image
                     src="/villa-6-ground-floor.png"
-                    alt="Plan Villa 6 - RDC"
+                    alt="Plan Villa 6 - Rez-de-chaussée"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -544,138 +548,6 @@ export default function VillaPage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact-section" className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cette Villa ?</h2>
-              <p className="text-lg text-gray-600">
-                La villa individuelle représente l'excellence de notre offre avec seulement 6 unités disponibles.
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12">
-              <Card className="rounded-none border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Villa</h3>
-                  <form action="/api/send-email" method="POST" className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="prénom"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="nom"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Isbimmobiliere@gmail.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                      <input
-                        type="tel"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="+216 58 666 963"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Villa souhaitée</label>
-                      <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
-                        <option>Villa 1 - 357 m²</option>
-                        <option>Villa 2 - 355 m²</option>
-                        <option>Villa 3 - 354 m²</option>
-                        <option>Villa 4 - 353 m²</option>
-                        <option>Villa 5 - 356 m²</option>
-                        <option>Villa 6 - 355 m²</option>
-                        <option>Indifférent</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                      <textarea
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Questions spécifiques sur la villa individuelle..."
-                      ></textarea>
-                    </div>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                    >
-                      Envoyer la Demande
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Pratiques</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <Home className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Disponibilité</div>
-                        <div className="text-gray-600">6 villas individuelles disponibles</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Ruler className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Surfaces</div>
-                        <div className="text-gray-600">De 353 m² à 357 m²</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Trees className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Jardin privé</div>
-                        <div className="text-gray-600">60-219 m² de jardin paysager</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Droplets className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Piscine privée</div>
-                        <div className="text-gray-600">Incluse</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white bg-transparent"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Discuter sur WhatsApp
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Navigation to Other Types */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -737,6 +609,52 @@ export default function VillaPage() {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Notre équipe est à votre disposition pour répondre à toutes vos questions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <Phone className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Téléphone</h4>
+                    <p className="text-gray-600">+216 71 234 567</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <Mail className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Email</h4>
+                    <p className="text-gray-600">contact@isbimmobiliere.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <MapPin className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Adresse</h4>
+                    <p className="text-gray-600">Chotrana 3, La Soukra, Tunis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>

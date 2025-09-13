@@ -7,13 +7,7 @@
  */
 export const sendContactEmail = async (formData) => {
   try {
-    const response = await fetch("/api/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "Isbimmobiliere@gmail.com",
-        subject: `Nouvelle demande de contact - ${formData.firstName} ${formData.lastName}`,
-        message: `
+    const messageContent = `
 Nouvelle demande de contact reçue:
 
 Nom: ${formData.firstName} ${formData.lastName}
@@ -23,8 +17,15 @@ Type de logement: ${formData.unitType || "Non spécifié"}
 
 Message:
 ${formData.message}
-        `,
-        formData,
+    `;
+
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: "Isbimmobiliere@gmail.com",
+        subject: `Nouvelle demande de contact - ${formData.firstName} ${formData.lastName}`,
+        message: messageContent,
       }),
     });
 
@@ -41,13 +42,7 @@ ${formData.message}
  */
 export const sendReservationEmail = async (reservationData) => {
   try {
-    const response = await fetch("/api/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "Isbimmobiliere@gmail.com",
-        subject: `Nouvelle réservation - ${reservationData.firstName} ${reservationData.lastName}`,
-        message: `
+    const messageContent = `
 Nouvelle réservation reçue:
 
 Client: ${reservationData.firstName} ${reservationData.lastName}
@@ -59,8 +54,15 @@ Message:
 ${reservationData.message || "Aucun message"}
 
 Date de réservation: ${new Date().toLocaleDateString("fr-FR")}
-        `,
-        formData: reservationData,
+    `;
+
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: "Isbimmobiliere@gmail.com",
+        subject: `Nouvelle réservation - ${reservationData.firstName} ${reservationData.lastName}`,
+        message: messageContent,
       }),
     });
 
@@ -77,19 +79,20 @@ Date de réservation: ${new Date().toLocaleDateString("fr-FR")}
  */
 export const sendNewsletterEmail = async (email) => {
   try {
-    const response = await fetch("/api/send-email", {
+    const messageContent = `
+Nouvelle inscription à la newsletter:
+
+Email: ${email}
+Date d'inscription: ${new Date().toLocaleDateString("fr-FR")}
+    `;
+
+    const response = await fetch("/api/sendEmail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         to: "Isbimmobiliere@gmail.com",
         subject: "Nouvelle inscription à la newsletter",
-        message: `
-Nouvelle inscription à la newsletter:
-
-Email: ${email}
-Date d'inscription: ${new Date().toLocaleDateString("fr-FR")}
-        `,
-        formData: { email },
+        message: messageContent,
       }),
     });
 

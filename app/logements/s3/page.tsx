@@ -18,7 +18,6 @@ import {
   Droplets,
   Wind,
   Eye,
-  Trees,
   ChevronLeft,
   ChevronRight,
   Camera,
@@ -539,117 +538,6 @@ export default function AppartementS3Page() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact-section" className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cet Appartement ?</h2>
-              <p className="text-lg text-gray-600">
-                L'appartement S+3 représente 24% de notre offre et convient parfaitement aux grandes familles.
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12">
-              <Card className="rounded-none border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+3</h3>
-                  <form action="/api/send-email" method="POST" className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="prénom"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="nom"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Isbimmobiliere@gmail.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                      <input
-                        type="tel"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="+216 58 666 963"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Surface souhaitée</label>
-                      <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
-                        <option>139 m² - 160 m²</option>
-                        <option>160 m² - 180 m²</option>
-                        <option>180 m² - 208 m²</option>
-                        <option>Indifférent</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                      <textarea
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Questions spécifiques sur l'appartement S+3..."
-                      ></textarea>
-                    </div>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                    >
-                      Envoyer la Demande
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Pratiques</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <Home className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Disponibilité</div>
-                        <div className="text-gray-600">22 appartements S+3 disponibles</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Ruler className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Surfaces</div>
-                        <div className="text-gray-600">De 139 m² à 208 m²</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Trees className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Jardin privé</div>
-                        <div className="text-gray-600">0-28 m² (disponible uniquement pour certains appartements)</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

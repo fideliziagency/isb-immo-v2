@@ -115,15 +115,15 @@ export default function FacilitiesSection() {
             </p>
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
-                <div className="text-3xl font-bold text-custom-beige mb-2">8</div>
+                <div className="text-3xl font-bold text-custom-beige-800 mb-2">8</div>
                 <div className="text-sm text-gray-600">Services Premium</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-custom-beige mb-2">24/7</div>
+                <div className="text-3xl font-bold text-custom-beige-800 mb-2">24/7</div>
                 <div className="text-sm text-gray-600">Sécurité & Surveillance</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-custom-beige mb-2">100%</div>
+                <div className="text-3xl font-bold text-custom-beige-800 mb-2">100%</div>
                 <div className="text-sm text-gray-600">Satisfaction Résidents</div>
               </div>
             </div>

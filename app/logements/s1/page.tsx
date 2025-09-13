@@ -20,14 +20,17 @@ import {
   Droplets,
   Wind,
   Eye,
-  Trees,
   ChevronLeft,
   ChevronRight,
   Camera,
   Tv,
+  Phone,
+  Mail,
+  MapPin,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import ContactForm from "@/components/contact-form"
 
 export default function AppartementS1Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
@@ -279,13 +282,6 @@ export default function AppartementS1Page() {
     setShowPlanLightbox(true)
   }
 
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact-section")
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -327,7 +323,7 @@ export default function AppartementS1Page() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
                   <div key={index} className="flex items-center space-x-3">
-                    <spec.icon className="h-5 w-5 text-custom-beige" />
+                    {spec.icon && <spec.icon className="h-5 w-5 text-custom-beige" />}
                     <div>
                       <div className="text-sm text-gray-600">{spec.label}</div>
                       <div className="font-semibold text-gray-900">{spec.value}</div>
@@ -585,118 +581,6 @@ export default function AppartementS1Page() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12 md:mb-12 mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par cet Appartement ?</h2>
-              <p className="text-lg text-gray-600">
-                Contactez-nous pour plus d'informations ou pour planifier une visite
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
-              <Card className="rounded-none border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - S+1</h3>
-                  <form action="/api/send-email" method="POST" className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="prénom"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="nom"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Isbimmobiliere@gmail.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                      <input
-                        type="tel"
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="+216 58 666 963"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Surface souhaitée</label>
-                      <select className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent">
-                        <option>48 m² - 55 m²</option>
-                        <option>55 m² - 62 m²</option>
-                        <option>62 m² - 69 m²</option>
-                        <option>69 m² - 77 m²</option>
-                        <option>Indifférent</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                      <textarea
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        placeholder="Questions spécifiques sur l'appartement S+1..."
-                      ></textarea>
-                    </div>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                    >
-                      Envoyer la Demande
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Informations Pratiques</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <Home className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Disponibilité</div>
-                        <div className="text-gray-600">30 appartements S+1 disponibles</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Ruler className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Surfaces</div>
-                        <div className="text-gray-600">De 48 à 77 m²</div>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Trees className="h-5 w-5 text-custom-beige mt-1" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Jardin privé</div>
-                        <div className="text-gray-600">0-28 m² (disponible uniquement pour certains appartements)</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Navigation to Other Types */}
       <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -760,6 +644,52 @@ export default function AppartementS1Page() {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Notre équipe est à votre disposition pour répondre à toutes vos questions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <Phone className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Téléphone</h4>
+                    <p className="text-gray-600">+216 71 234 567</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <Mail className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Email</h4>
+                    <p className="text-gray-600">contact@isbimmobiliere.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <MapPin className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Adresse</h4>
+                    <p className="text-gray-600">Chotrana 3, La Soukra, Tunis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>

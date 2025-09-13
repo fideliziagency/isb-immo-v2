@@ -1,12 +1,14 @@
 "use client"
-import { useForm, ValidationError } from "@formspree/react" // 👈 Ajoutez cette ligne
-import type React from "react"
+import { useForm } from "@formspree/react" // 👈 Ajoutez cette ligne
+import { CardContent } from "@/components/ui/card"
+
+import { Card } from "@/components/ui/card"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
 import { Badge } from "@/components/ui/badge"
-import PlanLightbox from "@/components/plan-lightbox"
-import { useState, useEffect } from "react"
+
+import type React from "react"
 import {
   ArrowLeft,
   Home,
@@ -23,9 +25,15 @@ import {
   ChevronRight,
   Camera,
   Tv,
+  Phone,
+  Mail,
+  MapPin,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import PlanLightbox from "@/components/plan-lightbox"
+import { useState, useEffect } from "react"
+import ContactForm from "@/components/contact-form"
 
 export default function DuplexPage() {
   const [state, handleSubmit] = useForm("meoldjwl") // 👈 Utilisez votre ID Formspree
@@ -424,114 +432,6 @@ export default function DuplexPage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact-section" className="py-16 md:py-16 py-10 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12 md:mb-12 mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Intéressé par ce Duplex ?</h2>
-              <p className="text-lg text-gray-600">
-                Le duplex de prestige représente l'excellence de notre offre avec seulement 2 unités disponibles.
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8">
-              <Card className="rounded-none border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information - Duplex</h3>
-
-                  {/* 👇 CODE CORRIGÉ AVEC FORMSPREE */}
-                  {state.succeeded ? (
-                    <p className="text-green-600 font-medium">
-                      Merci pour votre demande ! Nous vous contacterons sous 24h.
-                    </p>
-                  ) : (
-                    <form onSubmit={handleSubmit}>
-                      <input type="hidden" name="_replyto" value="Isbimmobiliere@gmail.com" />
-
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                          <input
-                            type="text"
-                            name="firstName"
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                            placeholder="prénom"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-                          <input
-                            type="text"
-                            name="lastName"
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                            placeholder="nom"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                        <input
-                          type="email"
-                          name="email"
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Isbimmobiliere@gmail.com"
-                        />
-                        <ValidationError field="email" prefix="Email" errors={state.errors} />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="+216 58 666 963"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Duplex souhaité</label>
-                        <select
-                          name="unitType"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                        >
-                          <option>Duplex FD.01 - 254 m²</option>
-                          <option>Duplex GD.05 - 221 m²</option>
-                          <option>Indifférent</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                        <textarea
-                          rows={4}
-                          name="message"
-                          className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
-                          placeholder="Questions spécifiques sur le duplex de prestige..."
-                        ></textarea>
-                        <ValidationError field="message" prefix="Message" errors={state.errors} />
-                      </div>
-                      <Button
-                        type="submit"
-                        size="lg"
-                        className="w-full rounded-none bg-custom-beige hover:bg-custom-beige"
-                        disabled={state.submitting}
-                      >
-                        {state.submitting ? "Envoi en cours..." : "Envoyer la Demande"}
-                      </Button>
-                    </form>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* ... le reste du code reste inchangé ... */}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Navigation to Other Types */}
       <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -606,6 +506,52 @@ export default function DuplexPage() {
         plans={duplexPlans}
         initialIndex={lightboxStartIndex}
       />
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Notre équipe est à votre disposition pour répondre à toutes vos questions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <Phone className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Téléphone</h4>
+                    <p className="text-gray-600">+216 71 234 567</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <Mail className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Email</h4>
+                    <p className="text-gray-600">contact@isbimmobiliere.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <MapPin className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Adresse</h4>
+                    <p className="text-gray-600">Chotrana 3, La Soukra, Tunis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <ContactForm />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

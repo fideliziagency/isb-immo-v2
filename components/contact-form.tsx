@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-import { Card, CardContent } from "@/components/ui/card" // adapte selon ton ui-library
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { sendContactEmail } from "@/utils/email-sender" // adapte le chemin selon ton projet
+import { sendContactEmail } from "../utils/email-sender.js"
 
 const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
