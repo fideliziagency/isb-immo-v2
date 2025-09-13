@@ -295,96 +295,46 @@ export default function DuplexPage() {
             <p className="text-lg text-gray-600">Un agencement exceptionnel sur 2 niveaux</p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="rounded-none border-0 shadow-lg overflow-hidden">
-              <div className="relative">
-                {/* Plan Slider */}
-                <div
-                  className="relative h-96 overflow-hidden"
-                  onTouchStart={handlePlanTouchStart}
-                  onTouchMove={handlePlanTouchMove}
-                  onTouchEnd={handlePlanTouchEnd}
-                >
-                  <div
-                    className="flex transition-transform duration-500 ease-in-out h-full"
-                    style={{ transform: `translateX(-${currentPlanIndex * 100}%)` }}
-                  >
-                    {duplexPlans.map((plan, index) => (
-                      <div
-                        key={index}
-                        className="w-full flex-shrink-0 relative cursor-pointer group"
-                        onClick={() => openLightbox(index)}
-                      >
-                        <Image
-                          src={plan.src || "/placeholder.svg"}
-                          alt={plan.alt}
-                          fill
-                          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                          <Button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none bg-custom-beige hover:bg-custom-beige">
-                            <Eye className="h-4 w-4 mr-2" />
-                            Voir en grand
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Duplex FD.01 */}
+              <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="relative h-80 cursor-pointer group" onClick={() => openLightbox(0)}>
+                  <Image
+                    src="/duplex-plan-fd01.png"
+                    alt="Plan Duplex - Appartement FD.01 (Duplex Bloc F)"
+                    fill
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                    <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-
-                  {/* Navigation Arrows */}
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={prevPlan}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={nextPlan}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 border-gray-300 hover:bg-white z-10"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
                 </div>
-
-                {/* Plan Info */}
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Plan Duplex - Unité {currentPlanIndex + 1} sur 2
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Agencement exceptionnel avec salon double hauteur, cuisine haut de gamme, 3 suites et terrasse
-                    panoramique.
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <Button
-                      onClick={() => openLightbox(currentPlanIndex)}
-                      variant="outline"
-                      className="rounded-none border-custom-beige text-custom-beige hover:bg-custom-beige hover:text-white"
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      Voir en grand
-                    </Button>
-                  </div>
-                </CardContent>
-
-                {/* Dots Navigation */}
-                <div className="flex justify-center space-x-1 pb-4">
-                  {duplexPlans.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentPlanIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentPlanIndex ? "bg-custom-beige" : "bg-gray-300"
-                      }`}
-                    />
-                  ))}
+                <div className="px-4 pb-4">
+                  <h3 className="text-lg font-bold text-gray-900 text-center">Duplex FD.01</h3>
+                  <p className="text-sm text-gray-600 text-center">254 m² • Bloc F • 2 niveaux</p>
                 </div>
               </div>
-            </Card>
+
+              {/* Duplex GD.05 */}
+              <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="relative h-80 cursor-pointer group" onClick={() => openLightbox(1)}>
+                  <Image
+                    src="/duplex-plan-gd05.png"
+                    alt="Plan Duplex - Appartement GD.05 (Duplex Bloc G)"
+                    fill
+                    className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                    <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                </div>
+                <div className="px-4 pb-4">
+                  <h3 className="text-lg font-bold text-gray-900 text-center">Duplex GD.05</h3>
+                  <p className="text-sm text-gray-600 text-center">221 m² • Bloc G • 2 niveaux</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

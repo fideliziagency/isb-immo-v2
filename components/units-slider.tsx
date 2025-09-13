@@ -207,6 +207,29 @@ export default function UnitsSlider() {
                             {property.disponibles}
                           </Badge>
                         </div>
+
+                        {index === currentIndex && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                prevSlide()
+                              }}
+                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-custom-beige/90 hover:bg-custom-beige p-2 rounded-full shadow-lg transition-all duration-200 z-20 border border-white"
+                            >
+                              <ChevronLeft className="h-5 w-5 text-white" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                nextSlide()
+                              }}
+                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-custom-beige/90 hover:bg-custom-beige p-2 rounded-full shadow-lg transition-all duration-200 z-20 border border-white"
+                            >
+                              <ChevronRight className="h-5 w-5 text-white" />
+                            </button>
+                          </>
+                        )}
                       </div>
 
                       {/* Content */}
@@ -270,20 +293,6 @@ export default function UnitsSlider() {
               ))}
             </div>
           </div>
-
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 bg-custom-beige hover:bg-custom-beige/90 p-3 rounded-full shadow-xl transition-all duration-200 z-10 border-2 border-white"
-          >
-            <ChevronLeft className="h-7 w-7 text-white" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 bg-custom-beige hover:bg-custom-beige/90 p-3 rounded-full shadow-xl transition-all duration-200 z-10 border-2 border-white"
-          >
-            <ChevronRight className="h-7 w-7 text-white" />
-          </button>
 
           {/* Dots Navigation */}
           <div className="flex justify-center space-x-2 mt-8">
