@@ -5,7 +5,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Phone, Mail, Shield, Award, Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { MapPin, Phone, Mail, Shield, Award, Menu, X, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react"
 
 import UnitsSlider from "@/components/units-slider"
 import FacilitiesSection from "@/components/facilities-section"
@@ -17,6 +17,8 @@ export default function HomePage() {
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [currentConceptImage, setCurrentConceptImage] = useState(0)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
 
@@ -34,6 +36,35 @@ export default function HomePage() {
   const nextConceptImage = () => setCurrentConceptImage((prev) => (prev + 1) % conceptImages.length)
   const prevConceptImage = () =>
     setCurrentConceptImage((prev) => (prev - 1 + conceptImages.length) % conceptImages.length)
+
+  const openLightbox = (index: number) => {
+    setLightboxImageIndex(index)
+    setIsLightboxOpen(true)
+    document.body.style.overflow = "hidden"
+  }
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false)
+    document.body.style.overflow = "unset"
+  }
+
+  const nextLightboxImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
+    setLightboxImageIndex((prev) => (prev + 1) % conceptImages.length)
+  }
+
+  const prevLightboxImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
+    setLightboxImageIndex((prev) => (prev - 1 + conceptImages.length) % conceptImages.length)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isLightboxOpen) return
+    if (e.key === "Escape") closeLightbox()
+    if (e.key === "ArrowLeft") prevLightboxImage()
+    if (e.key === "ArrowRight") nextLightboxImage()
+  }
+
   const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX)
   const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX)
   const handleTouchEnd = () => {
@@ -43,8 +74,26 @@ export default function HomePage() {
     if (distance < -50) prevConceptImage()
   }
 
+  const handleLightboxTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleLightboxTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleLightboxTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    if (distance > 50) nextLightboxImage()
+    if (distance < -50) prevLightboxImage()
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" onKeyDown={handleKeyDown} tabIndex={0}>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -61,17 +110,31 @@ export default function HomePage() {
               <p className="text-xs text-gray-600">ISB immobilière</p>
             </div>
           </div>
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="#projet" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
-              Le Projet
-            </Link>
-            <Link href="#logements" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
-              Les Logements
-            </Link>
-            <Link href="#contact" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
-              Contact
-            </Link>
-          </nav>
+
+          <div className="hidden md:flex items-center space-x-8">
+            <nav className="flex items-center space-x-8">
+              <Link href="#projet" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
+                Le Projet
+              </Link>
+              <Link href="#logements" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
+                Les Logements
+              </Link>
+              <Link href="#contact" className="text-gray-700 hover:text-custom-beige font-medium text-xl">
+                Contact
+              </Link>
+            </nav>
+            <a
+              href="https://wa.me/21658666963"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium"
+              aria-label="Contactez-nous sur WhatsApp"
+            >
+              <MessageCircle className="h-5 w-5" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+
           <button
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -81,7 +144,7 @@ export default function HomePage() {
         </div>
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
-            <nav className="flex flex-col space-y-4 pt-4">
+            <nav className="flex flex-col space-y-4 pt-4 px-4">
               <Link
                 href="#projet"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -103,6 +166,17 @@ export default function HomePage() {
               >
                 Contact
               </Link>
+              <a
+                href="https://wa.me/21658666963"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
+                aria-label="Contactez-nous sur WhatsApp"
+              >
+                <MessageCircle className="h-5 w-5" />
+                <span>Contactez-nous sur WhatsApp</span>
+              </a>
             </nav>
           </div>
         )}
@@ -195,7 +269,13 @@ export default function HomePage() {
                 >
                   {conceptImages.map((image, index) => (
                     <div key={index} className="w-full h-full flex-shrink-0 relative">
-                      <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+                      <Image
+                        src={image.src || "/placeholder.svg"}
+                        alt={image.alt}
+                        fill
+                        className="object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+                        onClick={() => openLightbox(index)}
+                      />
                     </div>
                   ))}
                 </div>
@@ -266,7 +346,7 @@ export default function HomePage() {
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900">Téléphone</h4>
-                    <p className="text-gray-600">+216 71 234 567</p>
+                    <p className="text-gray-600">+216 58 666 963</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -284,6 +364,19 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+
+              <div className="mt-8">
+                <a
+                  href="https://wa.me/21658666963"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
+                  aria-label="Contactez-nous sur WhatsApp"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Contactez-nous sur WhatsApp</span>
+                </a>
+              </div>
             </div>
 
             <div>
@@ -295,6 +388,79 @@ export default function HomePage() {
 
       {/* Reservation Modal */}
       <ReservationModal isOpen={isReservationModalOpen} onClose={() => setIsReservationModalOpen(false)} />
+
+      {isLightboxOpen && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4" onClick={closeLightbox}>
+          <div className="relative w-full h-full max-w-6xl max-h-full flex items-center justify-center">
+            {/* Image principale */}
+            <div
+              className="relative w-full h-full max-w-5xl max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={handleLightboxTouchStart}
+              onTouchMove={handleLightboxTouchMove}
+              onTouchEnd={handleLightboxTouchEnd}
+            >
+              <Image
+                src={conceptImages[lightboxImageIndex].src || "/placeholder.svg"}
+                alt={conceptImages[lightboxImageIndex].alt}
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            </div>
+
+            {/* Bouton fermer */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                closeLightbox()
+              }}
+              className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-all duration-200 backdrop-blur-sm z-10"
+              aria-label="Fermer la lightbox"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            <button
+              onClick={prevLightboxImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-all duration-200 backdrop-blur-sm z-10"
+              aria-label="Image précédente"
+            >
+              <ChevronLeft className="h-8 w-8" />
+            </button>
+
+            <button
+              onClick={nextLightboxImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-all duration-200 backdrop-blur-sm z-10"
+              aria-label="Image suivante"
+            >
+              <ChevronRight className="h-8 w-8" />
+            </button>
+
+            {/* Indicateurs de pagination */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+              {conceptImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setLightboxImageIndex(index)
+                  }}
+                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                    index === lightboxImageIndex ? "bg-white scale-125" : "bg-white/60 hover:bg-white/80"
+                  }`}
+                  aria-label={`Aller à l'image ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Compteur d'images (mobile) */}
+            <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm md:hidden">
+              {lightboxImageIndex + 1} / {conceptImages.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

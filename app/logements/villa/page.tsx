@@ -1,9 +1,13 @@
 "use client"
 
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
+import CoverLightbox from "@/components/cover-lightbox"
+import GalleryLightbox from "@/components/gallery-lightbox"
 import { useState, useEffect } from "react"
 import {
   ArrowLeft,
@@ -26,6 +30,8 @@ import {
   Phone,
   Mail,
   MapPin,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -35,10 +41,112 @@ export default function VillaPage() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
+  const [currentHeroImageIndex, setCurrentHeroImageIndex] = useState(0)
+  const [showCoverLightbox, setShowCoverLightbox] = useState(false)
+  const [coverLightboxIndex, setCoverLightboxIndex] = useState(0)
+  const [showGalleryLightbox, setShowGalleryLightbox] = useState(false)
+  const [galleryLightboxIndex, setGalleryLightboxIndex] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const heroGalleryImages = [
+    {
+      src: "/villa-h1-exterior.jpg",
+      alt: "Extérieur Villa - Façade moderne avec jardin paysager",
+    },
+    {
+      src: "/villa-h5.jpg",
+      alt: "Salon Villa - Salon moderne avec grandes baies vitrées",
+    },
+    {
+      src: "/villa-h3.jpg",
+      alt: "Salon Villa - Salon contemporain avec TV murale et lustre design",
+    },
+    {
+      src: "/villa-h2.jpg",
+      alt: "Cuisine Villa - Cuisine moderne avec îlot central en marbre",
+    },
+    {
+      src: "/villa-h6.jpg",
+      alt: "Suite Villa - Chambre moderne avec design contemporain",
+    },
+    {
+      src: "/villa-h4.jpg",
+      alt: "Piscine Villa - Terrasse avec piscine et salon extérieur",
+    },
+  ]
+
+  const galleryImages = [
+    {
+      src: "/villa-h1-exterior.jpg",
+      alt: "Extérieur Villa - Façade moderne avec jardin paysager",
+    },
+    {
+      src: "/villa-h5.jpg",
+      alt: "Salon Villa - Salon moderne avec grandes baies vitrées",
+    },
+    {
+      src: "/villa-h3.jpg",
+      alt: "Salon Villa - Salon contemporain avec TV murale et lustre design",
+    },
+    {
+      src: "/villa-h2.jpg",
+      alt: "Cuisine Villa - Cuisine moderne avec îlot central en marbre",
+    },
+    {
+      src: "/villa-h6.jpg",
+      alt: "Suite Villa - Chambre moderne avec design contemporain",
+    },
+    {
+      src: "/villa-h4.jpg",
+      alt: "Piscine Villa - Terrasse avec piscine et salon extérieur",
+    },
+  ]
+
+  const nextHeroImage = () => {
+    setCurrentHeroImageIndex((prev) => (prev + 1) % heroGalleryImages.length)
+  }
+
+  const prevHeroImage = () => {
+    setCurrentHeroImageIndex((prev) => (prev - 1 + heroGalleryImages.length) % heroGalleryImages.length)
+  }
+
+  const openCoverLightbox = (index: number) => {
+    setCoverLightboxIndex(index)
+    setShowCoverLightbox(true)
+  }
+
+  const openGalleryLightbox = (index: number) => {
+    setGalleryLightboxIndex(index)
+    setShowGalleryLightbox(true)
+  }
+
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextHeroImage()
+    }
+    if (isRightSwipe) {
+      prevHeroImage()
+    }
+  }
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "353-357 m²" },
@@ -70,7 +178,6 @@ export default function VillaPage() {
     { icon: Wind, label: "VMC double flux" },
   ]
 
-  // Generate 6 Villa unit plans
   const villaPlans = [
     {
       src: "/villa-1-ground-floor.png",
@@ -203,18 +310,54 @@ export default function VillaPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Removed the "Demander une Visite" button */}
             </div>
 
             <div className="relative">
-              <Image
-                src="/villa-7.png"
-                alt="Villa Individuelle - Vue extérieure avec piscine et jardin"
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
+              <div
+                className="relative h-96 overflow-hidden"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <Image
+                  src={heroGalleryImages[currentHeroImageIndex].src || "/placeholder.svg"}
+                  alt={heroGalleryImages[currentHeroImageIndex].alt}
+                  width={600}
+                  height={400}
+                  className="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
+                  onClick={() => openCoverLightbox(currentHeroImageIndex)}
+                />
+
+                <button
+                  onClick={prevHeroImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200 z-10"
+                  aria-label="Image précédente"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+
+                <button
+                  onClick={nextHeroImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200 z-10"
+                  aria-label="Image suivante"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {heroGalleryImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentHeroImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                        index === currentHeroImageIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                      aria-label={`Aller à l'image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="absolute top-4 right-4">
                 <Badge className="bg-custom-beige text-white rounded-none">6 Unités Disponibles</Badge>
               </div>
@@ -224,11 +367,10 @@ export default function VillaPage() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
-            <p className="text-lg text-gray-600">Un agencement pensé pour la vie de famille</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -473,7 +615,7 @@ export default function VillaPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(0)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h1-exterior.jpg"
@@ -485,7 +627,7 @@ export default function VillaPage() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(1)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h5.jpg"
@@ -497,7 +639,7 @@ export default function VillaPage() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(2)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h3.jpg"
@@ -509,7 +651,7 @@ export default function VillaPage() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(3)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h2.jpg"
@@ -521,7 +663,7 @@ export default function VillaPage() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(4)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h6.jpg"
@@ -533,7 +675,7 @@ export default function VillaPage() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(5)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/villa-h4.jpg"
@@ -614,7 +756,7 @@ export default function VillaPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
+      <section id="contact-section" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
@@ -632,7 +774,7 @@ export default function VillaPage() {
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900">Téléphone</h4>
-                    <p className="text-gray-600">+216 71 234 567</p>
+                    <p className="text-gray-600">+216 58 666 963</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -649,6 +791,20 @@ export default function VillaPage() {
                     <p className="text-gray-600">Chotrana 3, La Soukra, Tunis</p>
                   </div>
                 </div>
+              </div>
+
+              {/* WhatsApp Button */}
+              <div className="mt-8">
+                <a
+                  href="https://wa.me/21658666963"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
+                  aria-label="Contactez-nous sur WhatsApp"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Contactez-nous sur WhatsApp</span>
+                </a>
               </div>
             </div>
 
@@ -676,6 +832,22 @@ export default function VillaPage() {
         plans={villaPlans}
         startIndex={lightboxStartIndex}
         onClose={() => setShowPlanLightbox(false)}
+      />
+
+      {/* Cover Lightbox */}
+      <CoverLightbox
+        isOpen={showCoverLightbox}
+        onClose={() => setShowCoverLightbox(false)}
+        images={heroGalleryImages}
+        initialIndex={coverLightboxIndex}
+      />
+
+      {/* Gallery Lightbox */}
+      <GalleryLightbox
+        isOpen={showGalleryLightbox}
+        onClose={() => setShowGalleryLightbox(false)}
+        images={galleryImages}
+        initialIndex={galleryLightboxIndex}
       />
     </div>
   )

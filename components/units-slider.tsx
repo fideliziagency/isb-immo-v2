@@ -234,7 +234,11 @@ export default function UnitsSlider() {
 
                       {/* Content */}
                       <CardContent className="p-8 flex flex-col justify-center">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">{property.title}</h3>
+                        <Link href={property.href} className="group">
+                          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#b7b0a0] transition-colors duration-200">
+                            {property.title}
+                          </h3>
+                        </Link>
                         <p className="text-gray-600 mb-6">{property.description}</p>
 
                         {/* Specifications */}

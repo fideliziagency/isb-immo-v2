@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
+import CoverLightbox from "@/components/cover-lightbox"
+import GalleryLightbox from "@/components/gallery-lightbox"
 import { useState, useEffect } from "react"
 import {
   ArrowLeft,
@@ -27,6 +29,7 @@ import {
   Phone,
   Mail,
   MapPin,
+  MessageCircle,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -37,6 +40,12 @@ export default function AppartementS1Page() {
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
   const [currentCoverIndex, setCurrentCoverIndex] = useState(0)
+  const [showCoverLightbox, setShowCoverLightbox] = useState(false)
+  const [coverLightboxIndex, setCoverLightboxIndex] = useState(0)
+  const [showGalleryLightbox, setShowGalleryLightbox] = useState(false)
+  const [galleryLightboxIndex, setGalleryLightboxIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -64,9 +73,6 @@ export default function AppartementS1Page() {
   const prevCoverImage = () => {
     setCurrentCoverIndex((prev) => (prev - 1 + coverImages.length) % coverImages.length)
   }
-
-  const [touchStart, setTouchStart] = useState(0)
-  const [touchEnd, setTouchEnd] = useState(0)
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX)
@@ -282,6 +288,31 @@ export default function AppartementS1Page() {
     setShowPlanLightbox(true)
   }
 
+  const openCoverLightbox = (index: number) => {
+    setCoverLightboxIndex(index)
+    setShowCoverLightbox(true)
+  }
+
+  const openGalleryLightbox = (index: number) => {
+    setGalleryLightboxIndex(index)
+    setShowGalleryLightbox(true)
+  }
+
+  const galleryImages = [
+    {
+      src: "/s1-salon-moderne-luxe.jpeg",
+      alt: "Salon S+1 - Espace de vie moderne avec canapé beige, coin bar et TV murale",
+    },
+    {
+      src: "/s1-new-open-living-dining.jpeg",
+      alt: "Salon-salle à manger S+1 - Espace ouvert avec cuisine et îlot central",
+    },
+    {
+      src: "/s1-new-kitchen-modern.jpeg",
+      alt: "Cuisine S+1 - Cuisine moderne équipée avec plan de travail en marbre",
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -353,7 +384,8 @@ export default function AppartementS1Page() {
                         alt={image.alt}
                         width={600}
                         height={400}
-                        className="w-full h-96 object-cover"
+                        className="w-full h-96 object-cover cursor-pointer"
+                        onClick={() => openCoverLightbox(index)}
                       />
                     </div>
                   ))}
@@ -400,11 +432,10 @@ export default function AppartementS1Page() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 md:py-16 py-10 bg-gray-50">
+      <section className="py-8 md:py-8 py-5 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 md:mb-12 mb-8">
+          <div className="text-center mb-6 md:mb-6 mb-4">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
-            <p className="text-lg text-gray-600">Découvrez l'agencement optimisé de votre futur appartement</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -542,7 +573,7 @@ export default function AppartementS1Page() {
           </div>
 
           <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6 md:gap-6 gap-4">
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(0)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s1-salon-moderne-luxe.jpeg"
@@ -554,7 +585,7 @@ export default function AppartementS1Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(1)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s1-new-open-living-dining.jpeg"
@@ -566,7 +597,7 @@ export default function AppartementS1Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(2)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s1-new-kitchen-modern.jpeg"
@@ -667,7 +698,7 @@ export default function AppartementS1Page() {
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900">Téléphone</h4>
-                    <p className="text-gray-600">+216 71 234 567</p>
+                    <p className="text-gray-600">+216 58 666 963</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -685,6 +716,19 @@ export default function AppartementS1Page() {
                   </div>
                 </div>
               </div>
+
+              <div className="mt-8">
+                <a
+                  href="https://wa.me/21658666963"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
+                  aria-label="Contactez-nous sur WhatsApp"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Contactez-nous sur WhatsApp</span>
+                </a>
+              </div>
             </div>
 
             <div>
@@ -700,6 +744,22 @@ export default function AppartementS1Page() {
         onClose={() => setShowPlanLightbox(false)}
         plans={s1Plans}
         initialIndex={lightboxStartIndex}
+      />
+
+      {/* Cover Lightbox */}
+      <CoverLightbox
+        isOpen={showCoverLightbox}
+        onClose={() => setShowCoverLightbox(false)}
+        images={coverImages}
+        initialIndex={coverLightboxIndex}
+      />
+
+      {/* Gallery Lightbox */}
+      <GalleryLightbox
+        isOpen={showGalleryLightbox}
+        onClose={() => setShowGalleryLightbox(false)}
+        images={galleryImages}
+        initialIndex={galleryLightboxIndex}
       />
     </div>
   )

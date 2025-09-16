@@ -1,9 +1,13 @@
 "use client"
 
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PlanLightbox from "@/components/plan-lightbox"
+import CoverLightbox from "@/components/cover-lightbox"
+import GalleryLightbox from "@/components/gallery-lightbox"
 import { useState, useEffect } from "react"
 import {
   ArrowLeft,
@@ -31,12 +35,41 @@ export default function AppartementS3Page() {
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0)
   const [currentCoverIndex, setCurrentCoverIndex] = useState(0)
+  const [showCoverLightbox, setShowCoverLightbox] = useState(false)
+  const [coverLightboxIndex, setCoverLightboxIndex] = useState(0)
+  const [showGalleryLightbox, setShowGalleryLightbox] = useState(false)
+  const [galleryLightboxIndex, setGalleryLightboxIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   const coverImages = [
+    {
+      src: "/s3-new-living-dining-gallery.png",
+      alt: "Salon et salle à manger S+3 - Espace de vie moderne",
+    },
+    {
+      src: "/s3-new-dining-area-gallery.png",
+      alt: "Salle à manger S+3 - Espace repas avec miroirs",
+    },
+    {
+      src: "/s3-new-open-living-gallery.png",
+      alt: "Salon S+3 - Espace de vie ouvert et moderne",
+    },
+    {
+      src: "/s3-new-kitchen-island-gallery.png",
+      alt: "Cuisine S+3 - Cuisine moderne avec îlot central",
+    },
+    {
+      src: "/s3-new-master-bedroom-gallery.png",
+      alt: "Suite parentale S+3 - Chambre principale moderne",
+    },
+  ]
+
+  const galleryImages = [
     {
       src: "/s3-new-living-dining-gallery.png",
       alt: "Salon et salle à manger S+3 - Espace de vie moderne",
@@ -67,12 +100,29 @@ export default function AppartementS3Page() {
     setCurrentCoverIndex((prev) => (prev - 1 + coverImages.length) % coverImages.length)
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentCoverIndex((prev) => (prev + 1) % coverImages.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [coverImages.length])
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextCoverImage()
+    }
+    if (isRightSwipe) {
+      prevCoverImage()
+    }
+  }
 
   const specifications = [
     { icon: Ruler, label: "Surface", value: "139-208 m²" },
@@ -229,6 +279,16 @@ export default function AppartementS3Page() {
     setShowPlanLightbox(true)
   }
 
+  const openCoverLightbox = (index: number) => {
+    setCoverLightboxIndex(index)
+    setShowCoverLightbox(true)
+  }
+
+  const openGalleryLightbox = (index: number) => {
+    setGalleryLightboxIndex(index)
+    setShowGalleryLightbox(true)
+  }
+
   const scrollToContact = () => {
     const contactSection = document.getElementById("contact-section")
     if (contactSection) {
@@ -292,10 +352,19 @@ export default function AppartementS3Page() {
                 <div
                   className="flex transition-transform duration-500 ease-in-out h-full"
                   style={{ transform: `translateX(-${currentCoverIndex * 100}%)` }}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                 >
                   {coverImages.map((image, index) => (
                     <div key={index} className="w-full flex-shrink-0 relative">
-                      <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+                      <Image
+                        src={image.src || "/placeholder.svg"}
+                        alt={image.alt}
+                        fill
+                        className="object-cover cursor-pointer"
+                        onClick={() => openCoverLightbox(index)}
+                      />
                     </div>
                   ))}
                 </div>
@@ -339,11 +408,10 @@ export default function AppartementS3Page() {
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
-            <p className="text-lg text-gray-600">Un agencement pensé pour les grandes familles</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -481,7 +549,7 @@ export default function AppartementS3Page() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(0)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s3-new-living-dining-gallery.png"
@@ -493,7 +561,7 @@ export default function AppartementS3Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(1)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s3-new-dining-area-gallery.png"
@@ -505,7 +573,7 @@ export default function AppartementS3Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(2)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s3-new-open-living-gallery.png"
@@ -517,7 +585,7 @@ export default function AppartementS3Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(3)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s3-new-kitchen-island-gallery.png"
@@ -529,7 +597,7 @@ export default function AppartementS3Page() {
               </div>
             </div>
 
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer" onClick={() => openGalleryLightbox(4)}>
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src="/s3-new-master-bedroom-gallery.png"
@@ -610,6 +678,22 @@ export default function AppartementS3Page() {
         onClose={() => setShowPlanLightbox(false)}
         plans={s3Plans}
         initialIndex={lightboxStartIndex}
+      />
+
+      {/* Cover Lightbox */}
+      <CoverLightbox
+        isOpen={showCoverLightbox}
+        onClose={() => setShowCoverLightbox(false)}
+        images={coverImages}
+        initialIndex={coverLightboxIndex}
+      />
+
+      {/* Gallery Lightbox */}
+      <GalleryLightbox
+        isOpen={showGalleryLightbox}
+        onClose={() => setShowGalleryLightbox(false)}
+        images={galleryImages}
+        initialIndex={galleryLightboxIndex}
       />
     </div>
   )
