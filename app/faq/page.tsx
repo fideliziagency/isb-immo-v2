@@ -107,7 +107,7 @@ const faqCategories = [
   },
   {
     id: "services",
-    name: "Services et Commodités",
+    name: "Services et commodités",
     icon: Users,
     questions: [
       {

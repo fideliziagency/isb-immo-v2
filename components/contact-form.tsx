@@ -24,7 +24,7 @@ const ContactForm = () => {
   return (
     <Card className="rounded-none border-0 shadow-lg">
       <CardContent className="p-8">
-        <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'Information</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Demande d'information</h3>
         <form onSubmit={handleSubmit} className="space-y-6">
           <input type="hidden" name="formType" value="contact" />
 
@@ -103,7 +103,7 @@ const ContactForm = () => {
             size="lg"
             className="w-full rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white transition-colors duration-300"
           >
-            Envoyer la Demande
+            Envoyer la demande
           </Button>
         </form>
       </CardContent>

@@ -79,7 +79,7 @@ export default function FacilitiesSection() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Équipements</Badge>
-          <h2 className="text-6xl font-bold text-gray-900 mb-6">Services et Commodités</h2>
+          <h2 className="text-6xl font-bold text-gray-900 mb-6">Services et commodités</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Un ensemble complet de services et d'équipements pensés pour votre confort et votre bien-être au quotidien.
           </p>
@@ -107,7 +107,7 @@ export default function FacilitiesSection() {
 
         <div className="mt-16 text-center">
           <div className="bg-custom-beige-light p-8 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Un Art de Vivre Complet</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Un art de vivre complet</h3>
             <p className="text-gray-700 mb-6">
               The Life Residence ne se contente pas d'offrir des logements d'exception. C'est un véritable écosystème de
               vie qui combine confort moderne, sécurité optimale et services haut de gamme pour créer une expérience

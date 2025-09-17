@@ -22,7 +22,7 @@ export default function Footer() {
                 <p className="text-sm text-gray-400">ISB immobilière</p>
               </div>
             </div>
-            <p className="text-gray-400 text-sm">L'art de vivre au cœur de la modernité à La Soukra</p>
+            <p className="text-gray-400 text-sm">L'art de vivre au cœur de la modernité</p>
           </div>
 
           {/* Liens rapides */}
@@ -59,7 +59,7 @@ export default function Footer() {
                 <Mail className="h-5 w-5 text-custom-beige mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-400 text-sm">Email</p>
-                  <p className="text-white">contact@isbimmobiliere.com</p>
+                  <p className="text-white">isbimmobiliere@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -128,7 +128,7 @@ export default function Footer() {
             <p className="text-gray-400 text-sm">
               © 2024 The Life Residence - ISB Immobilière Sodaprim Bouaziz. Tous droits réservés.
             </p>
-            <p className="text-gray-400 text-sm">Livraison prévue : 2027</p>
+            <p className="text-gray-400 text-sm">Livraison prévue : Fin 2027</p>
           </div>
         </div>
       </div>

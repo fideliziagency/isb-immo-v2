@@ -189,14 +189,14 @@ export default function UnitsSlider() {
                     <div className="grid lg:grid-cols-2 gap-0">
                       {/* Image */}
                       <div className="relative h-96 lg:h-auto">
-                        <Link href={property.href} className="block w-full h-full">
+                        <div className="block w-full h-full">
                           <Image
                             src={property.image || "/placeholder.svg"}
                             alt={property.title}
                             fill
-                            className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            className="object-cover hover:scale-105 transition-transform duration-300"
                           />
-                        </Link>
+                        </div>
                         <div className="absolute top-4 left-4">
                           <Badge className="bg-custom-beige text-black rounded-none font-semibold shadow-sm">
                             {property.type}

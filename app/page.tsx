@@ -127,7 +127,7 @@ export default function HomePage() {
               href="https://wa.me/21658666963"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium"
+              className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
               aria-label="Contactez-nous sur WhatsApp"
             >
               <MessageCircle className="h-5 w-5" />
@@ -192,7 +192,7 @@ export default function HomePage() {
           priority
         />
         <div className="relative z-10 container mx-auto px-4 pt-8 text-center">
-          <div className="backdrop-blur-md bg-black/40 border border-white/20 rounded-2xl px-8 py-6 max-w-4xl mx-auto shadow-xl">
+          <div className="backdrop-blur-md bg-black/40 border border-white/20 px-8 py-6 max-w-4xl mx-auto shadow-xl">
             <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">The Life Residence</h1>
             <p className="text-lg md:text-xl text-white drop-shadow-lg font-light">
               L'art de vivre au cœur de la modernité
@@ -205,7 +205,7 @@ export default function HomePage() {
       <section id="projet" className="py-20 bg-white">
         <div className="container mx-auto px-4 text-center mb-16">
           <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Le Projet</Badge>
-          <h2 className="text-6xl font-bold text-gray-900 mb-6">Un Concept d'Exception</h2>
+          <h2 className="text-6xl font-bold text-gray-900 mb-6">Un concept d'exception</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Situé sur la route principale face au restaurant El Firma, The Life Residence redéfinit l'art de vivre
             moderne à La Soukra.
@@ -216,7 +216,7 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Colonne gauche - Informations */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Emplacement Privilégié</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Emplacement privilégié</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-3">
                   <MapPin className="h-6 w-6 text-custom-beige mt-1 flex-shrink-0" />
@@ -246,7 +246,7 @@ export default function HomePage() {
                 <div className="flex items-start space-x-3">
                   <Award className="h-6 w-6 text-custom-beige mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Finitions Haut de Gamme</h4>
+                    <h4 className="font-semibold text-gray-900">Finitions haut de gamme</h4>
                     <p className="text-gray-600">Matériaux premium et finitions très haut standing</p>
                   </div>
                 </div>
@@ -340,7 +340,7 @@ export default function HomePage() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de contact</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
