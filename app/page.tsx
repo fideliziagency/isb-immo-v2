@@ -21,6 +21,8 @@ export default function HomePage() {
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+  const [touchStartTime, setTouchStartTime] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
 
   const conceptImages = [
     { src: "/isb-residence-1.jpg", alt: "Vue aérienne complète du projet architectural" },
@@ -65,13 +67,43 @@ export default function HomePage() {
     if (e.key === "ArrowRight") nextLightboxImage()
   }
 
-  const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX)
-  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+    setTouchStartTime(Date.now())
+    setIsDragging(true)
+    // Empêcher le scroll vertical pendant le swipe horizontal
+    e.preventDefault()
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return
+    setTouchEnd(e.targetTouches[0].clientX)
+    // Empêcher le scroll vertical pendant le swipe horizontal
+    e.preventDefault()
+  }
+
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
+    if (!touchStart || !touchEnd || !isDragging) {
+      setIsDragging(false)
+      return
+    }
+
     const distance = touchStart - touchEnd
-    if (distance > 50) nextConceptImage()
-    if (distance < -50) prevConceptImage()
+    const touchDuration = Date.now() - touchStartTime
+    const velocity = Math.abs(distance) / touchDuration // pixels par milliseconde
+
+    // Seuil adaptatif basé sur la vitesse et la distance
+    const minDistance = velocity > 0.3 ? 20 : 30 // Seuil réduit si mouvement rapide
+
+    if (Math.abs(distance) > minDistance) {
+      if (distance > 0) {
+        nextConceptImage()
+      } else {
+        prevConceptImage()
+      }
+    }
+
+    setIsDragging(false)
   }
 
   const handleLightboxTouchStart = (e: React.TouchEvent) => {
@@ -257,15 +289,19 @@ export default function HomePage() {
             <div className="relative">
               {/* Container du slider avec effet de glissement */}
               <div
-                className="relative h-96 rounded-lg overflow-hidden cursor-grab active:cursor-grabbing"
+                className="relative h-96 rounded-lg overflow-hidden cursor-grab active:cursor-grabbing touch-pan-y"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
+                style={{ touchAction: "pan-y" }} // Permet le scroll vertical mais optimise le horizontal
               >
                 {/* Images du slider */}
                 <div
-                  className="flex transition-transform duration-500 ease-in-out h-full"
-                  style={{ transform: `translateX(-${currentConceptImage * 100}%)` }}
+                  className="flex h-full"
+                  style={{
+                    transform: `translateX(-${currentConceptImage * 100}%)`,
+                    transition: isDragging ? "none" : "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)", // Transition plus rapide et fluide
+                  }}
                 >
                   {conceptImages.map((image, index) => (
                     <div key={index} className="w-full h-full flex-shrink-0 relative">

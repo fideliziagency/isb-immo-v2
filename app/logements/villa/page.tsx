@@ -46,6 +46,7 @@ export default function VillaPage() {
   const [coverLightboxIndex, setCoverLightboxIndex] = useState(0)
   const [showGalleryLightbox, setShowGalleryLightbox] = useState(false)
   const [galleryLightboxIndex, setGalleryLightboxIndex] = useState(0)
+  const [villaSpecificPlans, setVillaSpecificPlans] = useState<typeof villaPlans>([])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -123,6 +124,22 @@ export default function VillaPage() {
     setShowGalleryLightbox(true)
   }
 
+  const openVillaLightbox = (villaNumber: number, planIndex: number) => {
+    const villaStartIndex = (villaNumber - 1) * 2
+    let villaPlansOnly
+    if (villaNumber === 1) {
+      // Pour Villa 1, inverser l'ordre : sous-sol en premier, rez-de-chaussée en second
+      villaPlansOnly = [villaPlans[villaStartIndex + 1], villaPlans[villaStartIndex]]
+    } else {
+      // Pour toutes les autres villas, garder l'ordre normal
+      villaPlansOnly = [villaPlans[villaStartIndex], villaPlans[villaStartIndex + 1]]
+    }
+    setCurrentPlanIndex(planIndex)
+    setLightboxStartIndex(planIndex)
+    setShowPlanLightbox(true)
+    setVillaSpecificPlans(villaPlansOnly)
+  }
+
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
 
@@ -182,12 +199,12 @@ export default function VillaPage() {
     {
       src: "/villa-1-ground-floor.png",
       alt: "Plan Villa 1 - Rez-de-chaussée",
-      title: "Plan Villa 1 - Rez-de-chaussée - 357 m²",
+      title: "Plan Villa 1 - sous-sol - 357 m²",
     },
     {
       src: "/villa-1-upper-floor.png",
-      alt: "Plan Villa 1 - Étage",
-      title: "Plan Villa 1 - Étage - 357 m²",
+      alt: "Plan Villa 1 - Sous-sol",
+      title: "Plan Villa 1 - Rez-de-chaussée - 357 m²",
     },
     {
       src: "/villa-2-ground-floor.png",
@@ -196,8 +213,8 @@ export default function VillaPage() {
     },
     {
       src: "/villa-2-upper-floor.png",
-      alt: "Plan Villa 2 - Étage",
-      title: "Plan Villa 2 - Étage - 355 m²",
+      alt: "Plan Villa 2 - Sous-sol",
+      title: "Plan Villa 2 - Sous-sol - 355 m²",
     },
     {
       src: "/villa-3-ground-floor.png",
@@ -206,8 +223,8 @@ export default function VillaPage() {
     },
     {
       src: "/villa-3-upper-floor.png",
-      alt: "Plan Villa 3 - Étage",
-      title: "Plan Villa 3 - Étage - 354 m²",
+      alt: "Plan Villa 3 - Sous-sol",
+      title: "Plan Villa 3 - Sous-sol - 354 m²",
     },
     {
       src: "/villa-4-ground-floor.png",
@@ -216,8 +233,8 @@ export default function VillaPage() {
     },
     {
       src: "/villa-4-upper-floor.png",
-      alt: "Plan Villa 4 - Étage",
-      title: "Plan Villa 4 - Étage - 353 m²",
+      alt: "Plan Villa 4 - Sous-sol",
+      title: "Plan Villa 4 - Sous-sol - 353 m²",
     },
     {
       src: "/villa-5-ground-floor.png",
@@ -226,8 +243,8 @@ export default function VillaPage() {
     },
     {
       src: "/villa-5-upper-floor.png",
-      alt: "Plan Villa 5 - Étage",
-      title: "Plan Villa 5 - Étage - 356 m²",
+      alt: "Plan Villa 5 - Sous-sol",
+      title: "Plan Villa 5 - Sous-sol - 356 m²",
     },
     {
       src: "/villa-6-ground-floor.png",
@@ -236,22 +253,17 @@ export default function VillaPage() {
     },
     {
       src: "/villa-6-upper-floor.png",
-      alt: "Plan Villa 6 - Étage",
-      title: "Plan Villa 6 - Étage - 355 m²",
+      alt: "Plan Villa 6 - Sous-sol",
+      title: "Plan Villa 6 - Sous-sol - 355 m²",
     },
   ]
 
   const nextPlan = () => {
-    setCurrentPlanIndex((prev) => (prev + 1) % villaPlans.length)
+    setCurrentPlanIndex((prev) => (prev + 1) % villaSpecificPlans.length)
   }
 
   const prevPlan = () => {
-    setCurrentPlanIndex((prev) => (prev - 1 + villaPlans.length) % villaPlans.length)
-  }
-
-  const openLightbox = (index: number) => {
-    setLightboxStartIndex(index)
-    setShowPlanLightbox(true)
+    setCurrentPlanIndex((prev) => (prev - 1 + villaSpecificPlans.length) % villaSpecificPlans.length)
   }
 
   const scrollToContact = () => {
@@ -377,7 +389,7 @@ export default function VillaPage() {
             {/* Villa 1 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(0)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(1, 0)}>
                   <Image
                     src="/villa-1-ground-floor.png"
                     alt="Plan Villa 1 - RDC"
@@ -388,10 +400,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(1)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(1, 1)}>
                   <Image
                     src="/villa-1-upper-floor.png"
-                    alt="Plan Villa 1 - Étage"
+                    alt="Plan Villa 1 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -409,7 +421,7 @@ export default function VillaPage() {
             {/* Villa 2 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(2)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(2, 0)}>
                   <Image
                     src="/villa-2-ground-floor.png"
                     alt="Plan Villa 2 - RDC"
@@ -420,10 +432,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(3)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(2, 1)}>
                   <Image
                     src="/villa-2-upper-floor.png"
-                    alt="Plan Villa 2 - Étage"
+                    alt="Plan Villa 2 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -441,7 +453,7 @@ export default function VillaPage() {
             {/* Villa 3 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(4)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(3, 0)}>
                   <Image
                     src="/villa-3-ground-floor.png"
                     alt="Plan Villa 3 - RDC"
@@ -452,10 +464,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(5)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(3, 1)}>
                   <Image
                     src="/villa-3-upper-floor.png"
-                    alt="Plan Villa 3 - Étage"
+                    alt="Plan Villa 3 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -473,7 +485,7 @@ export default function VillaPage() {
             {/* Villa 4 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(6)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(4, 0)}>
                   <Image
                     src="/villa-4-ground-floor.png"
                     alt="Plan Villa 4 - RDC"
@@ -484,10 +496,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(7)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(4, 1)}>
                   <Image
                     src="/villa-4-upper-floor.png"
-                    alt="Plan Villa 4 - Étage"
+                    alt="Plan Villa 4 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -505,7 +517,7 @@ export default function VillaPage() {
             {/* Villa 5 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(8)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(5, 0)}>
                   <Image
                     src="/villa-5-ground-floor.png"
                     alt="Plan Villa 5 - RDC"
@@ -516,10 +528,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(9)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(5, 1)}>
                   <Image
                     src="/villa-5-upper-floor.png"
-                    alt="Plan Villa 5 - Étage"
+                    alt="Plan Villa 5 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -537,7 +549,7 @@ export default function VillaPage() {
             {/* Villa 6 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="grid grid-cols-2 gap-2 p-4">
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(10)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(6, 0)}>
                   <Image
                     src="/villa-6-ground-floor.png"
                     alt="Plan Villa 6 - Rez-de-chaussée"
@@ -548,10 +560,10 @@ export default function VillaPage() {
                     <Eye className="h-4 w-4 text-custom-beige opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
-                <div className="relative h-48 cursor-pointer group" onClick={() => openLightbox(11)}>
+                <div className="relative h-48 cursor-pointer group" onClick={() => openVillaLightbox(6, 1)}>
                   <Image
                     src="/villa-6-upper-floor.png"
-                    alt="Plan Villa 6 - Étage"
+                    alt="Plan Villa 6 - Sous-sol"
                     fill
                     className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -829,7 +841,7 @@ export default function VillaPage() {
       {/* Plan Lightbox */}
       <PlanLightbox
         isOpen={showPlanLightbox}
-        plans={villaPlans}
+        plans={villaSpecificPlans}
         startIndex={lightboxStartIndex}
         onClose={() => setShowPlanLightbox(false)}
       />

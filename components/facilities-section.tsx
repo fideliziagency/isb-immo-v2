@@ -78,7 +78,7 @@ export default function FacilitiesSection() {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-custom-beige-light text-custom-beige rounded-none">Équipements</Badge>
+          <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Équipements</Badge>
           <h2 className="text-6xl font-bold text-gray-900 mb-6">Services et commodités</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Un ensemble complet de services et d'équipements pensés pour votre confort et votre bien-être au quotidien.

@@ -240,13 +240,13 @@ export default function DuplexPage() {
               Logements
             </Link>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-900">Duplex de Prestige</span>
+            <span className="text-gray-900">Duplex de prestige</span>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 md:gap-12 gap-8 items-start">
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Duplex de Prestige</Badge>
-              <h1 className="text-4xl font-bold text-gray-900 mb-6">Duplex de Prestige</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-6">Duplex de prestige</h1>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -321,7 +321,7 @@ export default function DuplexPage() {
               </div>
 
               <div className="absolute top-4 right-4">
-                <Badge className="bg-custom-beige text-white rounded-none">2 Unités Disponibles</Badge>
+                <Badge className="bg-custom-beige text-white rounded-none">2 Unités disponibles</Badge>
               </div>
             </div>
           </div>
@@ -332,7 +332,7 @@ export default function DuplexPage() {
       <section className="py-8 md:py-8 py-5 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-6 md:mb-6 mb-4">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et agencement</h2>
           </div>
 
           <div className="max-w-6xl mx-auto">
@@ -383,7 +383,7 @@ export default function DuplexPage() {
       <section className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-12 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques techniques</h2>
             <p className="text-lg text-gray-600">Des équipements d'exception pour un confort absolu</p>
           </div>
 
@@ -399,7 +399,7 @@ export default function DuplexPage() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements Inclus</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements inclus</h3>
             <div className="flex flex-wrap gap-3 justify-center">
               {equipments.map((equipment, index) => (
                 <Badge
@@ -420,7 +420,7 @@ export default function DuplexPage() {
       <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-12 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie photos</h2>
             <p className="text-lg text-gray-600">Découvrez l'exception et le raffinement du duplex</p>
           </div>
 
@@ -468,7 +468,7 @@ export default function DuplexPage() {
       <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8 md:mb-8 mb-6">
-            Découvrez Nos Autres Logements
+            Découvrez nos autres logements
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 gap-4">
             <Link href="/logements/s1">
@@ -560,7 +560,7 @@ export default function DuplexPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
-            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-nous</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Notre équipe est à votre disposition pour répondre à toutes vos questions.
             </p>
@@ -568,7 +568,7 @@ export default function DuplexPage() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de contact</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />

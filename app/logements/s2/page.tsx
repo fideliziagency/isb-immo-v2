@@ -26,9 +26,14 @@ import {
   ChevronRight,
   Camera,
   Tv,
+  Phone,
+  Mail,
+  MapPin,
+  MessageCircle,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import ContactForm from "@/components/contact-form"
 
 export default function AppartementS2Page() {
   const [showPlanLightbox, setShowPlanLightbox] = useState(false)
@@ -417,7 +422,7 @@ export default function AppartementS2Page() {
               </div>
 
               <div className="absolute top-4 right-4">
-                <Badge className="bg-custom-beige text-black rounded-none">30 Unités Disponibles</Badge>
+                <Badge className="bg-custom-beige text-black rounded-none">30 Unités disponibles</Badge>
               </div>
             </div>
           </div>
@@ -428,7 +433,7 @@ export default function AppartementS2Page() {
       <section className="py-8 md:py-8 py-5 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-6 md:mb-6 mb-4">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et agencement</h2>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -524,7 +529,7 @@ export default function AppartementS2Page() {
       <section className="py-16 md:py-16 py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-12 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques techniques</h2>
             <p className="text-lg text-gray-600">Des équipements haut de gamme pour votre famille</p>
           </div>
 
@@ -540,7 +545,7 @@ export default function AppartementS2Page() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements Inclus</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements inclus</h3>
             <div className="flex flex-wrap gap-3 justify-center">
               {equipments.map((equipment, index) => (
                 <Badge
@@ -561,7 +566,7 @@ export default function AppartementS2Page() {
       <section className="py-16 md:py-16 py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-12 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie photos</h2>
             <p className="text-lg text-gray-600">Découvrez l'espace et le confort de l'appartement S+2</p>
           </div>
 
@@ -609,7 +614,7 @@ export default function AppartementS2Page() {
       <section className="py-12 md:py-12 py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8 md:mb-8 mb-6">
-            Découvrez Nos Autres Logements
+            Découvrez nos autres logements
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 gap-4">
             <Link href="/logements/s1">
@@ -676,6 +681,65 @@ export default function AppartementS2Page() {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </div>
+      </section>
+      
+{/* Contact Section */}
+      <section id="contact" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-nous</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Notre équipe est à votre disposition pour répondre à toutes vos questions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de contact</h3>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <Phone className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Téléphone</h4>
+                    <p className="text-gray-600">+216 58 666 963</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <Mail className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Email</h4>
+                    <p className="text-gray-600">contact@isbimmobiliere.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <MapPin className="h-6 w-6 text-custom-beige mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Adresse</h4>
+                    <p className="text-gray-600">Chotrana 3, La Soukra, Tunis</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <a
+                  href="https://wa.me/21658666963"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-custom-beige hover:bg-custom-beige-hover text-white px-4 py-2 rounded-none flex items-center space-x-2 transition-colors duration-200 font-medium w-fit"
+                  aria-label="Contactez-nous sur WhatsApp"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Contactez-nous sur WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>
