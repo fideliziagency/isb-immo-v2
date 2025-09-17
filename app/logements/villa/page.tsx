@@ -309,7 +309,7 @@ export default function VillaPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
               <Badge className="mb-4 bg-custom-beige text-white rounded-none">Villa Individuelle</Badge>
-              <h1 className="text-4xl font-bold text-gray-900 mb-6">Villa Individuelle</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-6">Villa individuelle</h1>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {specifications.map((spec, index) => (
@@ -371,7 +371,7 @@ export default function VillaPage() {
               </div>
 
               <div className="absolute top-4 right-4">
-                <Badge className="bg-custom-beige text-white rounded-none">6 Unités Disponibles</Badge>
+                <Badge className="bg-custom-beige text-white rounded-none">6 Unités disponibles</Badge>
               </div>
             </div>
           </div>
@@ -382,7 +382,7 @@ export default function VillaPage() {
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et Agencement</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plans et agencement</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -585,7 +585,7 @@ export default function VillaPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques Techniques</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Caractéristiques techniques</h2>
             <p className="text-lg text-gray-600">Des équipements d'exception pour un confort absolu</p>
           </div>
 
@@ -601,7 +601,7 @@ export default function VillaPage() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements Inclus</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Équipements inclus</h3>
             <div className="flex flex-wrap gap-3 justify-center">
               {equipments.map((equipment, index) => (
                 <Badge
@@ -622,7 +622,7 @@ export default function VillaPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie Photos</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Galerie photos</h2>
             <p className="text-lg text-gray-600">Découvrez l'art de vivre en villa</p>
           </div>
 
@@ -705,7 +705,7 @@ export default function VillaPage() {
       {/* Navigation to Other Types */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez Nos Autres Logements</h3>
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Découvrez nos autres logements</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link href="/logements/s1">
               <Card className="rounded-none border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
@@ -772,7 +772,7 @@ export default function VillaPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-custom-beige-light text-custom-beige-800 rounded-none">Contact</Badge>
-            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-Nous</h2>
+            <h2 className="text-6xl font-bold text-gray-900 mb-6">Contactez-nous</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Notre équipe est à votre disposition pour répondre à toutes vos questions.
             </p>
@@ -780,7 +780,7 @@ export default function VillaPage() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de Contact</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Informations de contact</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <Phone className="h-6 w-6 text-custom-beige mt-1" />
