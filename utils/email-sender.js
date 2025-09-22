@@ -1,37 +1,47 @@
 // utils/email-sender.js
 // Fonctions utilitaires pour envoyer des emails depuis The Life Residence
 
+// Base URL du backend (NestJS). Utiliser la var d'environnement côté client si définie.
+const API_BASE_URL =
+  (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ||
+  "http://localhost:3000";
+
 /**
  * Envoie un email de contact
  * @param {Object} formData - Données du formulaire de contact
  */
 export const sendContactEmail = async (formData) => {
   try {
-    const messageContent = `
-Nouvelle demande de contact reçue:
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      name: `${formData.firstName || ""} ${formData.lastName || ""}`.trim(),
+      email: formData.email,
+      phone: formData.phone,
+      unitType: formData.unitType,
+      message: formData.message,
+    };
 
-Nom: ${formData.firstName} ${formData.lastName}
-Email: ${formData.email}
-Téléphone: ${formData.phone}
-Type de logement: ${formData.unitType || "Non spécifié"}
+    // Inclure propertyId si fourni et convertible en nombre
+    if (formData.propertyId) {
+      const idNum = Number(formData.propertyId);
+      if (!Number.isNaN(idNum)) payload.propertyId = idNum;
+    }
 
-Message:
-${formData.message}
-    `;
-
-    const response = await fetch("/api/sendEmail", {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "Isbimmobiliere@gmail.com",
-        subject: `Nouvelle demande de contact - ${formData.firstName} ${formData.lastName}`,
-        message: messageContent,
-      }),
+      body: JSON.stringify(payload),
     });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Échec d'envoi (HTTP ${response.status}): ${errText}`);
+    }
 
     return await response.json();
   } catch (error) {
-    console.error("Erreur lors de l'envoi de l'email de contact:", error);
+    console.error("Erreur lors de l'envoi de la demande de contact au backend:", error);
     throw error;
   }
 };

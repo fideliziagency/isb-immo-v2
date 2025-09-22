@@ -1,23 +1,32 @@
 "use client"
 
 import type React from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { sendContactEmail } from "../utils/email-sender.js"
 
 const ContactForm = () => {
+  const [toast, setToast] = useState<null | { type: "success" | "error"; message: string }>(null)
+
+  const showToast = (type: "success" | "error", message: string) => {
+    setToast({ type, message })
+    setTimeout(() => setToast(null), 4000)
+  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
+    const formEl = e.currentTarget
+    const formData = new FormData(formEl)
     const data = Object.fromEntries(formData.entries())
 
     try {
       await sendContactEmail(data)
-      alert("Votre message a bien été envoyé !")
-      e.currentTarget.reset()
+      console.log("Email sent successfully")
+      showToast("success", "Votre message a bien été envoyé !")
+      formEl?.reset()
     } catch (err) {
       console.error(err)
-      alert("Erreur lors de l'envoi, veuillez réessayer.")
+      showToast("error", "Erreur lors de l'envoi, veuillez réessayer.")
     }
   }
 
@@ -93,6 +102,8 @@ const ContactForm = () => {
             <textarea
               rows={4}
               name="message"
+              required
+              minLength={5}
               placeholder="Message..."
               className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-custom-beige focus:border-transparent"
             />
@@ -106,6 +117,17 @@ const ContactForm = () => {
             Envoyer la demande
           </Button>
         </form>
+        {toast && (
+          <div
+            className={`fixed bottom-6 right-6 z-50 px-4 py-3 shadow-lg border text-white ${
+              toast.type === "success" ? "bg-green-600 border-green-700" : "bg-red-600 border-red-700"
+            }`}
+            role="status"
+            aria-live="polite"
+          >
+            {toast.message}
+          </div>
+        )}
       </CardContent>
     </Card>
   )
