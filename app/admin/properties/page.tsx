@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const API_BASE_URL =
   (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ||
-  "http://localhost:3000"
+  "https://isb-immo-backend-latest.onrender.com"
 
 function resolveImageUrl(src?: string): string {
   if (!src) return ""

@@ -38,7 +38,7 @@ export default function UnitsSlider() {
 
   const minSwipeDistance = 50
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://isb-immo-backend-latest.onrender.com"
 
   useEffect(() => {
     let isMounted = true

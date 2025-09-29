@@ -8,7 +8,7 @@ import { getAdminToken, isTokenValid } from "@/lib/auth-client"
 
 const API_BASE_URL =
   (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ||
-  "http://localhost:3000"
+  "https://isb-immo-backend-latest.onrender.com"
 
 export default function AdminLoginPage() {
   const router = useRouter()
