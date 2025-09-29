@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://isb-immo-backend-latest.onrender.com"
 
 type Lead = {
   id: string | number
