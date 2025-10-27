@@ -389,7 +389,7 @@ export default function HomePage() {
                   <Mail className="h-6 w-6 text-custom-beige mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900">Email</h4>
-                    <p className="text-gray-600">contact@isbimmobiliere.com</p>
+                    <p className="text-gray-600">isbimmobiliere@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
