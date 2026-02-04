@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const API_BASE_URL =
   (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ||
-  "https://isb-immo-backend-latest.onrender.com"
+  (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3000" : "https://isb-immo-backend-latest.onrender.com")
 
 function resolveImageUrl(src?: string): string {
   if (!src) return ""
@@ -31,13 +31,21 @@ type Property = {
   details?: Record<string, string>
   sold: boolean
   status: "published" | "pending"
+  houseId?: number | null
   createdAt: string
   updatedAt: string
+}
+
+type HouseSummary = {
+  id: number
+  code: string
+  name: string
 }
 
 export default function AdminPropertiesPage() {
   const [token, setToken] = useState<string | null>(null)
   const [items, setItems] = useState<Property[]>([])
+  const [houses, setHouses] = useState<HouseSummary[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState("")
@@ -73,6 +81,22 @@ export default function AdminPropertiesPage() {
 
   useEffect(() => {
     fetchList()
+  }, [])
+
+  const fetchHouses = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/houses`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const arr: HouseSummary[] = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : []
+      setHouses(arr)
+    } catch {
+      setHouses([])
+    }
+  }
+
+  useEffect(() => {
+    fetchHouses()
   }, [])
 
   const filtered = useMemo(() => {
@@ -334,6 +358,26 @@ export default function AdminPropertiesPage() {
                 className="w-full px-3 py-2 border border-gray-300"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Maison associée</label>
+              <select
+                value={editDraft.houseId ?? ""}
+                onChange={(e) =>
+                  setEditDraft({
+                    ...editDraft,
+                    houseId: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
+                className="w-full px-3 py-2 border border-gray-300"
+              >
+                <option value="">Aucune</option>
+                {houses.map((house) => (
+                  <option key={house.id} value={house.id}>
+                    {house.name} ({house.code})
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
               <input
@@ -436,6 +480,7 @@ export default function AdminPropertiesPage() {
         <AddPropertyPanel
           onClose={() => setAddOpen(false)}
           onSubmit={addItem}
+          houses={houses}
         />
       )}
 
@@ -457,9 +502,11 @@ export default function AdminPropertiesPage() {
 function AddPropertyPanel({
   onClose,
   onSubmit,
+  houses,
 }: {
   onClose: () => void
   onSubmit: (form: Partial<Property>) => void
+  houses: HouseSummary[]
 }) {
   const [form, setForm] = useState<Partial<Property>>({
     code: "",
@@ -493,6 +540,26 @@ function AddPropertyPanel({
               onChange={(e) => setForm({ ...form, type: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Maison associée</label>
+            <select
+              value={form.houseId ?? ""}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  houseId: e.target.value ? Number(e.target.value) : null,
+                })
+              }
+              className="w-full px-3 py-2 border border-gray-300"
+            >
+              <option value="">Aucune</option>
+              {houses.map((house) => (
+                <option key={house.id} value={house.id}>
+                  {house.name} ({house.code})
+                </option>
+              ))}
+            </select>
           </div>
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
