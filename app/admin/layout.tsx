@@ -79,16 +79,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Annonces (Properties)
             </Link>
             <Link
-              href="/admin/houses"
-              className={`block px-3 py-2 text-sm font-medium rounded-none border ${
-                pathname === "/admin/houses"
-                  ? "bg-custom-beige text-white border-custom-beige"
-                  : "bg-transparent text-gray-700 border-gray-200 hover:bg-gray-50"
-              }`}
-            >
-              Maisons
-            </Link>
-            <Link
               href="/admin/leads"
               className={`block px-3 py-2 text-sm font-medium rounded-none border ${
                 pathname === "/admin/leads"
