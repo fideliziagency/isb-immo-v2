@@ -1,0 +1,334 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --color-custom-beige: #b6b09f;
+  --color-custom-beige-hover: #a39a85;
+  --color-custom-beige-light: #e8e4db;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom styles for sharp corners */
+.rounded-none {
+  border-radius: 0 !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom colors for The Life Residence */
+.text-custom-beige {
+  color: #b6b09f;
+}
+
+.bg-custom-beige {
+  background-color: #b6b09f;
+}
+
+.border-custom-beige {
+  border-color: #b6b09f;
+}
+
+.hover\:bg-custom-beige:hover {
+  background-color: #a5a08a;
+}
+
+.bg-custom-beige-light {
+  background-color: #e8e6e0;
+}
+
+.text-custom-beige-light {
+  color: #d4d0c4;
+}
+
+.hover\:bg-custom-beige-light:hover {
+  background-color: #ddd9cc;
+}
+
+.bg-custom-beige-hover {
+  background-color: #a5a08a;
+}
+
+.hover\:bg-custom-beige-hover:hover {
+  background-color: #959075;
+}
+
+.text-custom-beige-600 {
+  color: #9b9580;
+}
+
+.bg-custom-beige-600 {
+  background-color: #9b9580;
+}
+
+.border-custom-beige-600 {
+  border-color: #9b9580;
+}
+
+.hover\:bg-custom-beige-600:hover {
+  background-color: #8a8570;
+}
+
+.hover\:bg-custom-beige-700:hover {
+  background-color: #7a7560;
+}
+
+.bg-custom-beige-50 {
+  background-color: #f5f4f1;
+}
+
+.bg-custom-beige-100 {
+  background-color: #ebeae5;
+}
+
+.text-custom-beige-800 {
+  color: #6b6555;
+}
+
+.border-custom-beige-500 {
+  border-color: #a8a28d;
+}
+
+.text-custom-beige-500 {
+  color: #a8a28d;
+}
+
+.hover\:bg-custom-beige-500:hover {
+  background-color: #9b9580;
+}
+
+/* Mobile spacing optimizations */
+@media (max-width: 768px) {
+  /* Réduction des paddings verticaux des sections principales */
+  .py-20 {
+    padding-top: 3rem !important; /* 48px au lieu de 80px */
+    padding-bottom: 3rem !important;
+  }
+
+  .py-16 {
+    padding-top: 2.5rem !important; /* 40px au lieu de 64px */
+    padding-bottom: 2.5rem !important;
+  }
+
+  .py-12 {
+    padding-top: 2rem !important; /* 32px au lieu de 48px */
+    padding-bottom: 2rem !important;
+  }
+
+  /* Réduction des marges entre les blocs */
+  .mb-16 {
+    margin-bottom: 2.5rem !important; /* 40px au lieu de 64px */
+  }
+
+  .mb-12 {
+    margin-bottom: 2rem !important; /* 32px au lieu de 48px */
+  }
+
+  .mb-8 {
+    margin-bottom: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Réduction des gaps dans les grilles */
+  .gap-12 {
+    gap: 2rem !important; /* 32px au lieu de 48px */
+  }
+
+  .gap-8 {
+    gap: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .gap-6 {
+    gap: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Optimisation spécifique pour les sections hero */
+  .py-12.md\:py-12 {
+    padding-top: 1.5rem !important; /* 24px */
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Réduction des espaces dans les cartes */
+  .p-8 {
+    padding: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+
+  .p-6 {
+    padding: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  /* Optimisation des espacements dans les formulaires */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important; /* 16px au lieu de 24px */
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 0.75rem !important; /* 12px au lieu de 16px */
+  }
+
+  /* Réduction des espaces dans les listes */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem !important; /* 24px au lieu de 32px */
+  }
+}
+
+/* Optimisations supplémentaires pour très petits écrans */
+@media (max-width: 480px) {
+  .py-20 {
+    padding-top: 2rem !important; /* 32px */
+    padding-bottom: 2rem !important;
+  }
+
+  .py-16 {
+    padding-top: 1.5rem !important; /* 24px */
+    padding-bottom: 1.5rem !important;
+  }
+
+  .mb-16 {
+    margin-bottom: 1.5rem !important; /* 24px */
+  }
+
+  .mb-12 {
+    margin-bottom: 1rem !important; /* 16px */
+  }
+}
