@@ -12,7 +12,8 @@ import Link from "next/link"
 
 type PropertyRecord = {
   id: string | number
-  type?: string
+  code: string
+  type: string
   title: string
   description?: string
   image?: string
@@ -27,22 +28,8 @@ type PropertyRecord = {
   sold?: boolean
 }
 
-type HouseRecord = {
-  id: string | number
-  code: string
-  name: string
-  description?: string
-  mainImage?: string
-  salesStatus?: "available" | "sold" | "reserved"
-  address?: string
-  totalSurface?: string
-  price?: string
-  details?: Record<string, string> | string | null
-  properties?: PropertyRecord[]
-}
-
 export default function UnitsSlider() {
-  const [houses, setHouses] = useState<HouseRecord[]>([])
+  const [categories, setCategories] = useState<PropertyRecord[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -61,7 +48,7 @@ export default function UnitsSlider() {
       try {
         setLoading(true)
         setError(null)
-        const res = await fetch(`${API_BASE_URL}/houses`, {
+        const res = await fetch(`${API_BASE_URL}/properties`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
@@ -72,8 +59,8 @@ export default function UnitsSlider() {
         }
         const data = await res.json()
         if (!isMounted) return
-        const arr: HouseRecord[] = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : []
-        setHouses(arr)
+        const arr: PropertyRecord[] = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : []
+        setCategories(arr)
         setCurrentIndex(0)
       } catch (e: any) {
         if (e?.name === "AbortError") return
@@ -90,8 +77,8 @@ export default function UnitsSlider() {
   }, [API_BASE_URL])
 
   useEffect(() => {
-    if (currentIndex >= houses.length) setCurrentIndex(0)
-  }, [houses.length, currentIndex])
+    if (currentIndex >= categories.length) setCurrentIndex(0)
+  }, [categories.length, currentIndex])
 
   const resolveImageUrl = (src?: string) => {
     if (!src) return "/placeholder.jpg"
@@ -99,32 +86,14 @@ export default function UnitsSlider() {
     return src
   }
 
-  const statusLabel = (status?: string) => {
-    switch (status) {
-      case "sold":
-        return "Vendue"
-      case "reserved":
-        return "Réservée"
-      case "available":
-      default:
-        return "Disponible"
-    }
-  }
-
-  const getCoverImage = (house: HouseRecord) => {
-    if (house.mainImage) return resolveImageUrl(house.mainImage)
-    const propertyImage = house.properties?.find((p) => p.image)?.image
-    return resolveImageUrl(propertyImage)
-  }
-
   const nextSlide = () => {
-    const len = houses.length
+    const len = categories.length
     if (!len) return
     setCurrentIndex((prev) => (prev + 1) % len)
   }
 
   const prevSlide = () => {
-    const len = houses.length
+    const len = categories.length
     if (!len) return
     setCurrentIndex((prev) => (prev - 1 + len) % len)
   }
@@ -173,11 +142,11 @@ export default function UnitsSlider() {
           {!loading && error && (
             <div className="text-center py-12 text-red-600">{error}</div>
           )}
-          {!loading && !error && houses.length === 0 && (
+          {!loading && !error && categories.length === 0 && (
             <div className="text-center py-12 text-gray-500">Aucun logement disponible pour le moment.</div>
           )}
           {/* Main Slider */}
-          {houses.length > 0 && (
+          {categories.length > 0 && (
           <div
             className="overflow-hidden rounded-none"
             ref={sliderRef}
@@ -189,36 +158,23 @@ export default function UnitsSlider() {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {houses.map((house: HouseRecord, index: number) => (
-                <div key={house.id} className="w-full flex-shrink-0">
+              {categories.map((category: PropertyRecord, index: number) => (
+                <div key={category.id} className="w-full flex-shrink-0">
                   <Card className="rounded-none border-0 shadow-lg mx-2">
                     <div className="grid lg:grid-cols-2 gap-0">
                       {/* Image */}
                       <div className="relative h-96 lg:h-auto">
                         <div className="block w-full h-full">
                           <Image
-                            src={getCoverImage(house)}
-                            alt={house.name || "Maison"}
+                            src={resolveImageUrl(category.image)}
+                            alt={category.title || "Catégorie"}
                             fill
                             className="object-cover hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                         <div className="absolute top-4 left-4">
                           <Badge className="bg-custom-beige text-black rounded-none font-semibold shadow-sm">
-                            {house.name}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4">
-                          <Badge
-                            className={`rounded-none font-semibold shadow-sm border ${
-                              house.salesStatus === "sold"
-                                ? "bg-red-600 text-white border-red-700/30"
-                                : house.salesStatus === "reserved"
-                                ? "bg-amber-500 text-white border-amber-600/30"
-                                : "bg-white/95 text-gray-900 border-gray-200"
-                            }`}
-                          >
-                            {statusLabel(house.salesStatus)}
+                            {category.type}
                           </Badge>
                         </div>
 
@@ -248,61 +204,49 @@ export default function UnitsSlider() {
 
                       {/* Content */}
                       <CardContent className="p-8 flex flex-col justify-center">
-                        <Link href={`/logements/${house.code}`} className="group">
-                          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#b7b0a0] transition-colors duration-200">
-                            {house.name}
-                          </h3>
-                        </Link>
-                        <p className="text-gray-600 mb-6">{house.description}</p>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                          {category.title}
+                        </h3>
+                        <p className="text-gray-600 mb-6">{category.description}</p>
 
                         {/* Specifications */}
                         <div className="grid grid-cols-2 gap-4 mb-6">
-                          <div className="flex items-center space-x-2">
-                            <Ruler className="h-4 w-4 text-custom-beige" />
-                            <span className="text-sm text-gray-600">{house.totalSurface || ""}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Bed className="h-4 w-4 text-custom-beige" />
-                            <span className="text-sm text-gray-600">{house.address || ""}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Waves className="h-4 w-4 text-custom-beige" />
-                            <span className="text-sm text-gray-600">{house.price || ""}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Trees className="h-4 w-4 text-custom-beige" />
-                            <span className="text-sm text-gray-600">{house.properties?.length || 0} biens</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Home className="h-4 w-4 text-custom-beige" />
-                            <span className="text-sm text-gray-600">{house.code}</span>
-                          </div>
-                        </div>
-
-                        {/* Additional Details */}
-                        <div className="mb-6">
-                          <h4 className="text-sm font-semibold text-gray-900 mb-2">Biens disponibles :</h4>
-                          <div className="text-xs text-gray-600 space-y-1">
-                            {house.properties && house.properties.length > 0 ? (
-                              house.properties.map((p) => (
-                                <div key={p.id} className="flex items-start">
-                                  <span className="w-2 h-2 bg-custom-beige rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                                  <span>{p.title} ({p.type})</span>
-                                </div>
-                              ))
-                            ) : (
-                              <div className="flex items-start">
-                                <span className="w-2 h-2 bg-custom-beige rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                                <span>Aucun bien associé</span>
-                              </div>
-                            )}
-                          </div>
+                          {category.surface && (
+                            <div className="flex items-center space-x-2">
+                              <Ruler className="h-4 w-4 text-custom-beige" />
+                              <span className="text-sm text-gray-600">{category.surface}</span>
+                            </div>
+                          )}
+                          {category.chambres && (
+                            <div className="flex items-center space-x-2">
+                              <Bed className="h-4 w-4 text-custom-beige" />
+                              <span className="text-sm text-gray-600">{category.chambres} chambres</span>
+                            </div>
+                          )}
+                          {category.sallesBain && (
+                            <div className="flex items-center space-x-2">
+                              <Waves className="h-4 w-4 text-custom-beige" />
+                              <span className="text-sm text-gray-600">{category.sallesBain} salles de bain</span>
+                            </div>
+                          )}
+                          {category.surfaceExterieure && (
+                            <div className="flex items-center space-x-2">
+                              <Trees className="h-4 w-4 text-custom-beige" />
+                              <span className="text-sm text-gray-600">{category.surfaceExterieure}</span>
+                            </div>
+                          )}
+                          {category.disponibles && (
+                            <div className="flex items-center space-x-2">
+                              <Home className="h-4 w-4 text-custom-beige" />
+                              <span className="text-sm text-gray-600">{category.disponibles} disponibles</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* CTA Button */}
-                        <Link href={`/logements/${house.code}`}>
+                        <Link href={`/logements/category/${category.code}`}>
                           <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige text-white">
-                            Découvrir cette maison
+                            Découvrir les maisons
                           </Button>
                         </Link>
                       </CardContent>
@@ -315,9 +259,9 @@ export default function UnitsSlider() {
           )}
 
           {/* Dots Navigation */}
-          {houses.length > 0 && (
+          {categories.length > 0 && (
             <div className="flex justify-center space-x-2 mt-8">
-              {houses.map((_: HouseRecord, index: number) => (
+              {categories.map((_: PropertyRecord, index: number) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}

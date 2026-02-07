@@ -15,6 +15,13 @@ function resolveImageUrl(src?: string): string {
   return src
 }
 
+type Category = {
+  id: number
+  code: string
+  type: string
+  title: string
+}
+
 type Property = {
   id: number
   code: string
@@ -39,11 +46,20 @@ type House = {
   code: string
   name: string
   description: string
+  location?: string
   mainImage?: string
   salesStatus: "available" | "sold" | "reserved"
-  address?: string
-  totalSurface?: string
+  sold: boolean
+  categoryId: number
+  category?: Category
   price?: string
+  surfaceDupHorsOeuvreRDC?: string
+  surfaceDupHorsOeuvreR1?: string
+  surfaceTotalDup?: string
+  surfacePartiesCommunes?: string
+  surfaceVendable?: string
+  surfaceJardinPrive?: string
+  planPdf?: string
   details?: Record<string, string>
   properties?: Property[]
   floorPlans?: FloorPlan[]
@@ -60,6 +76,7 @@ const statusLabel: Record<string, string> = {
 export default function AdminHousesPage() {
   const [token, setToken] = useState<string | null>(null)
   const [items, setItems] = useState<House[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState("")
@@ -96,7 +113,20 @@ export default function AdminHousesPage() {
 
   useEffect(() => {
     fetchList()
+    fetchCategories()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      setCategories(Array.isArray(data) ? data : [])
+    } catch (e: any) {
+      console.error('Error fetching categories:', e)
+      setCategories([])
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -183,22 +213,40 @@ export default function AdminHousesPage() {
     }
   }
 
+  const updateSoldStatus = async (sold: boolean) => {
+    if (!selected || !token) return
+    try {
+      const res = await fetch(`${API_BASE_URL}/houses/${selected.id}/sold`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ sold }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      showToast("success", sold ? "Marquée vendue" : "Marquée non vendue")
+      await fetchList()
+      await selectItem(selected.id)
+    } catch (e: any) {
+      showToast("error", e.message || "Échec de la mise à jour")
+    }
+  }
+
   const uploadMainImage = async (file: File | null) => {
     if (!selected || !token || !file) return
     try {
       setUploading(true)
       const formData = new FormData()
-      formData.append("files", file)
+      formData.append("file", file)
 
-      const uploadRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.id}`, {
+      const uploadRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.code}/main-image`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       })
       if (!uploadRes.ok) throw new Error(`HTTP ${uploadRes.status}`)
-      const uploaded = (await uploadRes.json()) as Array<{ filename: string; path: string }>
-      const first = uploaded[0]
-      if (!first) throw new Error("Fichier non reçu")
+      const uploaded = await uploadRes.json() as { filename: string; path: string; houseCode: string }
 
       const updateRes = await fetch(`${API_BASE_URL}/houses/${selected.id}`, {
         method: "PATCH",
@@ -206,15 +254,78 @@ export default function AdminHousesPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ mainImage: first.path }),
+        body: JSON.stringify({ mainImage: uploaded.path }),
       })
       if (!updateRes.ok) throw new Error(`HTTP ${updateRes.status}`)
 
       showToast("success", "Image principale mise à jour")
+      setEditDraft({ ...editDraft, mainImage: uploaded.path })
       await fetchList()
       await selectItem(selected.id)
     } catch (e: any) {
       showToast("error", e.message || "Échec de l'upload")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const uploadPlanPdf = async (file: File | null) => {
+    if (!selected || !token || !file) return
+    if (!file.type.includes("pdf")) {
+      showToast("error", "Veuillez sélectionner un fichier PDF")
+      return
+    }
+    try {
+      setUploading(true)
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const uploadRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.code}/plan-pdf`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      })
+      if (!uploadRes.ok) throw new Error(`HTTP ${uploadRes.status}`)
+      const uploaded = await uploadRes.json() as { filename: string; path: string; houseCode: string }
+
+      const updateRes = await fetch(`${API_BASE_URL}/houses/${selected.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ planPdf: uploaded.path }),
+      })
+      if (!updateRes.ok) throw new Error(`HTTP ${updateRes.status}`)
+
+      showToast("success", "Plan PDF mis à jour")
+      setEditDraft({ ...editDraft, planPdf: uploaded.path })
+      await selectItem(selected.id)
+    } catch (e: any) {
+      showToast("error", e.message || "Échec de l'upload du PDF")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const uploadSliderImages = async (files: FileList | null) => {
+    if (!selected || !token || !files || files.length === 0) return
+    try {
+      setUploading(true)
+      const formData = new FormData()
+      Array.from(files).forEach((file) => formData.append("files", file))
+
+      const uploadRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.code}/slider-images`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      })
+      if (!uploadRes.ok) throw new Error(`HTTP ${uploadRes.status}`)
+      
+      showToast("success", "Images du slider ajoutées")
+      await selectItem(selected.id)
+    } catch (e: any) {
+      showToast("error", e.message || "Échec de l'upload des images")
     } finally {
       setUploading(false)
     }
@@ -322,10 +433,10 @@ export default function AdminHousesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Maisons</h1>
-          <p className="text-sm text-gray-600">Gérer vos maisons, statuts et plans.</p>
+          <p className="text-sm text-gray-600">Gérer vos maisons, catégories, statuts et plans.</p>
         </div>
         <Button
           onClick={() => setAddOpen(true)}
@@ -359,21 +470,23 @@ export default function AdminHousesPage() {
                 <th className="text-left px-3 py-2 border-b">ID</th>
                 <th className="text-left px-3 py-2 border-b">Code</th>
                 <th className="text-left px-3 py-2 border-b">Nom</th>
+                <th className="text-left px-3 py-2 border-b">Catégorie</th>
                 <th className="text-left px-3 py-2 border-b">Statut</th>
+                <th className="text-left px-3 py-2 border-b">Vendu</th>
                 <th className="text-left px-3 py-2 border-b">Créé</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan={5} className="px-3 py-4 text-center text-gray-500">
+                  <td colSpan={7} className="px-3 py-4 text-center text-gray-500">
                     Chargement...
                   </td>
                 </tr>
               )}
               {!loading && filtered.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-3 py-4 text-center text-gray-500">
+                  <td colSpan={7} className="px-3 py-4 text-center text-gray-500">
                     Aucune maison
                   </td>
                 </tr>
@@ -388,11 +501,13 @@ export default function AdminHousesPage() {
                     <td className="px-3 py-2 border-b">{h.id}</td>
                     <td className="px-3 py-2 border-b font-medium">{h.code}</td>
                     <td className="px-3 py-2 border-b">{h.name}</td>
+                    <td className="px-3 py-2 border-b">{h.category?.title || '-'}</td>
                     <td className="px-3 py-2 border-b">
                       <span className="px-2 py-1 text-xs border bg-gray-50 text-gray-700 border-gray-200">
                         {statusLabel[h.salesStatus] || h.salesStatus}
                       </span>
                     </td>
+                    <td className="px-3 py-2 border-b">{h.sold ? "Oui" : "Non"}</td>
                     <td className="px-3 py-2 border-b">{new Date(h.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))}
@@ -405,9 +520,16 @@ export default function AdminHousesPage() {
 
       {selected && editDraft && (
         <div className="bg-white border p-4 shadow-sm space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 className="font-semibold">Détails de la maison #{selected.id}</h2>
             <div className="flex gap-2">
+              <Button
+                onClick={() => updateSoldStatus(!selected.sold)}
+                disabled={!token}
+                className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white disabled:opacity-60"
+              >
+                Marquer {selected.sold ? "Non vendue" : "Vendue"}
+              </Button>
               <Button
                 onClick={removeItem}
                 disabled={!token}
@@ -431,18 +553,29 @@ export default function AdminHousesPage() {
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Modifier l'image principale</label>
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">📸 Image Principale</label>
+            <p className="text-xs text-gray-600 mb-3">
+              L'image sera enregistrée dans /uploads/maison_{selected.code}/
+            </p>
             <div className="flex items-center gap-3">
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => uploadMainImage(e.target.files?.[0] || null)}
                 disabled={uploading}
+                className="flex-1"
+                id="main-image-upload"
               />
-              {uploading && <span className="text-xs text-gray-500">Upload en cours...</span>}
+              <Button
+                onClick={() => document.getElementById('main-image-upload')?.click()}
+                disabled={uploading}
+                className="rounded-none bg-custom-beige hover:bg-custom-beige text-white disabled:opacity-60"
+              >
+                {uploading ? "Upload..." : "Choisir une image"}
+              </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">JPG, PNG recommandés. Max 5MB.</p>
+            <p className="text-xs text-gray-500 mt-2">JPG, PNG, WEBP recommandés. Max 5MB.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -461,6 +594,22 @@ export default function AdminHousesPage() {
                 onChange={(e) => setEditDraft({ ...editDraft, name: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
+              <select
+                value={editDraft.categoryId || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, categoryId: Number(e.target.value) })}
+                className="w-full px-3 py-2 border border-gray-300"
+                required
+              >
+                <option value="">Sélectionner une catégorie</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.title} ({cat.type})
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -492,19 +641,12 @@ export default function AdminHousesPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Localisation (RDC+ETAGE Bloc F)</label>
               <input
-                value={editDraft.address || ""}
-                onChange={(e) => setEditDraft({ ...editDraft, address: e.target.value })}
+                value={editDraft.location || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, location: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Surface totale</label>
-              <input
-                value={editDraft.totalSurface || ""}
-                onChange={(e) => setEditDraft({ ...editDraft, totalSurface: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="RDC+ETAGE Bloc F"
               />
             </div>
             <div>
@@ -514,6 +656,96 @@ export default function AdminHousesPage() {
                 onChange={(e) => setEditDraft({ ...editDraft, price: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Dup Hors oeuvre RDC</label>
+              <input
+                value={editDraft.surfaceDupHorsOeuvreRDC || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfaceDupHorsOeuvreRDC: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="93 m²"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Dup Hors oeuvre R+1</label>
+              <input
+                value={editDraft.surfaceDupHorsOeuvreR1 || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfaceDupHorsOeuvreR1: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="93 m²"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Totale Dup</label>
+              <input
+                value={editDraft.surfaceTotalDup || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfaceTotalDup: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="186 m²"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Parties communes</label>
+              <input
+                value={editDraft.surfacePartiesCommunes || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfacePartiesCommunes: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="35 m²"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Vendable</label>
+              <input
+                value={editDraft.surfaceVendable || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfaceVendable: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="221 m²"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Surface Jardin privé</label>
+              <input
+                value={editDraft.surfaceJardinPrive || ""}
+                onChange={(e) => setEditDraft({ ...editDraft, surfaceJardinPrive: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300"
+                placeholder="118 m²"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Plan PDF</label>
+              {editDraft.planPdf && (
+                <div className="mb-2 p-2 bg-gray-50 border rounded flex items-center justify-between">
+                  <a 
+                    href={resolveImageUrl(editDraft.planPdf)} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:underline flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    Voir le plan PDF
+                  </a>
+                  <button
+                    onClick={() => setEditDraft({ ...editDraft, planPdf: "" })}
+                    className="text-xs text-red-600 hover:text-red-800"
+                    type="button"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => uploadPlanPdf(e.target.files?.[0] || null)}
+                  disabled={uploading}
+                  className="flex-1 text-sm"
+                />
+                {uploading && <span className="text-xs text-gray-500">Upload en cours...</span>}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">PDF uniquement. Max 10MB. Enregistré dans /uploads/maison_{"{"}code{"}"}/</p>
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Détails (JSON)</label>
@@ -556,7 +788,6 @@ export default function AdminHousesPage() {
                   <div key={p.id} className="border p-3 bg-gray-50">
                     <div className="font-medium">{p.title}</div>
                     <div className="text-xs text-gray-600">{p.type} · {p.code}</div>
-                    <div className="text-xs text-gray-600">{p.sold ? "Vendu" : "Disponible"}</div>
                   </div>
                 ))}
               </div>
@@ -566,59 +797,35 @@ export default function AdminHousesPage() {
           </div>
 
           {/* Floor plans management */}
+
+
+          {/* Slider Images for maison_{code} directory */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Carousel (images pour détail public)</h3>
-            <p className="text-sm text-gray-600 mb-3">Ajoutez des images pour le carousel sur la page de détail publique</p>
+            <h3 className="text-lg font-semibold mb-3">Slider Principal (dans /uploads/maison_{selected.code}/)</h3>
+            <p className="text-sm text-gray-600 mb-3">
+              Ces images seront affichées dans le slider principal de la page de détail. 
+              Elles sont stockées dans le dossier /uploads/maison_{selected.code}/ et fonctionneront en production.
+            </p>
             <div className="flex items-center gap-3 mb-4">
               <input
                 type="file"
                 multiple
                 accept="image/*"
-                onChange={(e) => uploadFloorPlans(e.target.files)}
+                onChange={(e) => uploadSliderImages(e.target.files)}
                 disabled={uploading}
+                className="flex-1"
               />
               {uploading && <span className="text-xs text-gray-500">Upload en cours...</span>}
             </div>
-
-            {carouselPlans.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-4">
-                {carouselPlans.map((plan) => (
-                  <div key={plan.id} className="border p-3 bg-white">
-                    <div className="text-sm font-medium mb-2">{plan.title || plan.filename}</div>
-                    <div className="border bg-gray-50 p-2 mb-3">
-                      <img
-                        src={resolveImageUrl(plan.path)}
-                        alt={plan.title || "Plan"}
-                        className="max-h-48 w-auto object-contain"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-600">Remplacer:</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => replaceFloorPlan(plan.id, e.target.files?.[0] || null)}
-                      />
-                      <Button
-                        onClick={() => deleteFloorPlan(plan.id)}
-                        disabled={!token}
-                        className="ml-auto rounded-none bg-transparent text-red-600 border-2 border-red-600 hover:bg-red-600 hover:text-white disabled:opacity-60"
-                      >
-                        Supprimer
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-sm text-gray-500">Aucune image disponible.</div>
-            )}
+            <div className="bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
+              💡 Les images uploadées ici seront automatiquement détectées et affichées sur la page publique de cette maison.
+            </div>
           </div>
         </div>
       )}
 
       {addOpen && (
-        <AddHousePanel onClose={() => setAddOpen(false)} onSubmit={addItem} />
+        <AddHousePanel onClose={() => setAddOpen(false)} onSubmit={addItem} categories={categories} />
       )}
 
       {toast && (
@@ -639,20 +846,23 @@ export default function AdminHousesPage() {
 function AddHousePanel({
   onClose,
   onSubmit,
+  categories,
 }: {
   onClose: () => void
   onSubmit: (form: Partial<House>) => void
+  categories: Category[]
 }) {
   const [form, setForm] = useState<Partial<House>>({
     code: "",
     name: "",
     description: "",
     salesStatus: "available",
+    sold: false,
   })
 
   return (
     <div className="fixed inset-0 bg-black/30 z-40 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white border shadow-lg w-full max-w-2xl p-6" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white border shadow-lg w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Ajouter une maison</h3>
           <button onClick={onClose} className="text-gray-600 hover:text-gray-900">✕</button>
@@ -673,6 +883,22 @@ function AddHousePanel({
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
+            <select
+              value={form.categoryId || ""}
+              onChange={(e) => setForm({ ...form, categoryId: Number(e.target.value) })}
+              className="w-full px-3 py-2 border border-gray-300"
+              required
+            >
+              <option value="">Sélectionner une catégorie</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.title} ({cat.type})
+                </option>
+              ))}
+            </select>
           </div>
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -695,6 +921,15 @@ function AddHousePanel({
               <option value="reserved">Réservée</option>
             </select>
           </div>
+          <div className="flex items-center gap-2 mt-6">
+            <input
+              id="sold"
+              type="checkbox"
+              checked={!!form.sold}
+              onChange={(e) => setForm({ ...form, sold: e.target.checked })}
+            />
+            <label htmlFor="sold" className="text-sm text-gray-700">Vendue</label>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Image principale</label>
             <input
@@ -704,19 +939,12 @@ function AddHousePanel({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Localisation</label>
             <input
-              value={form.address || ""}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
+              value={form.location || ""}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Surface totale</label>
-            <input
-              value={form.totalSurface || ""}
-              onChange={(e) => setForm({ ...form, totalSurface: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="RDC+ETAGE Bloc F"
             />
           </div>
           <div>
@@ -726,6 +954,72 @@ function AddHousePanel({
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Surface Dup RDC</label>
+            <input
+              value={form.surfaceDupHorsOeuvreRDC || ""}
+              onChange={(e) => setForm({ ...form, surfaceDupHorsOeuvreRDC: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="93 m²"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Surface Dup R+1</label>
+            <input
+              value={form.surfaceDupHorsOeuvreR1 || ""}
+              onChange={(e) => setForm({ ...form, surfaceDupHorsOeuvreR1: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="93 m²"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Surface Totale</label>
+            <input
+              value={form.surfaceTotalDup || ""}
+              onChange={(e) => setForm({ ...form, surfaceTotalDup: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="186 m²"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Parties communes</label>
+            <input
+              value={form.surfacePartiesCommunes || ""}
+              onChange={(e) => setForm({ ...form, surfacePartiesCommunes: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="35 m²"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Surface Vendable</label>
+            <input
+              value={form.surfaceVendable || ""}
+              onChange={(e) => setForm({ ...form, surfaceVendable: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="221 m²"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Jardin privé</label>
+            <input
+              value={form.surfaceJardinPrive || ""}
+              onChange={(e) => setForm({ ...form, surfaceJardinPrive: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="118 m²"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Plan PDF</label>
+            <input
+              value={form.planPdf || ""}
+              onChange={(e) => setForm({ ...form, planPdf: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300"
+              placeholder="/uploads/plans/FD01-plan.pdf"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              💡 Pour uploader un fichier PDF, créez d'abord la maison puis modifiez-la pour ajouter le plan PDF.
+            </p>
           </div>
         </div>
 

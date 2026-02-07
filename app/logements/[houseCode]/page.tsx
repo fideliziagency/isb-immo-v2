@@ -39,9 +39,11 @@ type House = {
   address?: string
   totalSurface?: string
   price?: string
+  planPdf?: string
   details?: Record<string, string>
   properties?: Property[]
   carouselImages?: CarouselImage[]
+  sliderImages?: string[]
 }
 
 const statusLabel: Record<string, { label: string; color: string }> = {
@@ -97,7 +99,9 @@ export default function HouseDetailPage() {
   }
 
   const images =
-    house.carouselImages && house.carouselImages.length > 0
+    house.sliderImages && house.sliderImages.length > 0
+      ? house.sliderImages.map((path, idx) => ({ id: idx, filename: `slider-${idx}`, path, title: house.name }))
+      : house.carouselImages && house.carouselImages.length > 0
       ? house.carouselImages
       : house.mainImage
         ? [{ id: -1, filename: "main", path: house.mainImage, title: house.name }]
@@ -267,7 +271,39 @@ export default function HouseDetailPage() {
                   </div>
                 </div>
               ))}
+          
+
+        {/* Plan PDF Download */}
+        {house.planPdf && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Plan de la maison</h2>
+            <div className="bg-white border rounded-lg p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-red-50 rounded-lg">
+                  <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Plan architectural</p>
+                  <p className="text-sm text-gray-600">Document PDF</p>
+                </div>
+              </div>
+              <a
+                href={resolveImageUrl(house.planPdf)}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-custom-beige text-white font-semibold rounded-lg hover:bg-opacity-90 transition flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Télécharger le plan
+              </a>
             </div>
+          </div>
+        )}  </div>
           </div>
         )}
 
