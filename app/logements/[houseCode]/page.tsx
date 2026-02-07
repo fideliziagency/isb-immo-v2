@@ -37,13 +37,19 @@ type House = {
   mainImage?: string
   salesStatus: "available" | "sold" | "reserved"
   address?: string
+  location?: string
   totalSurface?: string
+  surfaceTotalDup?: string
   price?: string
   planPdf?: string
   details?: Record<string, string>
   properties?: Property[]
   carouselImages?: CarouselImage[]
   sliderImages?: string[]
+  sold?: boolean
+  yearBuilt?: number
+  bedrooms?: number
+  bathrooms?: number
 }
 
 const statusLabel: Record<string, { label: string; color: string }> = {
@@ -202,23 +208,53 @@ export default function HouseDetailPage() {
           </div>
 
           {/* Key Details */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-6 border-y border-gray-200">
-            {house.totalSurface && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-gray-200">
+            {(house.totalSurface || house.surfaceTotalDup) && (
               <div>
-                <p className="text-sm text-gray-600">Surface</p>
-                <p className="text-2xl font-bold text-gray-900">{house.totalSurface}</p>
+                <p className="text-sm text-gray-600">Surface totale</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.totalSurface || house.surfaceTotalDup}</p>
               </div>
             )}
             {house.price && (
               <div>
                 <p className="text-sm text-gray-600">Prix</p>
-                <p className="text-2xl font-bold text-gray-900">{house.price}</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.price}</p>
+              </div>
+            )}
+            {house.bedrooms && (
+              <div>
+                <p className="text-sm text-gray-600">Chambres</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.bedrooms}</p>
+              </div>
+            )}
+            {house.bathrooms && (
+              <div>
+                <p className="text-sm text-gray-600">Salles de bain</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.bathrooms}</p>
+              </div>
+            )}
+            {house.yearBuilt && (
+              <div>
+                <p className="text-sm text-gray-600">Année</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.yearBuilt}</p>
+              </div>
+            )}
+            {house.location && (
+              <div>
+                <p className="text-sm text-gray-600">Localisation</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.location}</p>
               </div>
             )}
             {house.properties && house.properties.length > 0 && (
               <div>
                 <p className="text-sm text-gray-600">Biens inclus</p>
-                <p className="text-2xl font-bold text-gray-900">{house.properties.length}</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.properties.length}</p>
+              </div>
+            )}
+            {house.code && (
+              <div>
+                <p className="text-sm text-gray-600">Code</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{house.code}</p>
               </div>
             )}
           </div>
@@ -271,13 +307,15 @@ export default function HouseDetailPage() {
                   </div>
                 </div>
               ))}
-          
+            </div>
+          </div>
+        )}
 
         {/* Plan PDF Download */}
         {house.planPdf && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Plan de la maison</h2>
-            <div className="bg-white border rounded-lg p-6 flex items-center justify-between">
+            <div className="bg-white border rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-red-50 rounded-lg">
                   <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -302,8 +340,6 @@ export default function HouseDetailPage() {
                 Télécharger le plan
               </a>
             </div>
-          </div>
-        )}  </div>
           </div>
         )}
 

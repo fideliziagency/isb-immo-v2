@@ -331,6 +331,65 @@ export default function AdminHousesPage() {
     }
   }
 
+  const deleteSliderImage = async (imagePath: string) => {
+    if (!selected || !token) return
+    const filename = imagePath.split('/').pop()
+    if (!filename) return
+    
+    if (!confirm(`Supprimer l'image ${filename} ?`)) return
+    
+    try {
+      setUploading(true)
+      const deleteRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.code}/slider-images/${filename}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!deleteRes.ok) throw new Error(`HTTP ${deleteRes.status}`)
+      
+      showToast("success", "Image supprimée")
+      await selectItem(selected.id)
+    } catch (e: any) {
+      showToast("error", e.message || "Échec de la suppression")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const deleteMainImage = async () => {
+    if (!selected || !token || !selected.mainImage) return
+    const filename = selected.mainImage.split('/').pop()
+    if (!filename) return
+    
+    if (!confirm(`Supprimer l'image principale ?`)) return
+    
+    try {
+      setUploading(true)
+      const deleteRes = await fetch(`${API_BASE_URL}/uploads/houses/${selected.code}/main-image/${filename}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!deleteRes.ok) throw new Error(`HTTP ${deleteRes.status}`)
+      
+      // Update database to remove mainImage reference
+      await fetch(`${API_BASE_URL}/houses/${selected.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ mainImage: null }),
+      })
+      
+      showToast("success", "Image principale supprimée")
+      await fetchList()
+      await selectItem(selected.id)
+    } catch (e: any) {
+      showToast("error", e.message || "Échec de la suppression")
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const uploadFloorPlans = async (files: FileList | null) => {
     if (!selected || !token || !files || files.length === 0) return
     try {
@@ -747,6 +806,79 @@ export default function AdminHousesPage() {
               </div>
               <p className="text-xs text-gray-500 mt-1">PDF uniquement. Max 10MB. Enregistré dans /uploads/maison_{"{"}code{"}"}/</p>
             </div>
+
+            {/* Slider Images Management */}
+            <div className="md:col-span-2 border-t pt-4">
+              <h4 className="text-sm font-bold text-gray-900 mb-3">🎨 Images du Slider</h4>
+              
+              {/* Current Slider Images */}
+              {selected.sliderImages && selected.sliderImages.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs text-gray-600 mb-2">Images actuelles ({selected.sliderImages.length}):</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {selected.sliderImages.map((img, idx) => (
+                      <div key={idx} className="relative group border rounded overflow-hidden">
+                        <img 
+                          src={resolveImageUrl(img)} 
+                          alt={`Slider ${idx + 1}`}
+                          className="w-full h-32 object-cover"
+                        />
+                        <button
+                          onClick={() => deleteSliderImage(img)}
+                          disabled={uploading}
+                          className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                          title="Supprimer cette image"
+                        >
+                          🗑️
+                        </button>
+                        <p className="text-xs text-gray-600 px-2 py-1 bg-white/90 truncate">
+                          {img.split('/').pop()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Upload New Slider Images */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => uploadSliderImages(e.target.files)}
+                  disabled={uploading}
+                  className="flex-1 text-sm"
+                  id="slider-images-upload"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">JPG, PNG, WEBP. Max 5MB par image. Enregistré dans /uploads/maison_{"{"}code{"}"}/</p>
+            </div>
+
+            {/* Main Image Display with Delete */}
+            {selected.mainImage && (
+              <div className="md:col-span-2 border-t pt-4">
+                <h4 className="text-sm font-bold text-gray-900 mb-3">Image Principale Actuelle</h4>
+                <div className="flex items-start gap-4">
+                  <img 
+                    src={resolveImageUrl(selected.mainImage)} 
+                    alt="Image principale"
+                    className="w-48 h-32 object-cover border rounded"
+                  />
+                  <div className="flex-1">
+                    <p className="text-xs text-gray-600 mb-2">{selected.mainImage}</p>
+                    <Button
+                      onClick={deleteMainImage}
+                      disabled={uploading}
+                      className="rounded-none bg-red-600 hover:bg-red-700 text-white disabled:opacity-60 text-sm py-1 px-3"
+                    >
+                      🗑️ Supprimer l'image principale
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Détails (JSON)</label>
               <textarea

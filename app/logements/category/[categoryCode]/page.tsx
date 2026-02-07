@@ -168,16 +168,17 @@ export default function CategoryHousesPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {houses.map((house) => (
               <Link key={house.id} href={`/logements/${house.code}`}>
                 <div className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
                   {/* House Image */}
-                  <div className="relative h-64">
+                  <div className="relative h-48 sm:h-52 md:h-56">
                     <Image
                       src={resolveImageUrl(house.mainImage)}
                       alt={house.name}
                       fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 right-3">
