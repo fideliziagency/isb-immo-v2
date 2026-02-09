@@ -96,6 +96,15 @@ export default function UnitsSlider() {
     return t.includes("villa") || t.includes("duplex")
   }
 
+  const normalizeHref = (href?: string) => {
+    if (!href) return "#"
+    const match = href.match(/^\/logements\/category\/([^/]+)\/?$/)
+    if (match) {
+      return `/logements/${match[1]}`
+    }
+    return href
+  }
+
   const isSold = (p: PropertyRecord): boolean => {
     const v: any = (p as any).sold
     if (typeof v === "boolean") return v
@@ -236,7 +245,7 @@ export default function UnitsSlider() {
 
                       {/* Content */}
                       <CardContent className="p-8 flex flex-col justify-center">
-                        <Link href={property.href || "#"} className="group">
+                        <Link href={normalizeHref(property.href)} className="group">
                           <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#b7b0a0] transition-colors duration-200">
                             {property.title}
                           </h3>
@@ -296,7 +305,7 @@ export default function UnitsSlider() {
                         </div>
 
                         {/* CTA Button */}
-                        <Link href={property.href || "#"}>
+                        <Link href={normalizeHref(property.href)}>
                           <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige text-white">
                             Découvrir ce logement
                           </Button>
