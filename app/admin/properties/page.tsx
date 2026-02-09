@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const API_BASE_URL =
   (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ||
-  "https://isb-immo-backend-latest.onrender.com"
+  (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3000" : "https://isb-immo-backend-latest.onrender.com")
 
 function resolveImageUrl(src?: string): string {
   if (!src) return ""
@@ -15,7 +15,7 @@ function resolveImageUrl(src?: string): string {
   return src
 }
 
-type Property = {
+type Category = {
   id: number
   code: string
   type: string
@@ -29,22 +29,22 @@ type Property = {
   disponibles?: string
   href?: string
   details?: Record<string, string>
-  sold: boolean
   status: "published" | "pending"
+  sold?: boolean | string | number
   createdAt: string
   updatedAt: string
 }
 
 export default function AdminPropertiesPage() {
   const [token, setToken] = useState<string | null>(null)
-  const [items, setItems] = useState<Property[]>([])
+  const [items, setItems] = useState<Category[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState("")
-  const [selected, setSelected] = useState<Property | null>(null)
+  const [selected, setSelected] = useState<Category | null>(null)
   const [toast, setToast] = useState<null | { type: "success" | "error"; message: string }>(null)
   const [addOpen, setAddOpen] = useState(false)
-  const [editDraft, setEditDraft] = useState<Partial<Property> | null>(null)
+  const [editDraft, setEditDraft] = useState<Partial<Category> | null>(null)
   const [importOpen, setImportOpen] = useState(false)
 
   const showToast = (type: "success" | "error", message: string) => {
@@ -89,7 +89,7 @@ export default function AdminPropertiesPage() {
       setLoading(true)
       const res = await fetch(`${API_BASE_URL}/properties/${id}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = (await res.json()) as Property
+      const data = (await res.json()) as Category
       setSelected(data)
       setEditDraft({ ...data })
     } catch (e: any) {
@@ -123,7 +123,7 @@ export default function AdminPropertiesPage() {
     }
   }
 
-  const updateState = async (state: { sold?: boolean; status?: "published" | "pending" }) => {
+  const updateState = async (state: { status?: "published" | "pending" }) => {
     if (!selected || !token) return
     try {
       const res = await fetch(`${API_BASE_URL}/properties/${selected.id}/state`, {
@@ -160,7 +160,7 @@ export default function AdminPropertiesPage() {
     }
   }
 
-  const addItem = async (form: Partial<Property>) => {
+  const addItem = async (form: Partial<Category>) => {
     if (!token) return showToast("error", "Connectez-vous")
     try {
       const res = await fetch(`${API_BASE_URL}/properties`, {
@@ -172,7 +172,7 @@ export default function AdminPropertiesPage() {
         body: JSON.stringify(form),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      showToast("success", "Annonce créée")
+      showToast("success", "Catégorie créée")
       setAddOpen(false)
       await fetchList()
     } catch (e: any) {
@@ -182,17 +182,17 @@ export default function AdminPropertiesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Annonces (Properties)</h1>
-          <p className="text-sm text-gray-600">Gérer vos annonces: recherche, édition, statut et suppression.</p>
+          <h1 className="text-2xl font-bold text-gray-900">Catégories</h1>
+          <p className="text-sm text-gray-600">Gérer vos catégories de logements: recherche, édition, statut et suppression.</p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             onClick={() => setAddOpen(true)}
             className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white"
           >
-            Ajouter une annonce
+            Ajouter une catégorie
           </Button>
           <Button
             onClick={() => setImportOpen(true)}
@@ -229,22 +229,21 @@ export default function AdminPropertiesPage() {
                 <th className="text-left px-3 py-2 border-b">Type</th>
                 <th className="text-left px-3 py-2 border-b">Titre</th>
                 <th className="text-left px-3 py-2 border-b">Statut</th>
-                <th className="text-left px-3 py-2 border-b">Vendu</th>
                 <th className="text-left px-3 py-2 border-b">Créé</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan={7} className="px-3 py-4 text-center text-gray-500">
+                  <td colSpan={6} className="px-3 py-4 text-center text-gray-500">
                     Chargement...
                   </td>
                 </tr>
               )}
               {!loading && filtered.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-3 py-4 text-center text-gray-500">
-                    Aucune annonce
+                  <td colSpan={6} className="px-3 py-4 text-center text-gray-500">
+                    Aucune catégorie
                   </td>
                 </tr>
               )}
@@ -270,7 +269,6 @@ export default function AdminPropertiesPage() {
                         {p.status}
                       </span>
                     </td>
-                    <td className="px-3 py-2 border-b">{p.sold ? "Oui" : "Non"}</td>
                     <td className="px-3 py-2 border-b">{new Date(p.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))}
@@ -284,16 +282,9 @@ export default function AdminPropertiesPage() {
       {/* Details + actions */}
       {selected && editDraft && (
         <div className="bg-white border p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Détails de l'annonce #{selected.id}</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="font-semibold">Détails de la catégorie #{selected.id}</h2>
             <div className="flex gap-2">
-              <Button
-                onClick={() => updateState({ sold: !selected.sold })}
-                disabled={!token}
-                className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white disabled:opacity-60"
-              >
-                Marquer {selected.sold ? "Non vendu" : "Vendu"}
-              </Button>
               <select
                 value={selected.status}
                 onChange={(e) => updateState({ status: e.target.value as any })}
@@ -442,7 +433,7 @@ export default function AdminPropertiesPage() {
 
       {/* Add modal (simple inline panel) */}
       {addOpen && (
-        <AddPropertyPanel
+        <AddCategoryPanel
           onClose={() => setAddOpen(false)}
           onSubmit={addItem}
         />
@@ -462,14 +453,14 @@ export default function AdminPropertiesPage() {
               const headers = lines[0].split(delimiter).map((h) => h.trim())
               const index = (name: string) => headers.findIndex((h) => h.toLowerCase() === name)
               const toBool = (v: string) => ["1", "true", "oui", "yes"].includes(v?.toLowerCase())
-              const items: Partial<Property>[] = []
+              const items: Partial<Category>[] = []
               for (let i = 1; i < lines.length; i++) {
                 const cols = lines[i].split(delimiter).map((c) => c.trim())
                 const make = (key: string) => {
                   const idx = index(key)
                   return idx >= 0 ? cols[idx] || "" : ""
                 }
-                const obj: Partial<Property> = {
+                const obj: Partial<Category> = {
                   code: make("code"),
                   type: make("type"),
                   title: make("title"),
@@ -522,27 +513,26 @@ export default function AdminPropertiesPage() {
   )
 }
 
-function AddPropertyPanel({
+function AddCategoryPanel({
   onClose,
   onSubmit,
 }: {
   onClose: () => void
-  onSubmit: (form: Partial<Property>) => void
+  onSubmit: (form: Partial<Category>) => void
 }) {
-  const [form, setForm] = useState<Partial<Property>>({
+  const [form, setForm] = useState<Partial<Category>>({
     code: "",
     type: "",
     title: "",
     description: "",
     status: "pending",
-    sold: false,
   })
 
   return (
     <div className="fixed inset-0 bg-black/30 z-40 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white border shadow-lg w-full max-w-2xl p-6" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white border shadow-lg w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Ajouter une annonce</h3>
+          <h3 className="text-lg font-semibold">Ajouter une catégorie</h3>
           <button onClick={onClose} className="text-gray-600 hover:text-gray-900">✕</button>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
@@ -589,15 +579,6 @@ function AddPropertyPanel({
               <option value="pending">pending</option>
               <option value="published">published</option>
             </select>
-          </div>
-          <div className="flex items-center gap-2 mt-6">
-            <input
-              id="sold"
-              type="checkbox"
-              checked={!!form.sold}
-              onChange={(e) => setForm({ ...form, sold: e.target.checked })}
-            />
-            <label htmlFor="sold" className="text-sm text-gray-700">Vendu</label>
           </div>
           <div className="md:col-span-2 grid md:grid-cols-2 gap-4">
             <div>
@@ -667,7 +648,7 @@ function AddPropertyPanel({
             </div>
           </div>
 
-          <div className="mt-4 flex gap-2 justify-end">
+          <div className="mt-4 flex gap-2 justify-end md:col-span-2">
             <Button
               onClick={() => onSubmit(form)}
               className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white"

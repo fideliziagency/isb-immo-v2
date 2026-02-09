@@ -1,16 +1,27 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { BarChart3, CheckCircle2, Clock3 } from "lucide-react"
+import { BarChart3, CheckCircle2, Clock3, Home, ShoppingBag } from "lucide-react"
 
-type Stats = Record<string, number>
+type Stats = {
+  categories?: {
+    total: number
+    published: number
+    pending: number
+  }
+  houses?: {
+    total: number
+    sold: number
+    available: number
+  }
+}
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://isb-immo-backend-latest.onrender.com"
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3000" : "https://isb-immo-backend-latest.onrender.com")
 
   useEffect(() => {
     let isMounted = true
@@ -47,14 +58,6 @@ export default function AdminDashboardPage() {
     }
   }, [API_BASE_URL])
 
-  const safeKeys = (obj: Stats | null): string[] => (obj ? Object.keys(obj) : [])
-
-  const pretty: Record<string, { label: string; icon: any; color: string; bg: string }> = {
-    total: { label: "Total", icon: BarChart3, color: "text-blue-700", bg: "bg-blue-50" },
-    published: { label: "Publiées", icon: CheckCircle2, color: "text-green-700", bg: "bg-green-50" },
-    pending: { label: "En attente", icon: Clock3, color: "text-amber-700", bg: "bg-amber-50" },
-  }
-
   return (
     <div className="container mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Tableau de bord</h1>
@@ -63,33 +66,84 @@ export default function AdminDashboardPage() {
       {!loading && error && <div className="text-red-600">{error}</div>}
 
       {!loading && !error && stats && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Highlight known stats first with labels/icons */}
-          {["total", "published", "pending"].filter((k) => k in stats).map((k) => {
-            const cfg = pretty[k]
-            const Icon = cfg?.icon
-            return (
-              <div key={k} className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
-                <div className={`h-12 w-12 rounded-md flex items-center justify-center ${cfg.bg}`}>
-                  {Icon ? <Icon className={`h-6 w-6 ${cfg.color}`} /> : null}
+        <div className="space-y-8">
+          {/* Categories Section */}
+          {stats.categories && (
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <ShoppingBag className="h-5 w-5" />
+                Catégories
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-blue-50">
+                    <BarChart3 className="h-6 w-6 text-blue-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">Total</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.categories.total}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-sm text-gray-500 uppercase tracking-wide">{cfg?.label ?? k}</div>
-                  <div className="text-3xl font-bold text-gray-900 mt-1">{stats[k]}</div>
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-green-50">
+                    <CheckCircle2 className="h-6 w-6 text-green-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">Publiées</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.categories.published}</div>
+                  </div>
+                </div>
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-amber-50">
+                    <Clock3 className="h-6 w-6 text-amber-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">En attente</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.categories.pending}</div>
+                  </div>
                 </div>
               </div>
-            )
-          })}
+            </div>
+          )}
 
-          {/* Render any additional fields returned by the API */}
-          {safeKeys(stats)
-            .filter((k) => !["total", "published", "pending"].includes(k))
-            .map((k) => (
-              <div key={k} className="border rounded-lg p-6 bg-white shadow-sm">
-                <div className="text-sm text-gray-500 uppercase tracking-wide">{k}</div>
-                <div className="text-3xl font-bold text-gray-900 mt-2">{stats[k]}</div>
+          {/* Houses Section */}
+          {stats.houses && (
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <Home className="h-5 w-5" />
+                Maisons
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-blue-50">
+                    <BarChart3 className="h-6 w-6 text-blue-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">Total</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.houses.total}</div>
+                  </div>
+                </div>
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-red-50">
+                    <CheckCircle2 className="h-6 w-6 text-red-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">Vendues</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.houses.sold}</div>
+                  </div>
+                </div>
+                <div className="border rounded-lg p-6 bg-white shadow-sm flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-md flex items-center justify-center bg-green-50">
+                    <CheckCircle2 className="h-6 w-6 text-green-700" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500 uppercase tracking-wide">Disponibles</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-1">{stats.houses.available}</div>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
+          )}
         </div>
       )}
     </div>

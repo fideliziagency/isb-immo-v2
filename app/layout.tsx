@@ -26,6 +26,19 @@ export const metadata: Metadata = {
   creator: "ISB Immobilière Sodaprim Bouaziz",
   publisher: "ISB Immobilière Sodaprim Bouaziz",
   robots: "index, follow",
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  other: {
+    'geo.region': 'TN-11',
+    'geo.placename': 'La Soukra, Tunisie',
+    'geo.position': '36.8667;10.2167',
+    'ICBM': '36.8667, 10.2167',
+  },
   openGraph: {
     type: "website",
     locale: "fr_TN",
@@ -61,15 +74,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="geo.region" content="TN-11" />
-        <meta name="geo.placename" content="La Soukra, Tunisie" />
-        <meta name="geo.position" content="36.8667;10.2167" />
-        <meta name="ICBM" content="36.8667, 10.2167" />
-      </head>
       <body className={inter.className}>
         {children}
         <Footer />
