@@ -30,6 +30,7 @@ type Category = {
   href?: string
   details?: Record<string, string>
   status: "published" | "pending"
+  sold?: boolean | string | number
   createdAt: string
   updatedAt: string
 }
@@ -44,6 +45,7 @@ export default function AdminPropertiesPage() {
   const [toast, setToast] = useState<null | { type: "success" | "error"; message: string }>(null)
   const [addOpen, setAddOpen] = useState(false)
   const [editDraft, setEditDraft] = useState<Partial<Category> | null>(null)
+  const [importOpen, setImportOpen] = useState(false)
 
   const showToast = (type: "success" | "error", message: string) => {
     setToast({ type, message })
@@ -185,12 +187,20 @@ export default function AdminPropertiesPage() {
           <h1 className="text-2xl font-bold text-gray-900">Catégories</h1>
           <p className="text-sm text-gray-600">Gérer vos catégories de logements: recherche, édition, statut et suppression.</p>
         </div>
-        <Button
-          onClick={() => setAddOpen(true)}
-          className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white"
-        >
-          Ajouter une catégorie
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => setAddOpen(true)}
+            className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white"
+          >
+            Ajouter une catégorie
+          </Button>
+          <Button
+            onClick={() => setImportOpen(true)}
+            className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white"
+          >
+            Importer CSV
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white border p-4 shadow-sm">
@@ -428,6 +438,65 @@ export default function AdminPropertiesPage() {
           onSubmit={addItem}
         />
       )}
+      {importOpen && (
+        <ImportCsvPanel
+          onClose={() => setImportOpen(false)}
+          onSubmit={async (text) => {
+            if (!token) {
+              showToast("error", "Connectez-vous")
+              return
+            }
+            try {
+              const lines = text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0)
+              if (lines.length === 0) throw new Error("Contenu CSV vide")
+              const delimiter = lines[0].includes(";") ? ";" : ","
+              const headers = lines[0].split(delimiter).map((h) => h.trim())
+              const index = (name: string) => headers.findIndex((h) => h.toLowerCase() === name)
+              const toBool = (v: string) => ["1", "true", "oui", "yes"].includes(v?.toLowerCase())
+              const items: Partial<Category>[] = []
+              for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(delimiter).map((c) => c.trim())
+                const make = (key: string) => {
+                  const idx = index(key)
+                  return idx >= 0 ? cols[idx] || "" : ""
+                }
+                const obj: Partial<Category> = {
+                  code: make("code"),
+                  type: make("type"),
+                  title: make("title"),
+                  description: make("description"),
+                  image: make("image"),
+                  surface: make("surface"),
+                  chambres: make("chambres"),
+                  sallesBain: make("sallesbain"),
+                  surfaceExterieure: make("surfaceexterieure"),
+                  disponibles: make("disponibles"),
+                  href: make("href"),
+                  status: (make("status") as any) || "pending",
+                  sold: toBool(make("sold")),
+                }
+                items.push(obj)
+              }
+              for (const it of items) {
+                const res = await fetch(`${API_BASE_URL}/properties`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(it),
+                })
+                if (!res.ok) throw new Error(`Échec import ligne: HTTP ${res.status}`)
+              }
+              showToast("success", `Import effectué: ${items.length} annonces`)
+              setImportOpen(false)
+              await fetchList()
+            } catch (e: any) {
+              showToast("error", e?.message || "Échec de l'import")
+            }
+          }}
+        />
+      )}
 
       {toast && (
         <div
@@ -594,6 +663,58 @@ function AddCategoryPanel({
               Annuler
             </Button>
           </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ImportCsvPanel({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void
+  onSubmit: (text: string) => void
+}) {
+  const [text, setText] = useState("")
+  const [busy, setBusy] = useState(false)
+  const handleImport = async () => {
+    if (busy) return
+    setBusy(true)
+    await onSubmit(text)
+    setBusy(false)
+  }
+  return (
+    <div className="fixed inset-0 bg-black/30 z-40 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white border shadow-lg w-full max-w-3xl p-6" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Importer des annonces (CSV)</h3>
+          <button onClick={onClose} className="text-gray-600 hover:text-gray-900">✕</button>
+        </div>
+        <div className="space-y-3">
+          <p className="text-sm text-gray-700">Format attendu: première ligne d’en-têtes. Colonnes recommandées: code,type,title,description,image,surface,chambres,sallesBain,surfaceExterieure,disponibles,href,status,sold. Délimiteur: virgule ou point-virgule.</p>
+          <textarea
+            rows={12}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300"
+          />
+        </div>
+        <div className="mt-4 flex gap-2 justify-end">
+          <Button
+            onClick={handleImport}
+            disabled={busy}
+            className="rounded-none bg-transparent text-custom-beige border-2 border-custom-beige hover:bg-custom-beige hover:text-white disabled:opacity-60"
+          >
+            Importer
+          </Button>
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="rounded-none border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
+          >
+            Annuler
+          </Button>
         </div>
       </div>
     </div>

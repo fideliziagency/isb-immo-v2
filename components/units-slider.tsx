@@ -85,7 +85,6 @@ export default function UnitsSlider() {
     if (src.startsWith("/uploads")) return `${API_BASE_URL}${src}`
     return src
   }
-
   const nextSlide = () => {
     const len = categories.length
     if (!len) return
@@ -244,7 +243,7 @@ export default function UnitsSlider() {
                         </div>
 
                         {/* CTA Button */}
-                        <Link href={`/logements/category/${category.code}`}>
+                        <Link href={`/logements/${category.code}`}>
                           <Button className="w-full rounded-none bg-custom-beige hover:bg-custom-beige text-white">
                             Découvrir les maisons
                           </Button>
